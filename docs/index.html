@@ -129,6 +129,13 @@
         font-size: clamp(2rem, 6vw + 1rem, 3rem);
       }
     }
+    @media (max-width: 768px) {
+      .hero-section {
+        height: auto;
+        min-height: 100svh;
+        max-height: none;
+      }
+    }
     @keyframes reveal {
       from {
         opacity: 0;
@@ -227,19 +234,19 @@
 </nav>
 </div>
 </header>
-<section class="relative flex flex-col items-start justify-center overflow-hidden hero-section text-white">
-  <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20 text-white">
-<h1 class="hero-heading font-black leading-tight tracking-tight text-shadow mb-4 md:mb-6">Dachrinnenreinigung in NRW – sauber, sicher und termintreu</h1>
-<p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-shadow text-slate-100">Wir halten Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW frei von Schmutz – zuverlässig, sicher und mit moderner Ausrüstung. Nutzen Sie unseren Kostenrechner und erhalten Sie Ihr Angebot innerhalb von 24 Stunden.</p>
-<div class="flex flex-col sm:flex-row gap-4">
-          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="kostenrechner.html">
+<section class="relative flex flex-col items-center md:items-start justify-center overflow-hidden hero-section text-white">
+  <div class="relative z-10 w-full max-w-4xl px-6 pt-32 pb-16 text-center text-white md:px-12 md:py-24 md:text-left">
+<h1 class="hero-heading font-black leading-tight tracking-tight text-shadow mb-4 md:mb-6 max-w-3xl mx-auto md:mx-0">Dachrinnenreinigung in NRW – sauber, sicher und termintreu</h1>
+<p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-shadow text-slate-100 max-w-2xl mx-auto md:mx-0">Wir halten Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW frei von Schmutz – zuverlässig, sicher und mit moderner Ausrüstung. Nutzen Sie unseren Kostenrechner und erhalten Sie Ihr Angebot innerhalb von 24 Stunden.</p>
+<div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center md:justify-start md:items-center">
+          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center w-full sm:w-auto" href="kostenrechner.html">
             Zum Kostenrechner
           </a>
-          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="#contact">
+          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center w-full sm:w-auto" href="#contact">
             Angebot anfordern
           </a>
         </div>
-</div>
+  </div>
 </section>
 <section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal" id="about">
 <div class="container mx-auto">
