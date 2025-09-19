@@ -18,6 +18,7 @@ export async function handleIncoming({ meta = {}, contact = {}, payload = {}, co
     const email = s(contact?.email, 120);
     const telefon = s(contact?.telefon, 30);
     const wunschtermin = s(contact?.wunschtermin, 40);
+    const nachricht = s(contact?.nachricht, 1000);
 
     if (!reEmail.test(email)) return { ok: false, error: 'INVALID_EMAIL' };
     if (!rePhone.test(telefon)) return { ok: false, error: 'INVALID_PHONE' };
@@ -60,6 +61,7 @@ export async function handleIncoming({ meta = {}, contact = {}, payload = {}, co
         userAgent: s(userAgent, 200),
         retentionUntil: retentionDate(12),
         contact_vorname: vorname, contact_nachname: nachname, contact_email: email, contact_telefon: telefon, contact_wunschtermin: wunschtermin,
+        contact_nachricht: nachricht,
         payload_typ: pl.typ, payload_lfm: pl.lfm, payload_hoehe: pl.hoehe, payload_adresse: pl.adresse, payload_km_einfach: pl.km_einfach,
         payload_schutz: pl.schutz, payload_schutz_clean: pl.schutz_clean, payload_schutz_mont: pl.schutz_mont, payload_schutz_demont: pl.schutz_demont,
         payload_endpreis: pl.endpreis, payload_eur_km: pl.eur_km, payload_setup: pl.setup, payload_ladder: pl.ladder, payload_steiger: pl.steiger,
@@ -74,7 +76,7 @@ export async function handleIncoming({ meta = {}, contact = {}, payload = {}, co
     // Mail (mit Details)
     let mailOk = true, mailError, usedFrom, mailStatus;
     try {
-      const m = await mailAdmin({ contact: { vorname, nachname, email, telefon, wunschtermin }, payload: pl, meta });
+      const m = await mailAdmin({ contact: { vorname, nachname, email, telefon, wunschtermin, nachricht }, payload: pl, meta });
       mailOk = !!m?.ok; mailError = m?.error; usedFrom = m?.usedFrom; mailStatus = m?.status;
     } catch (e) {
       mailOk = false; mailError = String(e);

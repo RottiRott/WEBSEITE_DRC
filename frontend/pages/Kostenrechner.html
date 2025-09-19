@@ -738,6 +738,7 @@
       nachname: sanitizeName(document.getElementById('inLast').value.trim()),
       email: emailEl.value.trim(),
       telefon: phoneEl.value.trim(),
+      nachricht: sanitizeText(document.getElementById('inMsg').value),
       wunschtermin: document.getElementById('dpWish').value || ""
     };
     const payload = window._payload || {};
