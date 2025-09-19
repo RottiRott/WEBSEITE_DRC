@@ -66,6 +66,7 @@
   <style>
     /* Allgemeine Variablen */
     :root{
+      --header-height: 4.5rem;
       --bg:#F8F9FA;
       --card:#FFFFFF;
       --ink:#0F172A;
@@ -104,6 +105,21 @@
       touch-action:pan-y; /* Erlaubt nur vertikales Panning, verhindert versehentliches horizontales Scrollen */
       overscroll-behavior-y:contain; /* Verhindert, dass Scrollen im iFrame das übergeordnete Fenster scrollt */
       transition:background-color .3s ease,color .3s ease;
+      padding-top:var(--header-height);
+      position:relative;
+    }
+
+    .scroll-progress{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:4px;
+      transform-origin:left center;
+      transform:scaleX(0);
+      background:linear-gradient(90deg,#38bdf8,#0ea5e9 55%,#0284c7);
+      z-index:60;
+      pointer-events:none;
     }
 
     /* Sicherstellen, dass Hauptcontainer flexibel sind, aber nicht überlaufen */
@@ -116,6 +132,40 @@
       display:flex;
       flex-direction:column;
       gap:24px;
+    }
+    .back-to-top{
+      position:fixed;
+      right:1.25rem;
+      bottom:clamp(1.5rem,3vh,3rem);
+      width:3rem;
+      height:3rem;
+      border-radius:9999px;
+      background:rgba(0,119,182,0.92);
+      color:#fff;
+      border:none;
+      box-shadow:0 15px 30px -18px rgba(15,23,42,0.7);
+      display:grid;
+      place-items:center;
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(16px);
+      transition:opacity .25s ease,transform .25s ease,visibility .25s ease;
+      z-index:55;
+    }
+    .back-to-top:focus-visible{
+      outline:3px solid #bae6fd;
+      outline-offset:3px;
+    }
+    .back-to-top.is-visible{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0);
+    }
+    .responsive-header{
+      min-height:var(--header-height);
+    }
+    .responsive-header > [data-nav-inner]{
+      min-height:var(--header-height);
     }
     @media (max-width: 768px){
       .wrap{
@@ -313,6 +363,7 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
+  <div aria-hidden="true" class="scroll-progress" id="scroll-progress"></div>
   <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
     <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
       <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
@@ -522,6 +573,12 @@
     </footer>
   </div>
 
+  <button aria-label="Nach oben" class="back-to-top" id="back-to-top" type="button">
+    <span class="material-symbols-outlined">arrow_upward</span>
+    <span class="sr-only">Nach oben</span>
+  </button>
+
+  <script defer src="assets/js/site-enhancements.js"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
   <script>
