@@ -159,7 +159,40 @@
     .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;align-items:end;justify-items:stretch}
     .fields-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;align-items:end;justify-items:stretch}
     .fields-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;justify-items:stretch}
-    @media (max-width:720px){.fields,.fields-2,.fields-3{grid-template-columns:1fr}}
+    @media (max-width:720px){
+      .fields,
+      .fields-2,
+      .fields-3{grid-template-columns:1fr;}
+      .hero{
+        text-align:center;
+        padding:28px 20px 32px;
+      }
+      .hero>span{
+        margin-inline:auto;
+      }
+      .hero h1,
+      .hero .lead{
+        margin-left:auto;
+        margin-right:auto;
+      }
+      .hero .usps{
+        justify-items:center;
+        gap:16px;
+      }
+      .hero .usp{
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        gap:10px;
+        max-width:340px;
+        margin-inline:auto;
+        width:100%;
+      }
+      .hero .usp svg{
+        flex:0 0 auto;
+      }
+    }
 
     .field{display:flex;flex-direction:column;gap:6px;min-width:0} /* min-width:0 ist hier gut, um Überlauf bei zu langen Eingaben zu vermeiden */
     label{font-weight:600;color:var(--ink);font-size:.95rem}
@@ -243,7 +276,7 @@
     @media (max-width:900px){
       input,select,textarea,button{ font-size:16px; }
       .btn{ padding:14px 20px; border-radius:18px; }
-      .hero,.card{ padding:18px; }
+      .card{ padding:18px; }
       .row label{ padding:10px 12px; border:1px solid rgba(15,23,42,0.12); border-radius:14px; background:rgba(255,255,255,0.96); }
     }
     .row input[type="radio"]{ accent-color: var(--accent); }
