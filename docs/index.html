@@ -479,10 +479,36 @@ Original lesen
 </div>
 
 <script>
-  const REVIEWS_ENDPOINTS = [
-    '/_functions/reviews?limit=20',
-    'https://www.dachrinnecheck.de/_functions/reviews?limit=20'
-  ];
+  const detectFunctionsBase = () => {
+    try {
+      if (typeof window !== 'undefined') {
+        const { hostname = '' } = window.location || {};
+        const normalized = String(hostname).toLowerCase();
+        if (normalized.includes('wixsite') || normalized.includes('editor')) {
+          return '/_functions-dev';
+        }
+      }
+    } catch (error) {
+      console.warn('Konnte Umgebung für Functions-Endpunkte nicht bestimmen:', error);
+    }
+    return '/_functions';
+  };
+
+  const FUNCTIONS_BASE = detectFunctionsBase();
+
+  const createReviewEndpoints = limit => {
+    const parsedLimit = Number.parseInt(limit, 10);
+    const safeLimit = Number.isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : 10;
+    const alternateBase = FUNCTIONS_BASE === '/_functions' ? '/_functions-dev' : '/_functions';
+    const endpoints = [
+      `${FUNCTIONS_BASE}/reviews?limit=${safeLimit}`,
+      `${alternateBase}/reviews?limit=${safeLimit}`,
+      `https://www.dachrinnecheck.de/_functions/reviews?limit=${safeLimit}`
+    ];
+    return [...new Set(endpoints)];
+  };
+
+  const REVIEWS_ENDPOINTS = createReviewEndpoints(20);
 
   function reviewsCarousel() {
     return {
@@ -509,6 +535,12 @@ Original lesen
               }
 
               payload = await response.json();
+
+              if (payload?.ok === false) {
+                const message = payload?.error || 'Die Kundenrezensionen konnten nicht geladen werden.';
+                throw new Error(message);
+              }
+
               break;
             } catch (fetchError) {
               lastError = fetchError;
@@ -842,7 +874,7 @@ Original lesen
         return;
       }
 
-      const ENDPOINT = 'https://www.dachrinnecheck.de/_functions/reviews?limit=10';
+      const ENDPOINTS = createReviewEndpoints(10);
 
       const showElement = (element, shouldShow) => {
         if (!element) {
@@ -944,12 +976,33 @@ Original lesen
         showElement(listElement, false);
 
         try {
-          const response = await fetch(ENDPOINT, { cache: 'no-store' });
-          if (!response.ok) {
-            throw new Error(`Serverantwort ${response.status}`);
+          let payload = null;
+          let lastError = null;
+
+          for (const endpoint of ENDPOINTS) {
+            try {
+              const response = await fetch(endpoint, { cache: 'no-store' });
+              if (!response.ok) {
+                throw new Error(`Serverantwort ${response.status}`);
+              }
+
+              payload = await response.json();
+
+              if (payload?.ok === false) {
+                const message = payload?.error || 'Die Kundenbewertungen konnten nicht geladen werden.';
+                throw new Error(message);
+              }
+
+              break;
+            } catch (requestError) {
+              lastError = requestError;
+            }
           }
 
-          const payload = await response.json();
+          if (!payload) {
+            throw lastError || new Error('Die Kundenbewertungen konnten nicht geladen werden.');
+          }
+
           const reviews = Array.isArray(payload?.items) ? payload.items : [];
 
           if (!reviews.length) {
