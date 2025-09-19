@@ -11,6 +11,8 @@
   const overlay = header.querySelector('[data-nav-overlay]');
   const dialog = header.querySelector('[data-nav-dialog]');
   const closeControls = header.querySelectorAll('[data-nav-close]');
+  const iconElement = toggleButton ? toggleButton.querySelector('[data-nav-icon]') : null;
+  const srTextElement = toggleButton ? toggleButton.querySelector('[data-nav-sr]') : null;
 
   if (!inlineNav || !logoLink || !toggleButton || !overlay || !dialog) {
     return;
@@ -18,6 +20,8 @@
 
   let lastFocused = null;
   const focusableSelectors = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"])';
+  const iconOpen = iconElement ? iconElement.dataset.navIconOpen || 'close' : null;
+  const iconClosed = iconElement ? iconElement.dataset.navIconClosed || 'menu' : null;
 
   function setAriaState(expanded) {
     toggleButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
@@ -25,6 +29,23 @@
     const closeLabel = toggleButton.dataset.navLabelClose || 'Menü schließen';
     toggleButton.setAttribute('aria-label', expanded ? closeLabel : openLabel);
     dialog.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+    if (srTextElement) {
+      srTextElement.textContent = expanded ? closeLabel : openLabel;
+    }
+    if (iconElement) {
+      iconElement.textContent = expanded ? iconOpen : iconClosed;
+    }
+  }
+
+  function broadcastState(expanded) {
+    window.dispatchEvent(
+      new CustomEvent('responsive-nav-toggle', {
+        detail: {
+          open: expanded,
+          header,
+        },
+      }),
+    );
   }
 
   function trapFocus(event) {
@@ -76,6 +97,7 @@
     overlay.removeAttribute('hidden');
     document.body.classList.add('nav-is-open');
     setAriaState(true);
+    broadcastState(true);
 
     window.requestAnimationFrame(() => {
       dialog.focus({ preventScroll: true });
@@ -83,8 +105,10 @@
   }
 
   function closeMenu() {
-    if (!header.classList.contains('menu-open')) {
+    const wasOpen = header.classList.contains('menu-open');
+    if (!wasOpen) {
       setAriaState(false);
+      broadcastState(false);
       return;
     }
 
@@ -93,6 +117,7 @@
     overlay.setAttribute('hidden', '');
     document.body.classList.remove('nav-is-open');
     setAriaState(false);
+    broadcastState(false);
 
     const target = lastFocused && document.contains(lastFocused) ? lastFocused : toggleButton;
     lastFocused = null;
@@ -174,6 +199,7 @@
   });
 
   setAriaState(false);
+  broadcastState(false);
 
   const resizeHandler = () => {
     updateCollapse();
