@@ -129,12 +129,15 @@
       .hero-heading {
         font-size: clamp(2rem, 6vw + 1rem, 3rem);
       }
+      :root {
+        --hero-base-offset: -32px;
+      }
     }
     @media (max-width: 768px) {
       .hero-section {
-        height: auto;
-        min-height: 100svh;
-        max-height: none;
+        min-height: 20rem;
+        height: min(85vh, 520px);
+        max-height: 520px;
       }
     }
     @keyframes reveal {
