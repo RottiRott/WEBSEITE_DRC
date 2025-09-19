@@ -1,0 +1,87 @@
+// backend/processor.jsw
+import wixData from 'wix-data';
+import { contacts } from 'wix-crm-backend';
+import { mailAdmin } from 'backend/resend.jsw';
+
+const reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const rePhone = /^\+?[0-9 ()\-\/]{6,20}$/;
+
+function s(x, max = 400) { return String(x ?? '').replace(/<[^>]*>/g,'').replace(/[\u0000-\u001F]/g,'').trim().slice(0, max); }
+function n(x){ const v = Number(x); return Number.isFinite(v) ? v : null; }
+function anonymizeIp(ip){ if (!ip) return ''; if (ip.includes(':')) { const p=ip.split(':'); p[p.length-1]='0000'; return p.join(':'); } const p=ip.split('.'); if (p.length===4) p[3]='0'; return p.join('.'); }
+function retentionDate(months=12){ const d=new Date(); d.setMonth(d.getMonth()+months); return d; }
+
+export async function handleIncoming({ meta = {}, contact = {}, payload = {}, consent, ip, userAgent }) {
+  try {
+    const vorname = s(contact?.vorname, 60);
+    const nachname = s(contact?.nachname, 60);
+    const email = s(contact?.email, 120);
+    const telefon = s(contact?.telefon, 30);
+    const wunschtermin = s(contact?.wunschtermin, 40);
+
+    if (!reEmail.test(email)) return { ok: false, error: 'INVALID_EMAIL' };
+    if (!rePhone.test(telefon)) return { ok: false, error: 'INVALID_PHONE' };
+    const consentGiven = String(consent || '').toLowerCase() === 'ja';
+
+    const pl = {
+      typ: s(payload?.typ, 40),
+      lfm: n(payload?.lfm),
+      hoehe: n(payload?.hoehe),
+      adresse: s(payload?.adresse, 200),
+      km_einfach: n(payload?.km_einfach),
+      schutz: s(payload?.schutz, 10),
+      schutz_clean: n(payload?.schutz_clean),
+      schutz_mont: n(payload?.schutz_mont ?? payload?.schluss_mont),
+      schutz_demont: n(payload?.schutz_demont),
+      endpreis: n(payload?.endpreis),
+      eur_km: n(payload?.eur_km),
+      setup: n(payload?.setup),
+      ladder: n(payload?.ladder),
+      steiger: n(payload?.steiger),
+      minpreis: n(payload?.minpreis),
+      ts: s(payload?.ts, 60)
+    };
+
+    // CRM (tolerant)
+    let crmContactId = null;
+    try {
+      const emailArr = email ? [{ tag: 'MAIN', email }] : [];
+      const phoneArr = telefon ? [{ tag: 'MOBILE', phone: telefon }] : [];
+      const addrArr = pl.adresse ? [{ tag: 'HOME', address: { addressLine1: pl.adresse } }] : [];
+      const { contact: created } = await contacts.createContact({ info: { name: { first: vorname||'', last: nachname||'' }, emails: emailArr, phones: phoneArr, addresses: addrArr } });
+      crmContactId = created?._id || null;
+    } catch (e) { console.error('createContact failed (continuing):', e); }
+
+    // DB-Log
+    try {
+      await wixData.insert('RequestsPriceCalculator', {
+        createdAt: new Date(),
+        ipAnon: anonymizeIp(ip),
+        userAgent: s(userAgent, 200),
+        retentionUntil: retentionDate(12),
+        contact_vorname: vorname, contact_nachname: nachname, contact_email: email, contact_telefon: telefon, contact_wunschtermin: wunschtermin,
+        payload_typ: pl.typ, payload_lfm: pl.lfm, payload_hoehe: pl.hoehe, payload_adresse: pl.adresse, payload_km_einfach: pl.km_einfach,
+        payload_schutz: pl.schutz, payload_schutz_clean: pl.schutz_clean, payload_schutz_mont: pl.schutz_mont, payload_schutz_demont: pl.schutz_demont,
+        payload_endpreis: pl.endpreis, payload_eur_km: pl.eur_km, payload_setup: pl.setup, payload_ladder: pl.ladder, payload_steiger: pl.steiger,
+        payload_minpreis: pl.minpreis, payload_ts: pl.ts,
+        meta_source: s(meta?.source, 80), meta_version: s(meta?.version, 40), meta_timestamp: s(meta?.timestamp, 80),
+        consent_given: !!consentGiven
+      });
+    } catch (e) {
+      return { ok: false, error: 'DB_INSERT_FAILED', detail: String(e?.message || e) };
+    }
+
+    // Mail (mit Details)
+    let mailOk = true, mailError, usedFrom, mailStatus;
+    try {
+      const m = await mailAdmin({ contact: { vorname, nachname, email, telefon, wunschtermin }, payload: pl, meta });
+      mailOk = !!m?.ok; mailError = m?.error; usedFrom = m?.usedFrom; mailStatus = m?.status;
+    } catch (e) {
+      mailOk = false; mailError = String(e);
+    }
+
+    return { ok: true, contactId: crmContactId, mailOk, ...(mailOk ? { usedFrom } : { mailError, usedFrom, mailStatus }) };
+  } catch (e) {
+    return { ok: false, error: 'UNHANDLED_EXCEPTION', detail: String(e?.message || e) };
+  }
+}
