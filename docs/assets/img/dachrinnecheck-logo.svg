@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" role="img" aria-labelledby="title desc">
+  <title id="title">DachrinneCheck</title>
+  <desc id="desc">Logo von DachrinneCheck mit stilisiertem Dach und Dachrinne</desc>
+  <defs>
+    <linearGradient id="roofGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0096C7" />
+      <stop offset="100%" stop-color="#0077B6" />
+    </linearGradient>
+    <linearGradient id="gutterGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#023E8A" />
+      <stop offset="100%" stop-color="#03045E" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(10 20)">
+    <path d="M0 48 L60 4 L120 48" fill="none" stroke="url(#roofGradient)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M18 56 L18 88 L102 88 L102 56" fill="none" stroke="url(#gutterGradient)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M18 74 C32 70 40 70 56 76 C72 82 80 82 102 78" fill="none" stroke="#64DFDF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <text x="150" y="66" font-family="'Poppins', 'Segoe UI', sans-serif" font-weight="700" font-size="44" letter-spacing="0.5">
+    <tspan fill="#0F172A">Dachrinne</tspan>
+    <tspan fill="#0077B6" dx="10">Check</tspan>
+  </text>
+  <text x="150" y="95" font-family="'Poppins', 'Segoe UI', sans-serif" font-size="16" fill="#475569" letter-spacing="1">
+    <tspan>Professionelle Dachrinnenreinigung in NRW</tspan>
+  </text>
+</svg>
