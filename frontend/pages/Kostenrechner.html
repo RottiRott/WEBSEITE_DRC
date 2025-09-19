@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dachrinnenreinigung Preisrechner – jetzt Kosten online berechnen | DachrinneCheck</title>
+  <meta name="description" content="Nutzen Sie den Dachrinnenreinigung Preisrechner von DachrinneCheck und berechnen Sie in wenigen Sekunden die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf & Umgebung. Richtpreis sofort & transparent.">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
+  <style>
+    /* Allgemeine Variablen */
+    :root{
+      --bg:#f7f8fb; --card:#ffffff; --ink:#0f172a; --muted:#6b7280;
+      --accent:#1B3898; --cta:#1B3898; --cta-ink:#fff; --border:#e5e7eb;
+      --warn:#b45309; --ok:#059669;
+    }
+    *{box-sizing:border-box}
+
+    /* Verbesserte Body/HTML-Einstellungen für Scrolling und Darstellung */
+    html,body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial;-webkit-text-size-adjust:100%;
+      height:100%; /* Wichtig für die korrekte Höhenberechnung im iFrame */
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden; /* Verhindert horizontales Scrollen */
+      overflow-y:auto; /* Erlaubt vertikales Scrollen im iFrame */
+      -webkit-overflow-scrolling:touch; /* Verbessertes Scroll-Verhalten auf iOS */
+      touch-action:pan-y; /* Erlaubt nur vertikales Panning, verhindert versehentliches horizontales Scrollen */
+      overscroll-behavior-y:contain; /* Verhindert, dass Scrollen im iFrame das übergeordnete Fenster scrollt */
+    }
+
+    /* Sicherstellen, dass Hauptcontainer flexibel sind, aber nicht überlaufen */
+    .wrap{
+      max-width:1100px;
+      margin:24px auto;
+      padding:0 16px;
+      min-width:0; /* Verhindert Überlauf bei flexiblen Layouts */
+      width:100%; /* Wichtig für die korrekte Breite im iFrame */
+    }
+
+    .hero{background:linear-gradient(135deg,#0ea5e910,#e11d4810);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:16px}
+    h1{margin:0 0 6px;font-size:clamp(22px,4vw,30px)}
+    p.lead{margin:0;color:var(--muted)}
+
+    .usps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px}
+    .usp{display:flex;gap:8px;align-items:center;font-size:.95rem;background:#fff;border:1px dashed var(--border);border-radius:12px;padding:10px}
+    .usp svg{flex:0 0 18px}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start; /* min-width:0; entfernt, da es durch .wrap & body abgedeckt ist */}
+    @media (max-width:900px){.grid-2{grid-template-columns:1fr}}
+
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column; /* max-width & width sind in der Regel nicht nötig, wenn grid-2 korrekt ist */}
+    .card h2{margin:0 0 8px;font-size:18px}
+
+    .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;align-items:end}
+    .fields-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;align-items:end}
+    .fields-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    @media (max-width:720px){.fields,.fields-2,.fields-3{grid-template-columns:1fr}}
+
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0} /* min-width:0 ist hier gut, um Überlauf bei zu langen Eingaben zu vermeiden */
+    label{font-weight:600}
+
+    input[type="text"],input[type="number"],input[type="email"],input[type="tel"],input[type="date"],select,textarea{
+      width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#fff;outline:none;
+      min-width:0; /* Sicherstellen, dass Input-Felder nicht überlaufen */
+    }
+    input:focus,textarea:focus,select:focus{box-shadow:0 0 0 4px #0ea5e922;border-color:#7dd3fc}
+    input[readonly]{background:#f3f4f6}
+
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-start} /* Explizites justify-content */
+    .hint{font-size:.9rem;color:var(--muted)}
+    .map{height:220px;border-radius:12px;border:1px solid var(--border);overflow:hidden;pointer-events:none}
+
+    .total{margin-top:auto;border-top:1px dashed var(--border);padding-top:12px;display:flex;justify-content:space-between;align-items:center}
+    .price{font-weight:900;font-size:1.5rem}
+
+    .btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;transition:transform .04s ease;
+      touch-action: manipulation; /* Verbessert die Reaktionsfähigkeit auf Touch-Geräten */
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .btn.secondary{background:#111827}
+    .btn.cta{background:var(--cta);color:var(--cta-ink)}
+
+    .stack{display:flex;flex-direction:column;gap:8px}
+    .consent{display:flex;gap:10px;align-items:flex-start}
+    .note{font-size:.85rem;color:var(--muted)}
+    .minnote{color:var(--warn);font-size:.9rem}
+    .error{color:#b91c1c;font-size:.85rem}
+    .ok{color:var(--ok);font-size:.85rem}
+
+    .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+    .trust .badge{background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px;text-align:center;font-size:.9rem}
+
+    /* Mobile spezifische Anpassungen */
+    @media (max-width:720px){
+      #calcCard .fields .field:nth-child(3){order:-1}
+      .map{height:clamp(220px,50vw,360px)}
+    }
+    .mobile-total{display:none}
+
+    @media (max-width:900px){
+      .mobile-total{position:fixed;left:0;right:0;bottom:0;z-index:2000;background:#fff;border-top:1px solid var(--border);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -6px 18px rgba(0,0,0,.06)}
+      .mobile-total .price{font-size:1.25rem}
+      /* padding-bottom anpassen, um den Fixed Footer zu berücksichtigen */
+      .wrap{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px));}
+    }
+    @media (max-width:900px){#btnSubmit{display:none !important}}
+
+    /* --- Mobile polish & accessibility --- */
+    @media (max-width:900px){
+      input,select,textarea,button{ font-size:16px; }
+      .btn{ padding:14px 18px; border-radius:14px; }
+      .hero,.card{ padding:14px; }
+      .row label{ padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:#fff; }
+    }
+    .row input[type="radio"]{ accent-color: var(--accent); }
+    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(110px + env(safe-area-inset-bottom,0px)); background:#111827; color:#fff; padding:12px 14px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18); z-index:3000; display:none; }
+    .toast.show{ display:block; }
+
+    /* --- Wix/mobile overflow guards --- */
+    svg,img,canvas,video{max-width:100%;height:auto}
+
+    /* --- Larger consent checkbox & mobile guard section --- */
+    #cbConsent{ width:28px; height:28px; accent-color: var(--accent); vertical-align: top; }
+    @media (max-width:900px){
+      /* HIER IST DIE WICHTIGE ÄNDERUNG */
+      #cbConsent{ transform: scale(1.3); /* Reduziert von 1.8 */ transform-origin: top left; }
+      .consent{ gap:16px; }
+    }
+
+    .consent label.note{ line-height:1.7; }
+
+    /* Subtle highlight for guard label */
+    .guard-label{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--border); border-radius:12px; background:rgba(27,56,152,0.06); font-weight:700; }
+    .guard-label input{ width:20px; height:20px; accent-color: var(--accent); }
+    @media (max-width:900px){
+      .guard-label{ padding:8px 12px; }
+      .guard-label input{ width:22px; height:22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Dachrinnenreinigung Preisrechner – jetzt Kosten online berechnen</h1>
+      <p class="lead">Nutzen Sie unseren Dachrinnenreinigung Preisrechner und berechnen Sie in wenigen Sekunden die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf & Umgebung. Der Richtpreis ist transparent und beinhaltet Anfahrt, Rüstzeiten und Zuschläge.</p>
+
+      <div class="usps">
+        <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><span>Schnelle Rückmeldung <b>≤ 24 h</b></span></div>
+        <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg><span>Versichert & Sicher bis <b>14 m</b></span></div>
+        <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>Transparenter Richtpreis – <b>ohne Überraschungen</b></span></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <section class="card" id="calcCard">
+        <h2>Jetzt Richtpreis berechnen & Anfrage absenden</h2>
+
+        <div class="fields-2">
+          <div class="field" style="grid-column:1/-1">
+            <label>Reinigungstyp</label>
+            <div class="row">
+              <label><input type="radio" name="typ" value="Erstreinigung" checked> Erstreinigung</label>
+              <label><input type="radio" name="typ" value="Folgereinigung"> Folgereinigung</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="lfm">Länge Dachrinne [lfm]</label>
+            <input id="lfm" type="number" min="1" step="0.5" value="12" inputmode="decimal" required />
+          </div>
+          <div class="field">
+            <label for="hoehe">Höhe Dachrinne [m]</label>
+            <input id="hoehe" type="number" min="2" step="0.1" value="6.0" inputmode="decimal" required />
+          </div>
+        </div>
+
+        <div class="fields" style="margin-top:4px">
+          <div class="field" style="grid-column:1/-1">
+            <label for="adresse">Objektadresse</label>
+            <input id="adresse" type="text" placeholder="Straße Hausnr, PLZ Ort" list="addrList" autocomplete="street-address" maxlength="120" />
+            <datalist id="addrList"></datalist>
+            <div class="hint">Distanz ab DachrinneCheck wird berechnet</div>
+          </div>
+          <div class="field">
+            <label>Entfernung [km]</label>
+            <input id="km" type="number" readonly placeholder="Automatisch ermittelt" />
+          </div>
+          <div class="field">
+            <label>Map-Vorschau</label>
+            <div id="map" class="map"></div>
+          </div>
+        </div>
+
+        <div class="fields" style="margin-top:4px">
+          <div class="field" style="grid-column:1/-1">
+            <label class="guard-label"><input id="schutzVorhanden" type="checkbox" /> Dachrinnenschutz vorhanden?</label>
+          </div>
+        </div>
+
+        <div id="schutzSection" class="fields-3" style="margin-top:8px">
+          <div class="field">
+            <label>Reinigung Dachrinnenschutz [lfm]</label>
+            <input id="schutzReinigung" type="number" min="0" step="1" value="0" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label>Montage Laubschutz [lfm]</label>
+            <input id="schutzMontage" type="number" min="0" step="1" value="0" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label>Demontage Laubschutz [lfm]</label>
+            <input id="schutzDemontage" type="number" min="0" step="1" value="0" inputmode="numeric" />
+          </div>
+          <div class="field" style="grid-column:1/-1">
+            <div class="note">Bei <b>Höhe &gt; 5 m</b> mit vorhandenem Schutz wird <b>automatisch ein Steiger</b> berücksichtigt.</div>
+          </div>
+        </div>
+
+        <div class="total">
+          <div class="stack">
+            <div class="note">Voraussichtlicher Endpreis (Richtwert)</div>
+            <div class="price" id="endpreis">–</div>
+            <div class="minnote" id="minnote" style="display:none">Mindestauftrag angewandt.</div>
+            <div class="note">Diese Woche noch freie Slots – jetzt anfragen.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Kontakt & Anfrage</h2>
+        <form id="kontaktForm" class="stack" novalidate>
+          <div class="fields">
+            <div class="field"><label>Vorname</label><input id="inFirst" type="text" required maxlength="40" autocomplete="given-name" /></div>
+            <div class="field"><label>Nachname</label><input id="inLast" type="text" required maxlength="40" autocomplete="family-name" /></div>
+            <div class="field">
+              <label>E-Mail</label>
+              <input id="inEmail" type="email" required autocomplete="email" inputmode="email" maxlength="80"
+                     pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" />
+              <div id="emailMsg" class="error" style="display:none">Bitte eine gültige E-Mail angeben (z.B. name@domain.de).</div>
+            </div>
+            <div class="field">
+              <label>Telefon</label>
+              <input id="inPhone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="25"
+                     pattern="^\+?[0-9 ()\-\/]{6,20}$" />
+              <div id="phoneMsg" class="error" style="display:none">Bitte eine gültige Telefonnummer angeben.</div>
+            </div>
+            <div class="field" style="grid-column:1/-1"><label>Objektadresse</label><input id="inFormAddress" type="text" readonly /></div>
+            <div class="field"><label>Wunschtermin</label><input id="dpWish" type="date" /></div>
+            <div class="field" style="grid-column:1/-1;min-height:auto"><label>Nachricht (optional)</label><textarea id="inMsg" rows="4" placeholder="Besonderheiten / Zugang / Wunschzeiten …" maxlength="1000"></textarea></div>
+          </div>
+
+          <div class="consent">
+            <input type="checkbox" id="cbConsent" required />
+            <label for="cbConsent" class="note">
+              Ich willige ein, dass meine Angaben zur Kontaktaufnahme, Angebotserstellung und Terminabstimmung verarbeitet und gespeichert werden.
+              Die Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen. Hinweise in der
+              <a href="/datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a>.
+            </label>
+          </div>
+
+          <button class="btn cta" id="btnSubmit" disabled>Anfrage absenden</button>
+
+          <div class="note">
+            Mit dem Absenden werden Ihre Angaben zusammen mit der Kalkulation an unser Postfach übermittelt.
+            Für die Distanzberechnung nutzen wir OpenStreetMap (Nominatim/OSRM).
+          </div>
+
+          <div class="trust">
+            <div class="badge">✓ Regional aus Willich</div>
+            <div class="badge">✓ Fest installiertes Profi-System</div>
+            <div class="badge">✓ Termin nach Arbeit möglich</div>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <div class="mobile-total" id="mobileTotal" aria-live="polite" role="status">
+    <div>
+      <div class="note">Richtpreis</div>
+      <div class="price" id="endpreis_mobile">–</div>
+    </div>
+    <button class="btn" id="btnStickySubmit" type="button" onclick="document.getElementById('kontaktForm').requestSubmit();" disabled>Anfrage absenden</button>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+  <script>
+  /* ===== Konfiguration ===== */
+  const START_ADDR = "Ackerstraße 39, 47877 Willich, Germany";
+  const START = { lat: 51.263, lon: 6.546 };
+  const GEOCACHE = {};
+  let LAST_ADDR = "";
+  let LAST_KM = 0;
+
+  // Pfad bleibt für Standalone-Betrieb (außerhalb iFrame)
+  const FUNCTIONS_BASE = (location.hostname.includes('wixsite') || location.hostname.includes('editor')) ? '/_functions-dev' : '/_functions';
+  const WEBHOOK_URL = `${FUNCTIONS_BASE}/webhookbridge`;
+
+  const PARAMS = { eurKm: 1.0, setup: 40, minPrice: 125, ladder: 40, steiger: 340 };
+  const RATES = {
+    ERST:[{min:2,max:3.99,price:5},{min:4,max:5.99,price:7},{min:6,max:7.99,price:9},{min:8,max:9.99,price:12},{min:10,max:999,price:15}],
+    FOLGE:[{min:2,max:3.99,price:4},{min:4,max:5.99,price:5},{min:6,max:7.99,price:7},{min:8,max:9.99,price:10},{min:10,max:999,price:15}]
+  };
+
+  const $ = s => document.querySelector(s);
+  function euro(x){return new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(x);}  
+  function bandPrice(type, height){
+    const arr = type === "Erstreinigung" ? RATES.ERST : RATES.FOLGE;
+    const h = Number(height)||0;
+    for(const b of arr){ if(h>=b.min && h<=b.max) return b.price; }
+    return arr[arr.length-1].price;
+  }
+
+  // ===== Leaflet Map =====
+  const NRW_BOUNDS = L.latLngBounds([[50.3,5.9],[52.6,9.6]]);
+  let map = L.map('map', {zoomControl:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap',
+    updateWhenIdle:true,
+    updateWhenZooming:false,
+    keepBuffer:1,
+    maxZoom:18
+  }).addTo(map);
+  map.setMaxBounds(NRW_BOUNDS);
+  map.dragging.disable(); map.scrollWheelZoom.disable(); map.doubleClickZoom.disable(); map.touchZoom.disable(); map.boxZoom.disable(); map.keyboard.disable();
+  map.fitBounds(NRW_BOUNDS);
+  let startMarker, destMarker;
+
+  async function geocode(addr){
+    if (GEOCACHE[addr]) return GEOCACHE[addr];
+    const u = new URL("https://nominatim.openstreetmap.org/search");
+    u.searchParams.set("format","jsonv2");
+    u.searchParams.set("limit","1");
+    u.searchParams.set('viewbox','5.9,52.6,9.6,50.3');
+    u.searchParams.set('bounded','1');
+    u.searchParams.set('q', addr);
+    u.searchParams.set('accept-language','de');
+    const r = await fetch(u);
+    if(!r.ok) throw new Error("Geocoding fehlgeschlagen");
+    const j = await r.json();
+    if(!j?.length) throw new Error("Adresse nicht gefunden");
+    const res = { lat:+j[0].lat, lon:+j[0].lon };
+    GEOCACHE[addr] = res;
+    return res;
+  }
+
+  async function routeKm(from, to){
+    const url = `https://router.project-osrm.org/route/v1/driving/${from.lon},${from.lat};${to.lon},${to.lat}?overview=false&alternatives=false`;
+    const r = await fetch(url);
+    if(!r.ok) throw new Error("Routing fehlgeschlagen");
+    const j = await r.json();
+    const meters = j?.routes?.[0]?.distance || 0;
+    return meters/1000;
+  }
+
+  // ===== Address Autocomplete =====
+  let acTimer; let acCtl; let lastQuery = "";
+  const addrInput = $('#adresse');
+  const addrList = $('#addrList');
+
+  addrInput.addEventListener('input', () => {
+    addrInput.value = sanitizeText(addrInput.value);
+    const q = addrInput.value.trim();
+    clearTimeout(acTimer);
+    if(q.length < 3){ addrList.innerHTML=''; return; }
+    if(q === lastQuery) return; lastQuery = q;
+    acTimer = setTimeout(async () => {
+      try{
+        const u = new URL('https://nominatim.openstreetmap.org/search');
+        u.searchParams.set('format','jsonv2');
+        u.searchParams.set('addressdetails','0');
+        u.searchParams.set('limit','5');
+        u.searchParams.set('countrycodes','de');
+        u.searchParams.set('viewbox','5.9,52.6,9.6,50.3'); // NRW-Beschränkung
+        u.searchParams.set('bounded','1');
+        u.searchParams.set('q', q);
+        u.searchParams.set('accept-language','de');
+        if (acCtl) acCtl.abort();
+        const r = await fetch(u, { signal: (acCtl = new AbortController()).signal });
+        if(!r.ok) return;
+        const data = await r.json();
+        addrList.innerHTML = data.map(x => `<option value="${escapeHtml(x.display_name)}"></option>`).join('');
+      }catch(e){ /* ignore */ }
+    }, 300);
+  });
+  addrInput.addEventListener('change', recalc);
+
+  function toggleGuard(){
+    const sec = document.getElementById('schutzSection');
+    const isChecked = document.getElementById('schutzVorhanden').checked;
+    if (sec) {
+      sec.style.display = isChecked ? 'grid' : 'none';
+      sec.setAttribute('aria-hidden', !isChecked);
+    }
+    if (window.__postHeight) window.__postHeight();
+  }
+
+  function autoActivateGuard(){
+    const ids = ['schutzReinigung','schutzMontage','schutzDemontage'];
+    const anyVal = ids.some(id => {
+      const el = document.getElementById(id);
+      return (parseFloat(el && el.value ? el.value : 0) || 0) > 0;
+    });
+    if (anyVal) {
+      const cb = document.getElementById('schutzVorhanden');
+      if (cb && !cb.checked) {
+        cb.checked = true;
+        if (window.__postHeight) window.__postHeight();
+        try{ recalc(); }catch(e){}
+        toggleGuard(); // Richtiges Anzeigen der Sektion
+      }
+    }
+  }
+
+  async function recalc(){
+    const typ = document.querySelector('input[name="typ"]:checked').value;
+    const lfm = parseFloat($('#lfm').value||0);
+    const hoehe = parseFloat($('#hoehe').value||0);
+    const addr = ($('#adresse').value||"").trim();
+
+    let kmEinfach = parseFloat($('#km').value||0);
+    if(addr){
+      try{
+        const from = START;
+        if (addr !== LAST_ADDR) {
+          const to = await geocode(addr);
+          const km = await routeKm(from, to);
+          LAST_ADDR = addr; LAST_KM = km;
+          $('#km').value = km.toFixed(1);
+          kmEinfach = km;
+
+          if (!startMarker) startMarker = L.marker([from.lat, from.lon]).addTo(map).bindPopup("Start");
+          else startMarker.setLatLng([from.lat, from.lon]);
+
+          if (!destMarker) destMarker = L.marker([to.lat, to.lon]).addTo(map).bindPopup("Ziel");
+          else destMarker.setLatLng([to.lat, to.lon]);
+
+          const bounds = L.latLngBounds([[from.lat,from.lon],[to.lat,to.lon]]);
+          map.fitBounds(bounds.pad(0.25));
+        } else {
+          $('#km').value = LAST_KM ? LAST_KM.toFixed(1) : '';
+          kmEinfach = LAST_KM || 0;
+        }
+      }catch(e){ console.warn(e); $('#km').value = ''; LAST_KM = 0; } // Bei Fehler km zurücksetzen
+    } else {
+        $('#km').value = ''; LAST_KM = 0; // Wenn Adresse leer, dann km auch leer
+        if (startMarker) map.removeLayer(startMarker); startMarker = null;
+        if (destMarker) map.removeLayer(destMarker); destMarker = null;
+        map.fitBounds(NRW_BOUNDS); // Karte auf NRW zurücksetzen
+    }
+
+    const hasGuard = $('#schutzVorhanden').checked;
+    const guardClean = hasGuard ? parseFloat($('#schutzReinigung').value||0) : 0;
+    const guardMount = hasGuard ? parseFloat($('#schutzMontage').value||0) : 0;
+    const guardDemount = hasGuard ? parseFloat($('#schutzDemontage').value||0) : 0;
+
+    const rate = bandPrice(typ, hoehe);
+    let sum = 0;
+    sum += lfm * rate;
+    sum += (kmEinfach * 2) * PARAMS.eurKm;
+    sum += PARAMS.setup;
+
+    if(hasGuard){
+      sum += guardClean * rate;
+      sum += guardMount * rate;
+      sum += guardDemount * rate;
+    }
+
+    const needSteiger = hasGuard && hoehe > 5 && (guardClean + guardMount + guardDemount > 0);
+    if(needSteiger){ sum += PARAMS.steiger; }
+    else if(hoehe > 6){ sum += PARAMS.ladder; }
+
+    const minApplied = sum < PARAMS.minPrice;
+    if(minApplied) sum = PARAMS.minPrice;
+
+    $('#endpreis').textContent = euro(sum);
+    const mob = document.getElementById('endpreis_mobile'); if(mob) mob.textContent = euro(sum);
+    document.getElementById('minnote').style.display = minApplied ? 'block' : 'none';
+
+    $('#inFormAddress').value = addr;
+
+    window._payload = {
+      typ, lfm, hoehe, adresse: addr, km_einfach: kmEinfach,
+      schutz: hasGuard ? "ja" : "nein",
+      schutz_clean: guardClean, schutz_mont: guardMount, schutz_demont: guardDemount,
+      endpreis: Number(sum.toFixed(2)),
+      eur_km: PARAMS.eurKm, setup: PARAMS.setup, ladder: PARAMS.ladder, steiger: PARAMS.steiger,
+      minpreis: PARAMS.minPrice, ts: new Date().toISOString()
+    };
+
+    if (window.__postHeight) window.__postHeight();
+  }
+
+  /* ===== Bridge: iFrame -> Wix-Seite ===== */
+  const IN_IFRAME = (() => { try { return window.self !== window.top; } catch { return true; } })();
+
+  function sendViaParent(body, timeoutMs = 15000){
+    return new Promise((resolve) => {
+      if (!IN_IFRAME) return resolve({ ok:false, status:0, text:'not-in-iframe' });
+      const token = Math.random().toString(36).slice(2);
+      const onMsg = (ev) => {
+        const d = ev.data;
+        if (!d || d.type !== 'webhookbridge:result' || d.token !== token) return;
+        window.removeEventListener('message', onMsg);
+        clearTimeout(timer);
+        resolve({ ok: !!d.ok, status: d.status, text: d.text || '' });
+      };
+      window.addEventListener('message', onMsg);
+      window.parent.postMessage({ type:'webhookbridge:submit', token, body }, '*');
+      const timer = setTimeout(() => {
+        window.removeEventListener('message', onMsg);
+        resolve({ ok:false, status:408, text:'Bridge timeout – keine Antwort von Wix-Seite.' });
+      }, timeoutMs);
+    });
+  }
+
+  /* ===== Debug: Ready-Signal vom Parent ===== */
+  window.addEventListener('message', (ev) => {
+    if (ev?.data?.type === 'webhookbridge:ready') {
+      console.log('Bridge ready from parent');
+    }
+  });
+
+  // ===== Toast helper (mobile-friendly) =====
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    if(!t){ alert(msg); return; }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=> t.classList.remove('show'), 2800);
+  }
+
+  // ===== Input sanitization =====
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"'`]/g, s => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;',
+      '`':'&#96;'
+    }[s]));
+  }
+  function sanitizeText(str){ return String(str).replace(/[<>\u0000-\u001F]/g, '').trimStart(); }
+  function sanitizeName(str){ return String(str).replace(/[^A-Za-zÀ-ÿ \-']/g, ''); }
+  function sanitizeTel(str){ return String(str).replace(/[^0-9 +()\-\/]/g, ''); }
+
+  ['inFirst','inLast','inMsg'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => { el.value = (id==='inMsg'? sanitizeText(el.value) : sanitizeName(el.value)); });
+  });
+  document.getElementById('inPhone').addEventListener('input', e => { e.target.value = sanitizeTel(e.target.value); });
+  document.getElementById('adresse').addEventListener('input', e => { e.target.value = sanitizeText(e.target.value); });
+
+  // ===== Email & Phone validation feedback =====
+  const emailEl = document.getElementById('inEmail');
+  const phoneEl = document.getElementById('inPhone');
+  const emailMsg = document.getElementById('emailMsg');
+  const phoneMsg = document.getElementById('phoneMsg');
+  function showValidity(el, msgEl){ if(el.validity.valid){ msgEl.style.display = 'none'; } else { msgEl.style.display = 'block'; } }
+  emailEl.addEventListener('input', () => showValidity(emailEl, emailMsg));
+  phoneEl.addEventListener('input', () => showValidity(phoneEl, phoneMsg));
+
+  async function submitForm(e){
+    e.preventDefault();
+
+    showValidity(emailEl, emailMsg);
+    showValidity(phoneEl, phoneMsg);
+    if(!document.getElementById('kontaktForm').checkValidity()){
+      document.getElementById('kontaktForm').reportValidity();
+      return;
+    }
+    if(!document.getElementById('cbConsent').checked){
+      showToast("Bitte stimmen Sie der Datenverarbeitung zu.");
+      return;
+    }
+
+    await recalc();
+
+    const contact = {
+      vorname: sanitizeName(document.getElementById('inFirst').value.trim()),
+      nachname: sanitizeName(document.getElementById('inLast').value.trim()),
+      email: emailEl.value.trim(),
+      telefon: phoneEl.value.trim(),
+      wunschtermin: document.getElementById('dpWish').value || ""
+    };
+    const payload = window._payload || {};
+    const body = { meta: { source: "preisrechner-html", version: "1.2.0", timestamp: new Date().toISOString() }, contact, payload, consent: "ja" };
+
+    let ok=false, status=0, text='';
+
+    // 1) Wenn NICHT im iFrame: Direkt an Velo-Funktion posten (mit Fallbacks)
+    if (!IN_IFRAME) {
+      const urls = [
+        WEBHOOK_URL, // /_functions-oder-/_functions-dev
+        '/_functions/webhookbridge',
+        '/_functions-dev/webhookbridge',
+        'https://www.dachrinnecheck.de/_functions/webhookbridge' // absolute Live-Domain
+      ];
+      for (const url of urls) {
+        try {
+          const resp = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+          });
+          status = resp.status; text = await resp.text(); ok = resp.ok;
+          if (ok) break;
+        } catch (err) {
+          status = 0; text = String(err); ok = false;
+        }
+      }
+    }
+
+    // 2) Im iFrame (oder wenn 1) fehlschlug): über Wix-Seite bridgen
+    if (!ok) {
+      const res = await sendViaParent(body);
+      ok = res.ok; status = res.status; text = res.text;
+    }
+
+    if(!ok){
+      console.error('Bridge error:', status, text);
+      showToast(`Online-Übermittlung fehlgeschlagen (Bridge ${status}). ${text || ""}`);
+      return;
+    }
+
+    showToast("Danke! Ihre Anfrage ist eingegangen. Wir melden uns kurzfristig.");
+    document.getElementById('kontaktForm').reset();
+    const b1 = document.getElementById('btnSubmit'); if (b1) b1.disabled = true;
+    const sbtn = document.getElementById('btnStickySubmit'); if (sbtn) sbtn.disabled = true;
+    // Blur focused fields and scroll to top to avoid mobile zoom sticking around
+    document.querySelectorAll('input,textarea,select').forEach(el=>el.blur());
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateSubmitState();
+
+    // --- Auto-Resize: Höhe an Wix melden (verbesserter Mechanismus) ---
+    (function(){
+      let raf = 0;
+      function postHeight(){
+        if(raf) return; raf = requestAnimationFrame(()=>{
+          raf = 0;
+          // Die Berechnung der Höhe sollte robust sein
+          const h = document.body.scrollHeight; // body.scrollHeight ist oft die zuverlässigste
+          try{
+            // console.log('Posting height:', h); // Debugging-Ausgabe
+            window.parent.postMessage({ type:'embed:height', height:h }, '*');
+          }catch(e){
+            // console.error('Error posting height to parent:', e);
+          }
+        });
+      }
+      window.__postHeight = postHeight; // Verfügbar machen für andere Funktionen
+      window.addEventListener('load', postHeight);
+      window.addEventListener('resize', postHeight); // Auch bei Resize posten
+      try{ new ResizeObserver(postHeight).observe(document.body); }catch(e){}
+      try{ new MutationObserver(postHeight).observe(document.body, { childList:true, subtree:true, attributes:true }); }catch(e){}
+      // Zusätzliche Timouts für den Fall, dass Observer nicht greifen oder initiale Renderzeit länger ist
+      setTimeout(postHeight, 300);
+      setTimeout(postHeight, 1000);
+      setTimeout(postHeight, 3000); // Eine letzte Verzögerung, falls alles andere fehlschlägt
+    })();
+  }
+
+  function updateSubmitState(){
+    const form = document.getElementById('kontaktForm');
+    const consent = document.getElementById('cbConsent').checked;
+    const valid = form.checkValidity();
+    const enable = consent && valid;
+    const b1 = document.getElementById('btnSubmit'); if (b1) b1.disabled = !enable;
+    const b2 = document.getElementById('btnStickySubmit'); if (b2) b2.disabled = !enable;
+  }
+
+  /* ===== Events ===== */
+  document.getElementById('schutzVorhanden').addEventListener('change', toggleGuard);
+  // Entfernt window.addEventListener('resize', toggleGuard); da es jetzt in postHeight ist und dort robuster platziert werden kann
+  ['lfm','hoehe','schutzReinigung','schutzMontage','schutzDemontage']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', recalc); });
+  document.querySelectorAll('input[name="typ"]').forEach(r => r.addEventListener('change', recalc));
+  document.getElementById('kontaktForm').addEventListener('submit', submitForm);
+  document.getElementById('cbConsent').addEventListener('change', updateSubmitState);
+  // Auto-activate guard checkbox when user types values
+  ['schutzReinigung','schutzMontage','schutzDemontage'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', autoActivateGuard);
+  });
+  document.querySelectorAll('#kontaktForm input, #kontaktForm textarea, #kontaktForm select').forEach(el => {
+    el.addEventListener('input', updateSubmitState);
+    el.addEventListener('change', updateSubmitState);
+  });
+
+  // Init
+  toggleGuard();
+  try { recalc(); } catch (e) { console.error('recalc init failed', e); }
+  updateSubmitState();
+  </script>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
