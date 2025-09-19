@@ -10,9 +10,43 @@ function s(x, max = 400) { return String(x ?? '').replace(/<[^>]*>/g,'').replace
 function n(x){ const v = Number(x); return Number.isFinite(v) ? v : null; }
 function anonymizeIp(ip){ if (!ip) return ''; if (ip.includes(':')) { const p=ip.split(':'); p[p.length-1]='0000'; return p.join(':'); } const p=ip.split('.'); if (p.length===4) p[3]='0'; return p.join('.'); }
 function retentionDate(months=12){ const d=new Date(); d.setMonth(d.getMonth()+months); return d; }
+function hasValue(v){ return v !== undefined && v !== null && (typeof v !== 'string' || v.trim() !== ''); }
+function isContactEmpty(obj){ if (!obj || typeof obj !== 'object') return true; return !Object.values(obj).some(val => hasValue(val)); }
+function pickLegacyContact(...sources){
+  const result = {};
+  const map = {
+    vorname: ['vorname', 'firstName', 'firstname', 'first_name', 'first'],
+    nachname: ['nachname', 'lastName', 'lastname', 'last_name', 'surname'],
+    email: ['email', 'mail'],
+    telefon: ['telefon', 'phone', 'tel', 'phoneNumber', 'phonenumber'],
+    nachricht: ['nachricht', 'message', 'msg', 'kommentar', 'comment', 'text'],
+    wunschtermin: ['wunschtermin', 'wunschTermin', 'termin', 'desiredDate', 'preferredDate', 'preferred_date']
+  };
+  for (const [target, keys] of Object.entries(map)) {
+    for (const source of sources) {
+      if (!source || typeof source !== 'object') continue;
+      for (const key of keys) {
+        const value = source[key];
+        if (hasValue(value)) {
+          result[target] = value;
+          break;
+        }
+      }
+      if (target in result) break;
+    }
+  }
+  return result;
+}
 
-export async function handleIncoming({ meta = {}, contact = {}, payload = {}, consent, ip, userAgent }) {
+export async function handleIncoming({ meta = {}, contact = {}, data = {}, payload = {}, consent, ip, userAgent }) {
   try {
+    if (isContactEmpty(contact)) {
+      const legacyContact = pickLegacyContact(data, data?.contact, payload, payload?.contact);
+      if (Object.keys(legacyContact).length) {
+        contact = legacyContact;
+      }
+    }
+
     const vorname = s(contact?.vorname, 60);
     const nachname = s(contact?.nachname, 60);
     const email = s(contact?.email, 120);

@@ -758,27 +758,32 @@ Original lesen
       submitButton.classList.add('opacity-60', 'cursor-not-allowed');
       submitButton.textContent = 'Wird gesendet…';
 
+      const contact = {
+        vorname: firstName,
+        nachname: lastName,
+        email: emailValue,
+        telefon: phoneValue,
+        nachricht: messageValue,
+        wunschtermin: ''
+      };
+
+      const payload = {
+        typ: 'Homepage-Anfrage',
+        adresse: addressValue,
+        hoehe: heightValue,
+        lfm: lengthValue,
+        gruende: selectedReasons,
+        schutzOptionen: selectedGuards
+      };
+
       const requestBody = {
         meta: {
           source: 'homepage-form',
           version: '2.0.0',
           timestamp: new Date().toISOString()
         },
-        contact: {
-          vorname: firstName,
-          nachname: lastName,
-          email: emailValue,
-          telefon: phoneValue,
-          nachricht: messageValue
-        },
-        payload: {
-          typ: 'Homepage-Anfrage',
-          adresse: addressValue,
-          hoehe: heightValue,
-          lfm: lengthValue,
-          gruende: selectedReasons,
-          schutzOptionen: selectedGuards
-        },
+        contact,
+        payload,
         consent: consentInput.checked ? 'ja' : 'nein'
       };
 
