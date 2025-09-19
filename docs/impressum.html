@@ -40,14 +40,14 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900">
-  <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
-    <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300" x-data="{ scrolled: false }">
-      <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5">
-        <a class="inline-flex items-center" href="index.html">
+  <div class="relative w-full overflow-x-hidden" x-data="navigationState()" x-init="init()" @resize.window="handleResize()" @load.window="checkCollapse()" @orientationchange.window="checkCollapse()">
+    <header class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300">
+      <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" x-ref="headerInner">
+        <a class="inline-flex items-center" href="index.html" x-ref="logo">
           <img alt="DachrinneCheck Logo" class="h-16 md:h-20 w-auto" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
           <span class="sr-only">Zur Startseite</span>
         </a>
-        <div class="hidden md:flex items-center gap-6 lg:gap-8">
+        <div class="flex items-center gap-6 lg:gap-8" x-ref="desktopNav" :class="{'hidden': collapseNav}">
           <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#services">Services</a>
           <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#about">Über uns</a>
           <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#contact">Kontakt</a>
@@ -58,21 +58,19 @@
             Angebot anfordern
           </a>
         </div>
-        <div class="md:hidden">
-          <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-900 dark:text-white p-2" aria-label="Menü öffnen">
-            <span class="material-symbols-outlined text-3xl">menu</span>
-          </button>
-        </div>
+        <button type="button" aria-label="Menü öffnen" class="hidden text-gray-900 dark:text-white p-2" x-ref="menuToggle" @click="toggleMobileMenu()" :class="{'hidden': !collapseNav, 'inline-flex': collapseNav}" :aria-expanded="collapseNav && mobileMenuOpen ? 'true' : 'false'" aria-controls="mobile-navigation">
+          <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
       </div>
-      <div :class="{'max-h-96': mobileMenuOpen, 'max-h-0': !mobileMenuOpen}" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out">
+      <div id="mobile-navigation" role="navigation" :aria-hidden="collapseNav && mobileMenuOpen ? 'false' : 'true'" :class="{'hidden': !collapseNav, 'max-h-96': collapseNav && mobileMenuOpen, 'max-h-0': !mobileMenuOpen || !collapseNav}" class="overflow-hidden transition-all duration-500 ease-in-out">
         <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700">
-          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#services">Services</a>
-          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#about">Über uns</a>
-          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#contact">Kontakt</a>
-          <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2" href="kostenrechner.html">
+          <a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#services">Services</a>
+          <a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#about">Über uns</a>
+          <a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#contact">Kontakt</a>
+          <a @click="closeMobileMenu()" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2" href="kostenrechner.html">
             Zum Kostenrechner
           </a>
-          <a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2" href="index.html#contact">
+          <a @click="closeMobileMenu()" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2" href="index.html#contact">
             Angebot anfordern
           </a>
         </div>
@@ -158,6 +156,125 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    function navigationState() {
+      return {
+        mobileMenuOpen: false,
+        collapseNav: false,
+        debouncedCheck: null,
+        init() {
+          this.debouncedCheck = this.debounce(() => this.checkCollapse(), 150);
+          this.$nextTick(() => {
+            this.checkCollapse();
+            if (typeof window.requestAnimationFrame === 'function') {
+              window.requestAnimationFrame(() => this.checkCollapse());
+            }
+            window.setTimeout(() => this.checkCollapse(), 250);
+            if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === 'function') {
+              document.fonts.ready.then(() => this.checkCollapse());
+            }
+          });
+        },
+        handleResize() {
+          if (typeof this.debouncedCheck === 'function') {
+            this.debouncedCheck();
+          } else {
+            this.checkCollapse();
+          }
+        },
+        debounce(callback, delay = 150) {
+          let timeoutId;
+          return (...args) => {
+            window.clearTimeout(timeoutId);
+            timeoutId = window.setTimeout(() => {
+              callback.apply(this, args);
+            }, delay);
+          };
+        },
+        toggleMobileMenu() {
+          if (!this.collapseNav) {
+            this.mobileMenuOpen = false;
+            return;
+          }
+          this.mobileMenuOpen = !this.mobileMenuOpen;
+        },
+        closeMobileMenu() {
+          this.mobileMenuOpen = false;
+        },
+        checkCollapse() {
+          const refs = this.$refs || {};
+          const container = refs.headerInner;
+          const nav = refs.desktopNav;
+          const logo = refs.logo;
+          const toggle = refs.menuToggle;
+
+          if (!container || !nav || !logo) {
+            return;
+          }
+
+          const navWasHidden = nav.classList.contains('hidden');
+          const originalNavStyle = {
+            visibility: nav.style.visibility,
+            position: nav.style.position,
+            left: nav.style.left,
+            right: nav.style.right,
+          };
+          const originalToggleStyle = toggle
+            ? {
+                visibility: toggle.style.visibility,
+                position: toggle.style.position,
+                left: toggle.style.left,
+                right: toggle.style.right,
+              }
+            : null;
+
+          if (toggle) {
+            toggle.style.visibility = 'hidden';
+            toggle.style.position = 'absolute';
+            toggle.style.left = '-9999px';
+            toggle.style.right = 'auto';
+          }
+
+          if (navWasHidden) {
+            nav.classList.remove('hidden');
+          }
+
+          nav.style.visibility = 'hidden';
+          nav.style.position = 'absolute';
+          nav.style.left = '-9999px';
+          nav.style.right = 'auto';
+
+          const navWidth = nav.scrollWidth;
+          const logoWidth = logo.offsetWidth;
+          const availableWidth = container.clientWidth - logoWidth;
+
+          const shouldCollapse = navWidth > availableWidth;
+
+          this.collapseNav = shouldCollapse;
+
+          if (shouldCollapse) {
+            nav.classList.add('hidden');
+          } else {
+            nav.classList.remove('hidden');
+            this.mobileMenuOpen = false;
+          }
+
+          nav.style.visibility = originalNavStyle.visibility || '';
+          nav.style.position = originalNavStyle.position || '';
+          nav.style.left = originalNavStyle.left || '';
+          nav.style.right = originalNavStyle.right || '';
+
+          if (toggle && originalToggleStyle) {
+            toggle.style.visibility = originalToggleStyle.visibility || '';
+            toggle.style.position = originalToggleStyle.position || '';
+            toggle.style.left = originalToggleStyle.left || '';
+            toggle.style.right = originalToggleStyle.right || '';
+          }
+        }
+      };
+    }
+  </script>
 
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
