@@ -337,28 +337,105 @@ Original lesen
 <div class="container mx-auto max-w-2xl text-center">
 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
-<form class="space-y-6 text-left" id="contact-form">
-<div>
-<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="name">Name</label>
-<input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="name" name="name" required="" type="text"/>
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="email">Email</label>
-<input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="email" name="email" required="" type="email"/>
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="phone">Telefonnummer</label>
-<input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="phone" name="phone" type="tel"/>
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="message">Nachricht</label>
-<textarea class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="message" name="message" required="" rows="5"></textarea>
-</div>
-<div class="text-center pt-4">
-<button class="bg-primary text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" type="submit">
-              Anfrage senden
-            </button>
-</div>
+<form class="space-y-8 text-left" id="contact-form">
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="first-name">Vorname<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="first-name" name="first-name" autocomplete="given-name" required="" type="text"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="last-name">Nachname<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="last-name" name="last-name" autocomplete="family-name" required="" type="text"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="email">E-Mail<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="email" name="email" autocomplete="email" required="" type="email"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="phone">Telefon<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="phone" name="phone" autocomplete="tel" inputmode="tel" pattern="\+?[0-9 ()\-\/]{6,20}" placeholder="z. B. +49 171 1234567" required="" type="tel"/>
+    </div>
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="address">Adresse auswählen<span class="text-red-500">*</span></label>
+    <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="address" name="address" placeholder="Straße, Hausnummer, PLZ und Ort" required="" type="text"/>
+    <p class="mt-2 text-xs text-text-light dark:text-text-dark">Bitte nennen Sie die Adresse der Immobilie, damit wir den Einsatz planen können.</p>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="gutter-height">Höhe der Dachrinne<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="gutter-height" name="gutter-height" min="0" step="0.1" placeholder="geschätzte Höhe in Metern" required="" type="number"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="gutter-length">Länge der Dachrinne<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="gutter-length" name="gutter-length" min="0" step="0.5" placeholder="geschätzte Länge in Metern" required="" type="number"/>
+    </div>
+  </div>
+
+  <fieldset class="space-y-4">
+    <legend class="text-sm font-semibold text-gray-900 dark:text-white">Grund für die Dachrinnenreinigung</legend>
+    <div class="space-y-3">
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Ich habe verunreinigtes Wasser"/>
+        <span>Ich habe verunreinigtes Wasser</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Wasserschäden an der Fassade"/>
+        <span>Wasserschäden an der Fassade</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Pflanzen in der Rinne"/>
+        <span>Pflanzen in der Rinne</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Dachrinne verstopft"/>
+        <span>Dachrinne verstopft</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Ich bin mir unsicher"/>
+        <span>Ich bin mir unsicher</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset class="space-y-4">
+    <legend class="text-sm font-semibold text-gray-900 dark:text-white">Dachrinnenschutz/Laubschutz</legend>
+    <div class="space-y-3">
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich habe einen Dachrinnenschutz"/>
+        <span>Ich habe einen Dachrinnenschutz</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich benötige einen Dachrinnenschutz"/>
+        <span>Ich benötige einen Dachrinnenschutz</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich bin mir unsicher – möchte mich beraten lassen"/>
+        <span>Ich bin mir unsicher – möchte mich beraten lassen</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich habe einen Dachrinnenschutz, brauche eine Reparatur"/>
+        <span>Ich habe einen Dachrinnenschutz, brauche eine Reparatur</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich habe einen Dachrinnenschutz, brauche eine Reinigung"/>
+        <span>Ich habe einen Dachrinnenschutz, brauche eine Reinigung</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="flex items-start gap-3">
+    <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" id="consent" name="consent" required="" type="checkbox"/>
+    <label class="text-sm text-gray-700 dark:text-gray-300" for="consent">Ich habe die <a class="text-primary hover:text-primary-dark font-medium" href="/Datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</label>
+  </div>
+
+  <div class="text-center pt-4">
+    <button class="bg-primary text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" type="submit">
+      Angebot anfordern
+    </button>
+  </div>
 </form>
 </div>
 </section>
@@ -575,27 +652,52 @@ Original lesen
       return;
     }
 
-    const nameInput = contactForm.querySelector('#name');
+    const firstNameInput = contactForm.querySelector('#first-name');
+    const lastNameInput = contactForm.querySelector('#last-name');
     const emailInput = contactForm.querySelector('#email');
     const phoneInput = contactForm.querySelector('#phone');
-    const messageInput = contactForm.querySelector('#message');
+    const addressInput = contactForm.querySelector('#address');
+    const heightInput = contactForm.querySelector('#gutter-height');
+    const lengthInput = contactForm.querySelector('#gutter-length');
+    const consentInput = contactForm.querySelector('#consent');
+    const reasonInputs = Array.from(contactForm.querySelectorAll('input[name="reasons"]'));
+    const guardInputs = Array.from(contactForm.querySelectorAll('input[name="guards"]'));
     const submitButton = contactForm.querySelector('button[type="submit"]');
 
-    if (!nameInput || !emailInput || !messageInput || !submitButton) {
+    if (!firstNameInput || !lastNameInput || !emailInput || !phoneInput || !addressInput || !heightInput || !lengthInput || !consentInput || !submitButton) {
       return;
     }
+
+    const parseNumberInput = input => {
+      if (!input) {
+        return null;
+      }
+      const rawValue = input.value.replace(',', '.').trim();
+      if (!rawValue) {
+        return null;
+      }
+      const numericValue = Number.parseFloat(rawValue);
+      return Number.isFinite(numericValue) ? numericValue : null;
+    };
 
     contactForm.addEventListener('submit', async event => {
       event.preventDefault();
 
       const errors = [];
-      const nameValue = nameInput.value.trim();
+      const firstName = firstNameInput.value.trim();
+      const lastName = lastNameInput.value.trim();
       const emailValue = emailInput.value.trim();
-      const phoneValue = phoneInput ? phoneInput.value.trim() : '';
-      const messageValue = messageInput.value.trim();
+      const phoneValue = phoneInput.value.trim();
+      const addressValue = addressInput.value.trim();
+      const heightValue = parseNumberInput(heightInput);
+      const lengthValue = parseNumberInput(lengthInput);
 
-      if (!nameValue) {
-        errors.push('Bitte geben Sie Ihren Namen an.');
+      if (!firstName) {
+        errors.push('Bitte geben Sie Ihren Vornamen an.');
+      }
+
+      if (!lastName) {
+        errors.push('Bitte geben Sie Ihren Nachnamen an.');
       }
 
       if (!emailValue) {
@@ -604,12 +706,26 @@ Original lesen
         errors.push('Bitte geben Sie eine gültige E-Mail-Adresse an.');
       }
 
-      if (!messageValue) {
-        errors.push('Bitte schildern Sie Ihr Anliegen.');
+      if (!phoneValue) {
+        errors.push('Bitte geben Sie eine Telefonnummer an.');
+      } else if (!/^\+?[0-9 ()\-\/]{6,20}$/.test(phoneValue)) {
+        errors.push('Bitte prüfen Sie die Telefonnummer.');
       }
 
-      if (phoneValue && !/^[+\d()\s-]{4,}$/.test(phoneValue)) {
-        errors.push('Bitte prüfen Sie die Telefonnummer.');
+      if (!addressValue) {
+        errors.push('Bitte geben Sie eine Adresse an.');
+      }
+
+      if (heightValue === null || heightValue <= 0) {
+        errors.push('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
+      }
+
+      if (lengthValue === null || lengthValue <= 0) {
+        errors.push('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
+      }
+
+      if (!consentInput.checked) {
+        errors.push('Bitte bestätigen Sie die Datenschutzerklärung.');
       }
 
       if (errors.length) {
@@ -617,29 +733,45 @@ Original lesen
         return;
       }
 
+      const selectedReasons = reasonInputs.filter(input => input.checked).map(input => input.value);
+      const selectedGuards = guardInputs.filter(input => input.checked).map(input => input.value);
+      const messageParts = [];
+      if (selectedReasons.length) {
+        messageParts.push(`Grund für die Reinigung: ${selectedReasons.join(', ')}`);
+      }
+      if (selectedGuards.length) {
+        messageParts.push(`Dachrinnenschutz: ${selectedGuards.join(', ')}`);
+      }
+      const messageValue = messageParts.join(' | ');
+
       const originalButtonText = submitButton.textContent;
       submitButton.disabled = true;
       submitButton.setAttribute('aria-disabled', 'true');
       submitButton.classList.add('opacity-60', 'cursor-not-allowed');
       submitButton.textContent = 'Wird gesendet…';
 
-      const [firstName, ...lastNameParts] = nameValue.split(/\s+/);
       const requestBody = {
         meta: {
           source: 'homepage-form',
+          version: '2.0.0',
           timestamp: new Date().toISOString()
         },
-        payload: {
-          typ: 'Homepage-Anfrage'
-        },
-        data: {
-          firstName: firstName || '',
-          lastName: lastNameParts.join(' ') || '',
-          fullName: nameValue,
+        contact: {
+          vorname: firstName,
+          nachname: lastName,
           email: emailValue,
-          phone: phoneValue || null,
-          message: messageValue
-        }
+          telefon: phoneValue,
+          nachricht: messageValue
+        },
+        payload: {
+          typ: 'Homepage-Anfrage',
+          adresse: addressValue,
+          hoehe: heightValue,
+          lfm: lengthValue,
+          gruende: selectedReasons,
+          schutzOptionen: selectedGuards
+        },
+        consent: consentInput.checked ? 'ja' : 'nein'
       };
 
       try {
@@ -651,8 +783,16 @@ Original lesen
           body: JSON.stringify(requestBody)
         });
 
-        if (!response.ok) {
-          throw new Error(`Unerwarteter Status ${response.status}`);
+        let result = null;
+        try {
+          result = await response.json();
+        } catch (jsonError) {
+          // ignore JSON parsing errors – will be handled by status check below
+        }
+
+        if (!response.ok || (result && result.ok === false)) {
+          const errorMessage = result?.error || `Unerwarteter Status ${response.status}`;
+          throw new Error(errorMessage);
         }
 
         alert('Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
