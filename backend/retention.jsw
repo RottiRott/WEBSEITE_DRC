@@ -1,0 +1,11 @@
+// backend/retention.js
+import wixData from 'wix-data';
+
+export async function pruneRequestsPriceCalculator() {
+  const now = new Date();
+  const res = await wixData.query('RequestsPriceCalculator').lt('retentionUntil', now).limit(1000).find();
+  let deleted = 0;
+  for (const item of res.items) { await wixData.remove('RequestsPriceCalculator', item._id); deleted++; }
+  console.log('prune RPC deleted:', deleted);
+  return { deleted };
+}
