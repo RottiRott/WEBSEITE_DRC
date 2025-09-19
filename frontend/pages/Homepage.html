@@ -43,14 +43,19 @@
     .text-shadow {
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
-    .parallax-bg {
-      background-attachment: fixed;
+    .hero-section {
+      position: relative;
+      min-height: 24rem;
+      height: min(70vh, 720px);
+      max-height: 720px;
+      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqHZh7xZYHC9LiJsE92sJ9MErl1KaBJ7rT5H1A2tSfSRrEgAq4zcHedYAm2O3_xiPHPuQDhPF1WLrD78vcuqR41irzfSyxpfRwpdXwbPm56QURmhkT4wz8TBPidkGAt3Wg9MLBoN-GJDsQFoRxoHRPu0Jw9N-1iww9q-L6C8gcIwPcgeR54xQxXgv295LP8_u5Z1JSFa02pyjU7nQxQe82eJANmBFivkctLJmvJPG8oqQY8SKmViJ09_fuMHZGsOgvgbUsAZKAhw');
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
+      background-attachment: fixed;
     }
     @media (max-width: 768px) {
-      .parallax-bg {
+      .hero-section {
         background-attachment: scroll;
       }
     }
@@ -79,7 +84,7 @@
       animation-timeline: view();
       animation-range: entry 20% cover 40%;
     }
-  </style>
+</style>
 <style>
     body {
       min-height: max(884px, 100dvh);
@@ -119,9 +124,7 @@
 </div>
 </div>
 </header>
-<section class="relative h-[80vh] md:h-[70vh] flex flex-col items-start justify-center text-white overflow-hidden">
-<div class="absolute inset-0 z-0 parallax-bg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqHZh7xZYHC9LiJsE92sJ9MErl1KaBJ7rT5H1A2tSfSRrEgAq4zcHedYAm2O3_xiPHPuQDhPF1WLrD78vcuqR41irzfSyxpfRwpdXwbPm56QURmhkT4wz8TBPidkGAt3Wg9MLBoN-GJDsQFoRxoHRPu0Jw9N-1iww9q-L6C8gcIwPcgeR54xQxXgv295LP8_u5Z1JSFa02pyjU7nQxQe82eJANmBFivkctLJmvJPG8oqQY8SKmViJ09_fuMHZGsOgvgbUsAZKAhw');">
-</div>
+<section class="relative flex flex-col items-start justify-center text-white overflow-hidden hero-section">
 <div class="absolute inset-0 bg-black/50"></div>
 <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
 <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
