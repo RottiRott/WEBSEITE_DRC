@@ -479,65 +479,10 @@ Original lesen
 </div>
 
 <script>
-  const REVIEWS_CSV_PATH = "../assets/data/rezensionen.csv";
-
-  function parseCSV(text) {
-    if (!text) {
-      return [];
-    }
-
-    text = text.replace(/^\ufeff/, '');
-    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-
-    const rows = [];
-    let currentRow = [];
-    let currentField = '';
-    let inQuotes = false;
-
-    for (let index = 0; index < text.length; index++) {
-      const char = text[index];
-
-      if (char === '"') {
-        if (inQuotes && text[index + 1] === '"') {
-          currentField += '"';
-          index += 1;
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (char === ',' && !inQuotes) {
-        currentRow.push(currentField);
-        currentField = '';
-      } else if (char === '\n' && !inQuotes) {
-        currentRow.push(currentField);
-        rows.push(currentRow);
-        currentRow = [];
-        currentField = '';
-      } else {
-        currentField += char;
-      }
-    }
-
-    if (currentField.length > 0 || currentRow.length) {
-      currentRow.push(currentField);
-      rows.push(currentRow);
-    }
-
-    const meaningfulRows = rows.filter(row => row.some(cell => cell && cell.trim() !== ''));
-
-    if (!meaningfulRows.length) {
-      return [];
-    }
-
-    const headers = meaningfulRows.shift().map(header => header.trim());
-
-    return meaningfulRows.map(row => {
-      const record = {};
-      headers.forEach((header, columnIndex) => {
-        record[header] = row[columnIndex] !== undefined ? row[columnIndex].trim() : '';
-      });
-      return record;
-    });
-  }
+  const REVIEWS_ENDPOINTS = [
+    '/_functions/reviews?limit=20',
+    'https://www.dachrinnecheck.de/_functions/reviews?limit=20'
+  ];
 
   function reviewsCarousel() {
     return {
@@ -553,32 +498,73 @@ Original lesen
         this.reviews = [];
 
         try {
-          const response = await fetch(REVIEWS_CSV_PATH, { cache: 'no-store' });
-          if (!response.ok) {
-            throw new Error(`Konnte Rezensionen nicht laden (Status ${response.status}).`);
+          let payload = null;
+          let lastError = null;
+
+          for (const endpoint of REVIEWS_ENDPOINTS) {
+            try {
+              const response = await fetch(endpoint, { cache: 'no-store' });
+              if (!response.ok) {
+                throw new Error(`Konnte Rezensionen nicht laden (Status ${response.status}).`);
+              }
+
+              payload = await response.json();
+              break;
+            } catch (fetchError) {
+              lastError = fetchError;
+            }
           }
 
-          const csvText = await response.text();
-          const rawRecords = parseCSV(csvText);
+          if (!payload) {
+            throw lastError || new Error('Die Kundenrezensionen konnten nicht geladen werden.');
+          }
 
-          if (!rawRecords.length) {
+          const rawItems = Array.isArray(payload?.items) ? payload.items : [];
+
+          if (!rawItems.length) {
             throw new Error('Keine Rezensionen in der Datenquelle gefunden.');
           }
 
-          const normalized = rawRecords.map((record, index) => {
-            const ratingValue = Number(record['Bewertung (1–5)']) || Number(record['Bewertung (1-5)']) || 0;
+          const formatDate = value => {
+            if (!value) {
+              return '';
+            }
+            const date = value instanceof Date ? value : new Date(value);
+            if (Number.isNaN(date.getTime())) {
+              return typeof value === 'string' ? value : '';
+            }
+            return date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+          };
+
+          const toBoolean = value => {
+            if (typeof value === 'string') {
+              const normalized = value.trim().toLowerCase();
+              return ['true', '1', 'yes', 'ja'].includes(normalized);
+            }
+            return Boolean(value);
+          };
+
+          const normalized = rawItems.map((item, index) => {
+            const safeItem = item || {};
+            const name = typeof safeItem.name === 'string' ? safeItem.name.trim() : '';
+            const comment = typeof safeItem.comment === 'string'
+              ? safeItem.comment.trim()
+              : (typeof safeItem.text === 'string' ? safeItem.text.trim() : '');
+            const ratingSource = safeItem.rating ?? safeItem.score ?? safeItem.stars;
+            const ratingValue = Number.parseFloat(ratingSource);
+
             return {
-              id: record.ID || record.id || `${record['Name/Initialen'] || 'kundin'}-${index}`,
-              name: record['Name/Initialen'] ? record['Name/Initialen'].trim() : 'Anonymer Kunde',
-              text: record['Bewertungstext'] ? record['Bewertungstext'].trim() : '',
-              rating: ratingValue || 0,
-              city: record['Stadt'] ? record['Stadt'].trim() : '',
-              date: record['Datum'] ? record['Datum'].trim() : '',
-              source: record['Quelle'] ? record['Quelle'].trim() : '',
-              link: record['Link zur Originalquelle'] ? record['Link zur Originalquelle'].trim() : '',
-              avatar: record['Avatar'] ? record['Avatar'].trim() : '',
-              highlighted: (record['hervorgehoben'] || '').toLowerCase() === 'true',
-              verified: (record['verifiziert'] || '').toLowerCase() === 'true'
+              id: safeItem.id || `review-${index}`,
+              name: name || 'Anonymer Kunde',
+              text: comment,
+              rating: Number.isFinite(ratingValue) ? ratingValue : 0,
+              city: typeof safeItem.city === 'string' ? safeItem.city.trim() : '',
+              date: formatDate(safeItem.date),
+              source: typeof safeItem.source === 'string' ? safeItem.source.trim() : '',
+              link: typeof safeItem.link === 'string' ? safeItem.link.trim() : '',
+              avatar: typeof safeItem.avatar === 'string' ? safeItem.avatar.trim() : '',
+              highlighted: toBoolean(safeItem.highlighted),
+              verified: toBoolean(safeItem.verified)
             };
           });
 
