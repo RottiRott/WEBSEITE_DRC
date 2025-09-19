@@ -41,8 +41,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link href="assets/css/responsive-nav.css" rel="stylesheet"/>
 <script defer src="assets/js/responsive-nav.js"></script>
-<link href="<img src="https://1drv.ms/i/c/83abebca150dc60f/IQT5fcvfMuAWQ6Xby_AFmFr0AcC8muppz2Sszhm6eSZi37I?width=1536&height=672" width="1536" height="672" />"/>
+<!-- Hintergrundbild wird per CSS gesetzt -->
 <style>
+    body {
+      position: relative;
+      min-height: max(884px, 100dvh);
+      background-image: url("https://1drv.ms/i/c/83abebca150dc60f/IQT5fcvfMuAWQ6Xby_AFmFr0AcC8muppz2Sszhm6eSZi37I?width=1536&height=672");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dark body::before {
+      background: rgba(15, 23, 42, 0.65);
+    }
+
     .text-shadow {
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
@@ -51,21 +74,6 @@
       min-height: 24rem;
       height: min(70vh, 720px);
       max-height: 720px;
-      background-image: url("https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png");
-      background-position: center top;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-attachment: fixed;
-    }
-    @media (min-width: 1024px) {
-      .hero-section {
-        background-position: 70% center;
-      }
-    }
-    @media (max-width: 768px) {
-      .hero-section {
-        background-attachment: scroll;
-      }
     }
     [x-cloak] {
       display: none !important;
@@ -93,14 +101,9 @@
       animation-range: entry 20% cover 40%;
     }
 </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
   </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-<div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
+<div class="relative z-10 w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
 <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
 <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
 <a class="inline-flex items-center" data-nav-logo href="index.html">
@@ -150,7 +153,7 @@
 </div>
 </header>
 <section class="relative flex flex-col items-start justify-center text-white overflow-hidden hero-section">
-<div class="absolute inset-0 bg-black/50"></div>
+<div class="absolute inset-0 bg-slate-900/60"></div>
 <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
 <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
 <p class="text-lg md:text-2xl mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
