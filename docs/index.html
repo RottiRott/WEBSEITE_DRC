@@ -342,23 +342,14 @@ Original lesen
 </template>
   </div>
   </div>
-  <div class="mt-12" id="dynamic-reviews">
-    <div class="text-center max-w-3xl mx-auto mb-8">
-      <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Aktuelle Kundenbewertungen</h3>
-      <p class="text-base md:text-lg text-text-light dark:text-text-dark">Ausgewählte Kundenbewertungen aus unserer MyHammer-Präsenz.</p>
-    </div>
-    <div class="max-w-4xl mx-auto">
-      <div class="grid gap-6 md:grid-cols-2" id="reviews-list"></div>
-    </div>
-  </div>
   </div>
 </section>
 
-<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal">
+<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark">
 <div class="container mx-auto max-w-3xl">
 <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-8 md:mb-12">Häufig gestellte Fragen</h2>
 <div class="space-y-4 md:space-y-6" x-data="{ open: null }">
-<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift">
 <button @click="open === 1 ? open = null : open = 1" class="w-full text-left p-4 md:p-6 flex justify-between items-center">
 <span class="font-semibold text-base md:text-xl text-gray-900 dark:text-white">Wie oft sollte ich meine Dachrinnen reinigen lassen?</span>
 <svg :class="{ 'rotate-180': open === 1 }" class="w-6 h-6 text-primary transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -369,7 +360,7 @@ Original lesen
 <p>Wir empfehlen, Ihre Dachrinnen mindestens zweimal im Jahr reinigen zu lassen, typischerweise im Frühjahr und Herbst. Wenn Ihr Grundstück von vielen Bäumen umgeben ist, kann eine häufigere Reinigung erforderlich sein.</p>
 </div>
 </div>
-<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift">
 <button @click="open === 2 ? open = null : open = 2" class="w-full text-left p-4 md:p-6 flex justify-between items-center">
 <span class="font-semibold text-base md:text-xl text-gray-900 dark:text-white">Was ist Ihr Servicegebiet in NRW?</span>
 <svg :class="{ 'rotate-180': open === 2 }" class="w-6 h-6 text-primary transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -380,7 +371,7 @@ Original lesen
 <p>Wir bieten unsere Dachrinnenreinigungsdienste in der gesamten Region Nordrhein-Westfalen (NRW) an. Kontaktieren Sie uns mit Ihrer Adresse, um zu bestätigen, ob wir Ihren spezifischen Standort bedienen.</p>
 </div>
 </div>
-<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift">
 <button @click="open === 3 ? open = null : open = 3" class="w-full text-left p-4 md:p-6 flex justify-between items-center">
 <span class="font-semibold text-base md:text-xl text-gray-900 dark:text-white">Wie wird der Preis für die Dachrinnenreinigung bestimmt?</span>
 <svg :class="{ 'rotate-180': open === 3 }" class="w-6 h-6 text-primary transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -394,7 +385,7 @@ Original lesen
 </div>
 </div>
 </section>
-<section class="py-16 md:py-24 px-4 bg-card-light dark:bg-card-dark reveal" id="contact">
+<section class="py-16 md:py-24 px-4 bg-card-light dark:bg-card-dark" id="contact">
 <div class="container mx-auto max-w-2xl text-center">
 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
@@ -1097,113 +1088,6 @@ Original lesen
       };
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const reviewsSection = document.querySelector('#dynamic-reviews');
-      if (!reviewsSection) {
-        return;
-      }
-
-      const listElement = reviewsSection.querySelector('#reviews-list');
-      if (!listElement) {
-        return;
-      }
-
-      const createStarRow = ratingValue => {
-        const rating = clampRating(ratingValue);
-        const container = document.createElement('div');
-        container.className = 'flex items-center gap-1 text-yellow-400';
-        container.setAttribute('aria-label', `${Math.round(rating * 10) / 10} von 5 Sternen`);
-
-        for (let index = 1; index <= 5; index += 1) {
-          const span = document.createElement('span');
-          span.className = 'material-symbols-outlined text-xl';
-          if (rating >= index) {
-            span.textContent = 'star';
-          } else if (rating >= index - 0.5) {
-            span.textContent = 'star_half';
-          } else {
-            span.textContent = 'star_border';
-          }
-          container.appendChild(span);
-        }
-
-        const label = document.createElement('span');
-        label.className = 'ml-2 text-sm font-medium text-text-light dark:text-text-dark';
-        label.textContent = `${Math.round(rating * 10) / 10} / 5`;
-        container.appendChild(label);
-
-        return container;
-      };
-
-      const createReviewCard = review => {
-        const card = document.createElement('article');
-        card.className = 'bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm flex flex-col gap-4';
-
-        if (review.highlighted) {
-          const badge = document.createElement('span');
-          badge.className = 'self-start text-xs font-semibold uppercase tracking-wide bg-primary text-white px-3 py-1 rounded-full';
-          badge.textContent = 'Top-Bewertung';
-          card.appendChild(badge);
-        }
-
-        const name = document.createElement('h4');
-        name.className = 'text-lg font-semibold text-gray-900 dark:text-white';
-        name.textContent = review.name || 'Kunde';
-        card.appendChild(name);
-
-        card.appendChild(createStarRow(review.rating));
-
-        if (review.text) {
-          const comment = document.createElement('p');
-          comment.className = 'text-sm md:text-base text-text-light dark:text-text-dark italic';
-          comment.textContent = review.text;
-          card.appendChild(comment);
-        }
-
-        const meta = document.createElement('p');
-        meta.className = 'text-xs text-text-light dark:text-text-dark';
-        meta.textContent = review.formattedDate ? `Bewertet am ${review.formattedDate}` : 'Bewertung ohne Datumsangabe';
-        card.appendChild(meta);
-
-        if (review.city) {
-          const city = document.createElement('p');
-          city.className = 'text-xs text-text-light dark:text-text-dark';
-          city.textContent = review.city;
-          card.appendChild(city);
-        }
-
-        if (review.source || review.link) {
-          const source = document.createElement('p');
-          source.className = 'text-xs text-text-light dark:text-text-dark';
-          if (review.link) {
-            const anchor = document.createElement('a');
-            anchor.href = review.link;
-            anchor.target = '_blank';
-            anchor.rel = 'noopener';
-            anchor.className = 'text-primary hover:text-primary-dark font-medium';
-            anchor.textContent = review.source || 'Zur Quelle';
-            source.appendChild(anchor);
-          } else {
-            source.textContent = review.source;
-          }
-          card.appendChild(source);
-        }
-
-        return card;
-      };
-
-      if (!NORMALIZED_REVIEWS.length) {
-        const placeholder = document.createElement('p');
-        placeholder.className = 'text-center text-text-light dark:text-text-dark';
-        placeholder.textContent = 'Aktuell liegen keine Bewertungen vor.';
-        listElement.appendChild(placeholder);
-        return;
-      }
-
-      NORMALIZED_REVIEWS.forEach(review => {
-        listElement.appendChild(createReviewCard(review));
-      });
-    });
     document.addEventListener('DOMContentLoaded', () => {
       const contactForm = document.querySelector('#contact-form');
       if (!contactForm) {
