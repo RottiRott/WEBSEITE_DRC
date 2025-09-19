@@ -35,19 +35,21 @@
       },
     };
   </script>
+  <link href="assets/css/responsive-nav.css" rel="stylesheet" />
+  <script defer src="assets/js/responsive-nav.js"></script>
   <style>
     body { min-height: 100vh; }
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900">
   <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
-    <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300" x-data="{ scrolled: false }">
-      <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5">
-        <a class="inline-flex items-center" href="index.html">
-          <img alt="DachrinneCheck Logo" class="h-16 md:h-20 w-auto" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
+    <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
+      <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
+        <a class="inline-flex items-center" data-nav-logo href="index.html">
+          <img alt="DachrinneCheck Logo" class="h-16 md:h-20 w-auto" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" style="height: clamp(32px, 6vh, 48px); width: auto; aspect-ratio: attr(width) / attr(height); object-fit: contain;"/>
           <span class="sr-only">Zur Startseite</span>
         </a>
-        <div class="hidden md:flex items-center gap-6 lg:gap-8">
+        <div class="hidden md:flex items-center gap-6 lg:gap-8 nav-inline" data-nav-inline>
           <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#services">Services</a>
           <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#about">Über uns</a>
           <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#contact">Kontakt</a>
@@ -58,24 +60,35 @@
             Angebot anfordern
           </a>
         </div>
-        <div class="md:hidden">
-          <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-900 dark:text-white p-2" aria-label="Menü öffnen">
-            <span class="material-symbols-outlined text-3xl">menu</span>
+        <div class="md:hidden nav-toggle">
+          <button @click="mobileMenuOpen = !mobileMenuOpen" aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white p-2" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
+            <span aria-hidden="true" class="material-symbols-outlined text-3xl">menu</span>
+            <span class="sr-only">Menü</span>
           </button>
         </div>
       </div>
-      <div :class="{'max-h-96': mobileMenuOpen, 'max-h-0': !mobileMenuOpen}" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out">
-        <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700">
-          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#services">Services</a>
-          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#about">Über uns</a>
-          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#contact">Kontakt</a>
-          <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2" href="kostenrechner.html">
-            Zum Kostenrechner
-          </a>
-          <a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2" href="index.html#contact">
-            Angebot anfordern
-          </a>
-        </div>
+      <div :class="{'max-h-96': mobileMenuOpen, 'max-h-0': !mobileMenuOpen}" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out nav-dialog-backdrop" data-nav-overlay hidden>
+        <nav aria-hidden="true" aria-label="Hauptnavigation" aria-modal="true" class="nav-dialog" data-nav-dialog id="primary-navigation" role="dialog" tabindex="-1">
+          <button class="nav-dialog-close text-gray-900 dark:text-text-dark p-2" data-nav-close type="button">
+            <span aria-hidden="true" class="material-symbols-outlined text-2xl">close</span>
+            <span class="sr-only">Menü schließen</span>
+          </button>
+          <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700 nav-dialog-content">
+            <div class="nav-dialog-links w-full flex flex-col items-center space-y-4">
+              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#services">Services</a>
+              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#about">Über uns</a>
+              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#contact">Kontakt</a>
+            </div>
+            <div class="nav-dialog-actions w-full flex flex-col items-center space-y-3">
+              <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="kostenrechner.html">
+                Zum Kostenrechner
+              </a>
+              <a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="index.html#contact">
+                Angebot anfordern
+              </a>
+            </div>
+          </div>
+        </nav>
       </div>
     </header>
 
