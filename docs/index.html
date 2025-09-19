@@ -268,20 +268,17 @@
 <template x-if="review.highlighted">
 <span class="absolute top-4 right-4 bg-primary text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full">Top-Bewertung</span>
 </template>
-<div class="flex justify-center mb-4">
-<img :alt="`Avatar von ${review.name}`" :src="avatarUrl(review)" class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-4 border-white shadow"/>
-</div>
-<div class="flex flex-wrap justify-center items-center gap-2 mb-3" x-show="review.verified || review.source">
-<template x-if="review.verified">
-<span class="flex items-center text-xs font-semibold text-green-700 bg-green-100 dark:text-green-200 dark:bg-green-900/60 px-3 py-1 rounded-full">
-<span class="material-symbols-outlined text-base mr-1">verified</span>
-Verifiziert
-</span>
-</template>
-<template x-if="review.source">
-<span class="text-xs text-text-light dark:text-text-dark px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/70" x-text="review.source"></span>
-</template>
-</div>
+          <div class="flex flex-wrap justify-center items-center gap-2 mb-4" x-show="review.verified || review.source">
+            <template x-if="review.verified">
+              <span class="flex items-center text-xs font-semibold text-green-700 bg-green-100 dark:text-green-200 dark:bg-green-900/60 px-3 py-1 rounded-full">
+                <span class="material-symbols-outlined text-base mr-1">verified</span>
+                Verifiziert
+              </span>
+            </template>
+            <template x-if="review.source">
+              <span class="text-xs text-text-light dark:text-text-dark px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/70" x-text="review.source"></span>
+            </template>
+          </div>
 <div class="flex justify-center text-yellow-400 mb-4">
 <template x-for="star in 5" :key="`${review.id || index}-star-${star}`">
 <span class="material-symbols-outlined" x-text="starIcon(star, review.rating)"></span>
@@ -319,14 +316,9 @@ Original lesen
   <div class="mt-12" id="dynamic-reviews">
     <div class="text-center max-w-3xl mx-auto mb-8">
       <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Aktuelle Kundenbewertungen</h3>
-      <p class="text-base md:text-lg text-text-light dark:text-text-dark">Echte Rückmeldungen aus unserer Reviews-CMS-Sammlung – automatisch aktualisiert.</p>
+      <p class="text-base md:text-lg text-text-light dark:text-text-dark">Ausgewählte Kundenbewertungen aus unserer MyHammer-Präsenz.</p>
     </div>
-    <div class="max-w-4xl mx-auto space-y-6">
-      <div class="bg-white/70 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl p-6 text-center" id="reviews-loading">
-        <p class="font-medium">Bewertungen werden geladen …</p>
-      </div>
-      <div class="hidden bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-700 dark:text-red-200 rounded-xl p-6 text-center" id="reviews-error"></div>
-      <div class="hidden text-text-light dark:text-text-dark text-center" id="reviews-empty">Noch keine veröffentlichten Bewertungen vorhanden.</div>
+    <div class="max-w-4xl mx-auto">
       <div class="grid gap-6 md:grid-cols-2" id="reviews-list"></div>
     </div>
   </div>
@@ -498,385 +490,535 @@ Original lesen
 </div>
 
 <script>
-  const detectFunctionsBase = () => {
-    try {
-      if (typeof window !== 'undefined') {
-        const { hostname = '' } = window.location || {};
-        const normalized = String(hostname).toLowerCase();
-        if (normalized.includes('wixsite') || normalized.includes('editor')) {
-          return '/_functions-dev';
-        }
-      }
-    } catch (error) {
-      console.warn('Konnte Umgebung für Functions-Endpunkte nicht bestimmen:', error);
+  const RAW_REVIEWS = [
+    {
+      "id": "0024a6a5-efce-4ed2-8b0b-c3240ab043ea",
+      "name": "MyHammer-Kunde",
+      "text": "",
+      "rating": 5.0,
+      "city": "Mönchengladbach",
+      "date": "16.Nov.2023",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "19717a95-1a5c-4c0b-8bf7-2ef50d4e04db",
+      "name": "Anja",
+      "text": "Gute Kommunikation und zuverlässig.",
+      "rating": 5.0,
+      "city": "Düsseldorf",
+      "date": "20 Apr 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "19cae03b-6938-4d52-ab10-75e346a251bb",
+      "name": "Lucija Petric",
+      "text": "Tolles Ergebnis, gute Kommunikation und Terminabstimmung. Kompetent und freundlich. Werde ihn im Herbst wieder beauftragen.",
+      "rating": 5.0,
+      "city": "Duisburg",
+      "date": "22 Jun 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "1d264bbd-e8a9-4fa0-bff9-16ac242a6c61",
+      "name": "Lisa",
+      "text": "Tolle Arbeit",
+      "rating": 5.0,
+      "city": "Willich",
+      "date": "2025-08-06T10:00:00Z",
+      "source": "",
+      "link": "",
+      "highlighted": false,
+      "verified": false
+    },
+    {
+      "id": "1e5ddeb3-25ce-4528-add6-fe2ba61699d9",
+      "name": "Walther",
+      "text": "Vom Angebot bis zur Ausführung professionell. Selbst Arbeiten außerhalb des Auftrags wurden ohne Aufpreis erledigt.",
+      "rating": 5.0,
+      "city": "Essen",
+      "date": "14 Sep 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": true,
+      "verified": true
+    },
+    {
+      "id": "1fccfada-7c7c-40e0-8760-8392601227fd",
+      "name": "Fleuren",
+      "text": "Von der ersten Kommunikation bis zur Ausführung top. Werde ihn wieder beauftragen.",
+      "rating": 5.0,
+      "city": "Oberhausen (Düsseldorf)",
+      "date": "26 Jan 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "34145f71-6fea-4d66-969a-a95b62e8034a",
+      "name": "Stephanie",
+      "text": "Sehr netter Kontakt. Die Arbeiten wurden perfekt ausgeführt.",
+      "rating": 5.0,
+      "city": "Kamp-Lintfort",
+      "date": "28 Mar 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "3ae683d3-b211-435d-a9ad-85567d0206f0",
+      "name": "Kravaev",
+      "text": "Freundlich, pünktlich, professionell. Sehr zu empfehlen.",
+      "rating": 5.0,
+      "city": "Mönchengladbach",
+      "date": "25 Feb 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "3f258d6c-34f8-409b-8fba-53f7149f5640",
+      "name": "S.",
+      "text": "Schnell und professioneller Service. Würde ihn jederzeit wieder buchen.",
+      "rating": 5.0,
+      "city": "Nettetal",
+      "date": "20 May 2025",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "47b18d36-7329-4390-812e-ac99729b9797",
+      "name": "MyHammer-Kunde",
+      "text": "",
+      "rating": 5.0,
+      "city": "Wegberg",
+      "date": "25 May 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "4e0bd180-bf98-4625-bc0f-c106a134b6cb",
+      "name": "Stefan Hirschmann",
+      "text": "Sehr freundlicher und professioneller Service. Kann ich nur empfehlen.",
+      "rating": 5.0,
+      "city": "Düsseldorf",
+      "date": "24 May 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "570b7993-cf44-4a22-a141-9389a29a36fb",
+      "name": "Gottmanns",
+      "text": "Sehr gute Bearbeitung.",
+      "rating": 5.0,
+      "city": "Mönchengladbach",
+      "date": "1 Aug 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "6d855bfa-cf25-4150-a548-2b96e713d43b",
+      "name": "MyHammer-Kunde",
+      "text": "Sehr gute Arbeit, pünktlich, professionell, höflich. Gerne wieder.",
+      "rating": 5.0,
+      "city": "Düsseldorf",
+      "date": "26 Aug 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "7708fef2-1116-4120-b7de-60e4c6cbe332",
+      "name": "MyHammer-Kunde",
+      "text": "Pünktlich, freundlich, sauber und fairer Preis.",
+      "rating": 5.0,
+      "city": "Titz",
+      "date": "20 Jul 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "7e6095e2-f538-4a1f-be74-d2eb81c7dd34",
+      "name": "MyHammer-Kunde",
+      "text": "Pünktlich, freundlich und sehr empfehlenswert.",
+      "rating": 5.0,
+      "city": "Düsseldorf",
+      "date": "11 May 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "8b41ad09-fb80-4345-ac43-e543566c2e04",
+      "name": "MyHammer-Kunde",
+      "text": "",
+      "rating": 5.0,
+      "city": "Krefeld",
+      "date": "7 May 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "90665a06-3718-4991-8f05-8b9bbc743499",
+      "name": "Claudia",
+      "text": "Sehr zuverlässig und pünktlich. Innovative Technik. Absolut empfehlenswert.",
+      "rating": 5.0,
+      "city": "Nettetal",
+      "date": "1 Sep 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "940d0633-25b9-4c18-9b3b-48af6f24e8e0",
+      "name": "MyHammer-Kunde",
+      "text": "Schnell, freundlich und zuverlässig.",
+      "rating": 5.0,
+      "city": "Rommerskirchen",
+      "date": "26 Oct 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "9585e27e-8290-4360-831e-e71ac0e6cf50",
+      "name": "MyHammer-Kunde",
+      "text": "Unkompliziert, alles wie es sein soll.",
+      "rating": 5.0,
+      "city": "Willich",
+      "date": "30 Apr 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "9af63655-4af5-443b-94fb-ed18eb489974",
+      "name": "Uwe",
+      "text": "Schnell, hilfsbereit und gute Arbeit.",
+      "rating": 5.0,
+      "city": "Viersen",
+      "date": "29 Jul 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "a5a9691b-1bad-48bf-b067-eb7cf37021ad",
+      "name": "MyHammer-Kunde",
+      "text": "Schnelle und kompetente Ausführung, freundlicher Kontakt.",
+      "rating": 5.0,
+      "city": "Ratingen",
+      "date": "18 Mar 2025",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "a6bb9eb1-3265-4530-9563-e702cfd90454",
+      "name": "Sebastian",
+      "text": "Unkompliziert, schnell und gut. Guter Preis ohne Diskussion.",
+      "rating": 5.0,
+      "city": "Dormagen",
+      "date": "5 Jul 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "a9c12f48-011f-4517-a328-53626903ce85",
+      "name": "MyHammer-Kunde",
+      "text": "Von A‑Z alles top.",
+      "rating": 5.0,
+      "city": "Mettmann",
+      "date": "12 Apr 2025",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "ab03a3bf-61f3-44b2-abab-c14a84ca1cb4",
+      "name": "MyHammer-Kunde",
+      "text": "Pünktlich, sauber, kompetent und freundlich.",
+      "rating": 5.0,
+      "city": "Duisburg",
+      "date": "6 Sep 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "b1ae3394-1e13-4c77-b20e-7fbd7625b325",
+      "name": "Peter Ohlert",
+      "text": "Reinigung mit neuer Technik, Dach und Dachrinne, Ergebnis super, schnell und zuverlässig.",
+      "rating": 5.0,
+      "city": "Nettetal",
+      "date": "21 Jul 2025",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": true,
+      "verified": true
+    },
+    {
+      "id": "b9fc10e5-7742-43af-ad8d-3543f9dd7bef",
+      "name": "MyHammer-Kunde",
+      "text": "Top! Gerne jederzeit wieder. Vielen Dank.",
+      "rating": 5.0,
+      "city": "Meerbusch",
+      "date": "29 Jul 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "c5dc5a14-070f-4c2e-ba32-60fa1d808bf7",
+      "name": "Angelina Tillmanns",
+      "text": "Schnelles Angebot, saubere Arbeit. Sehr zu empfehlen.",
+      "rating": 5.0,
+      "city": "Langenfeld (Rheinland)",
+      "date": "27 Jul 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": true,
+      "verified": true
+    },
+    {
+      "id": "e0ade0fd-3a3d-4c8b-b6a8-86b98003267d",
+      "name": "MyHammer-Kunde",
+      "text": "Freundlich und effizient.",
+      "rating": 5.0,
+      "city": "Mönchengladbach",
+      "date": "24 Nov 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "f38d5256-e9f1-4699-b60f-a5d41f4b12d5",
+      "name": "MyHammer-Kunde",
+      "text": "",
+      "rating": 5.0,
+      "city": "Duisburg",
+      "date": "28 Jul 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "f48ffbd5-fae3-425e-b85e-a8a2d24945ac",
+      "name": "MyHammer-Kunde",
+      "text": "",
+      "rating": 5.0,
+      "city": "Willich",
+      "date": "23 Feb 2024",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
+    },
+    {
+      "id": "f92085f9-be55-4dca-a3a5-186c4eef2218",
+      "name": "MyHammer-Kunde",
+      "text": "Schnelles Angebot, sehr ordentliche Ausführung. Perfekter Service. Preis-Leistung top. Kann ich nur empfehlen.",
+      "rating": 5.0,
+      "city": "Niederkrüchten",
+      "date": "10 Dec 2023",
+      "source": "MyHammer",
+      "link": "https://www.my-hammer.de/auftragnehmer/dachrinnecheck/bewertungen",
+      "highlighted": false,
+      "verified": true
     }
-    return '/_functions';
-  };
+  ];
 
-  const FUNCTIONS_BASE = detectFunctionsBase();
+    const clampRating = value => {
+      const numeric = typeof value === 'number' ? value : Number.parseFloat(value);
+      if (!Number.isFinite(numeric)) {
+        return 0;
+      }
+      return Math.min(Math.max(numeric, 0), 5);
+    };
 
-  const createReviewEndpoints = limit => {
-    const parsedLimit = Number.parseInt(limit, 10);
-    const safeLimit = Number.isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : 10;
-    const alternateBase = FUNCTIONS_BASE === '/_functions' ? '/_functions-dev' : '/_functions';
-    const endpoints = [
-      `${FUNCTIONS_BASE}/reviews?limit=${safeLimit}`,
-      `${alternateBase}/reviews?limit=${safeLimit}`,
-      `https://www.dachrinnecheck.de/_functions/reviews?limit=${safeLimit}`
-    ];
-    return [...new Set(endpoints)];
-  };
+    const parseReviewDate = value => {
+      if (!value) {
+        return null;
+      }
+      if (value instanceof Date) {
+        return Number.isNaN(value.getTime()) ? null : value;
+      }
+      const rawString = String(value).trim();
+      if (!rawString) {
+        return null;
+      }
+      let parsed = new Date(rawString);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed;
+      }
+      const normalized = rawString.replace(/(\d{1,2})\.(\w+)\.(\d{4})/, '$1 $2 $3').replace(/\./g, ' ');
+      parsed = new Date(normalized);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    };
 
-  const REVIEWS_ENDPOINTS = createReviewEndpoints(20);
+    const formatDateValue = (date, fallback) => {
+      if (date instanceof Date && !Number.isNaN(date.getTime())) {
+        return date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+      }
+      return typeof fallback === 'string' ? fallback : '';
+    };
 
-  function reviewsCarousel() {
-    return {
-      reviews: [],
-      activeIndex: 0,
-      ready: false,
-      error: '',
-      autoRotateId: null,
-      async init() {
-        this.stopAutoRotate();
-        this.error = '';
-        this.ready = false;
-        this.reviews = [];
+    const NORMALIZED_REVIEWS = RAW_REVIEWS.map((review, index) => {
+      const safeReview = review || {};
+      const name = typeof safeReview.name === 'string' ? safeReview.name.trim() : '';
+      const text = typeof safeReview.text === 'string' ? safeReview.text.trim() : '';
+      const city = typeof safeReview.city === 'string' ? safeReview.city.trim() : '';
+      const source = typeof safeReview.source === 'string' ? safeReview.source.trim() : '';
+      const link = typeof safeReview.link === 'string' ? safeReview.link.trim() : '';
+      const parsedDate = parseReviewDate(safeReview.date);
 
-        try {
-          let payload = null;
-          let lastError = null;
+      return {
+        id: safeReview.id || `static-review-${index}`,
+        name: name || 'MyHammer-Kunde',
+        text,
+        rating: clampRating(safeReview.rating),
+        city,
+        source,
+        link,
+        highlighted: Boolean(safeReview.highlighted),
+        verified: Boolean(safeReview.verified),
+        timestamp: parsedDate ? parsedDate.getTime() : null,
+        formattedDate: formatDateValue(parsedDate, safeReview.date)
+      };
+    }).sort((a, b) => {
+      if (a.highlighted !== b.highlighted) {
+        return a.highlighted ? -1 : 1;
+      }
+      if (a.timestamp && b.timestamp) {
+        return b.timestamp - a.timestamp;
+      }
+      if (a.timestamp) {
+        return -1;
+      }
+      if (b.timestamp) {
+        return 1;
+      }
+      return a.name.localeCompare(b.name, 'de');
+    });
 
-          for (const endpoint of REVIEWS_ENDPOINTS) {
-            try {
-              const response = await fetch(endpoint, { cache: 'no-store' });
-              if (!response.ok) {
-                throw new Error(`Konnte Rezensionen nicht laden (Status ${response.status}).`);
-              }
-
-              payload = await response.json();
-
-              if (payload?.ok === false) {
-                const message = payload?.error || 'Die Kundenrezensionen konnten nicht geladen werden.';
-                throw new Error(message);
-              }
-
-              break;
-            } catch (fetchError) {
-              lastError = fetchError;
-            }
+    function reviewsCarousel() {
+      return {
+        reviews: [],
+        activeIndex: 0,
+        ready: false,
+        error: '',
+        autoRotateId: null,
+        init() {
+          this.stopAutoRotate();
+          this.error = '';
+          this.activeIndex = 0;
+          const reviewsWithText = NORMALIZED_REVIEWS.filter(review => review.text.length > 0);
+          if (!reviewsWithText.length) {
+            this.ready = false;
+            this.error = 'Noch keine Kundenstimmen verfügbar.';
+            return;
           }
-
-          if (!payload) {
-            throw lastError || new Error('Die Kundenrezensionen konnten nicht geladen werden.');
-          }
-
-          const rawItems = Array.isArray(payload?.items) ? payload.items : [];
-
-          if (!rawItems.length) {
-            throw new Error('Keine Rezensionen in der Datenquelle gefunden.');
-          }
-
-          const formatDate = value => {
-            if (!value) {
-              return '';
-            }
-            const date = value instanceof Date ? value : new Date(value);
-            if (Number.isNaN(date.getTime())) {
-              return typeof value === 'string' ? value : '';
-            }
-            return date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
-          };
-
-          const toBoolean = value => {
-            if (typeof value === 'string') {
-              const normalized = value.trim().toLowerCase();
-              return ['true', '1', 'yes', 'ja'].includes(normalized);
-            }
-            return Boolean(value);
-          };
-
-          const normalized = rawItems.map((item, index) => {
-            const safeItem = item || {};
-            const name = typeof safeItem.name === 'string' ? safeItem.name.trim() : '';
-            const comment = typeof safeItem.comment === 'string'
-              ? safeItem.comment.trim()
-              : (typeof safeItem.text === 'string' ? safeItem.text.trim() : '');
-            const ratingSource = safeItem.rating ?? safeItem.score ?? safeItem.stars;
-            const ratingValue = Number.parseFloat(ratingSource);
-
-            return {
-              id: safeItem.id || `review-${index}`,
-              name: name || 'Anonymer Kunde',
-              text: comment,
-              rating: Number.isFinite(ratingValue) ? ratingValue : 0,
-              city: typeof safeItem.city === 'string' ? safeItem.city.trim() : '',
-              date: formatDate(safeItem.date),
-              source: typeof safeItem.source === 'string' ? safeItem.source.trim() : '',
-              link: typeof safeItem.link === 'string' ? safeItem.link.trim() : '',
-              avatar: typeof safeItem.avatar === 'string' ? safeItem.avatar.trim() : '',
-              highlighted: toBoolean(safeItem.highlighted),
-              verified: toBoolean(safeItem.verified)
-            };
-          });
-
-          const withTexts = normalized.filter(review => review.text.length > 0);
-
-          if (!withTexts.length) {
-            throw new Error('Keine veröffentlichten Rezensionstexte vorhanden.');
-          }
-
-          this.reviews = withTexts;
-          this.shuffleReviews();
+          this.reviews = reviewsWithText;
           this.ready = true;
           this.startAutoRotate();
-        } catch (loadError) {
-          console.error(loadError);
-          this.error = loadError?.message || 'Die Kundenrezensionen konnten nicht geladen werden.';
-        }
-      },
-      shuffleReviews() {
-        for (let index = this.reviews.length - 1; index > 0; index--) {
-          const swapIndex = Math.floor(Math.random() * (index + 1));
-          [this.reviews[index], this.reviews[swapIndex]] = [this.reviews[swapIndex], this.reviews[index]];
-        }
-        this.activeIndex = 0;
-      },
-      next() {
-        if (!this.reviews.length) {
-          return;
-        }
-        this.activeIndex = (this.activeIndex + 1) % this.reviews.length;
-        this.startAutoRotate();
-      },
-      previous() {
-        if (!this.reviews.length) {
-          return;
-        }
-        this.activeIndex = (this.activeIndex - 1 + this.reviews.length) % this.reviews.length;
-        this.startAutoRotate();
-      },
-      goTo(index) {
-        if (typeof index !== 'number' || index < 0 || index >= this.reviews.length) {
-          return;
-        }
-        this.activeIndex = index;
-        this.startAutoRotate();
-      },
-      startAutoRotate() {
-        this.stopAutoRotate();
-        if (this.reviews.length <= 1) {
-          return;
-        }
-        this.autoRotateId = setInterval(() => {
-          if (document.hidden) {
+        },
+        next() {
+          if (!this.reviews.length) {
             return;
           }
           this.activeIndex = (this.activeIndex + 1) % this.reviews.length;
-        }, 9000);
-      },
-      stopAutoRotate() {
-        if (this.autoRotateId) {
-          clearInterval(this.autoRotateId);
-          this.autoRotateId = null;
-        }
-      },
-      avatarUrl(review) {
-        if (review.avatar) {
-          return review.avatar;
-        }
-        const name = review.name || 'Kunde';
-        const initials = encodeURIComponent(name);
-        return `https://ui-avatars.com/api/?background=0077B6&color=fff&name=${initials}`;
-      },
-      starIcon(star, rating) {
-        if (rating >= star) {
-          return 'star';
-        }
-        if (rating >= star - 0.5) {
-          return 'star_half';
-        }
-        return 'grade';
-      },
-      formatMeta(review) {
-        const parts = [];
-        if (review.city) {
-          parts.push(review.city);
-        }
-        if (review.date) {
-          parts.push(review.date);
-        }
-        return parts.join(' • ');
-      }
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const contactForm = document.querySelector('#contact-form');
-    if (!contactForm) {
-      return;
-    }
-
-    const firstNameInput = contactForm.querySelector('#first-name');
-    const lastNameInput = contactForm.querySelector('#last-name');
-    const emailInput = contactForm.querySelector('#email');
-    const phoneInput = contactForm.querySelector('#phone');
-    const addressInput = contactForm.querySelector('#address');
-    const heightInput = contactForm.querySelector('#gutter-height');
-    const lengthInput = contactForm.querySelector('#gutter-length');
-    const consentInput = contactForm.querySelector('#consent');
-    const reasonInputs = Array.from(contactForm.querySelectorAll('input[name="reasons"]'));
-    const guardInputs = Array.from(contactForm.querySelectorAll('input[name="guards"]'));
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-
-    if (!firstNameInput || !lastNameInput || !emailInput || !phoneInput || !addressInput || !heightInput || !lengthInput || !consentInput || !submitButton) {
-      return;
-    }
-
-    const parseNumberInput = input => {
-      if (!input) {
-        return null;
-      }
-      const rawValue = input.value.replace(',', '.').trim();
-      if (!rawValue) {
-        return null;
-      }
-      const numericValue = Number.parseFloat(rawValue);
-      return Number.isFinite(numericValue) ? numericValue : null;
-    };
-
-    contactForm.addEventListener('submit', async event => {
-      event.preventDefault();
-
-      const errors = [];
-      const firstName = firstNameInput.value.trim();
-      const lastName = lastNameInput.value.trim();
-      const emailValue = emailInput.value.trim();
-      const phoneValue = phoneInput.value.trim();
-      const addressValue = addressInput.value.trim();
-      const heightValue = parseNumberInput(heightInput);
-      const lengthValue = parseNumberInput(lengthInput);
-
-      if (!firstName) {
-        errors.push('Bitte geben Sie Ihren Vornamen an.');
-      }
-
-      if (!lastName) {
-        errors.push('Bitte geben Sie Ihren Nachnamen an.');
-      }
-
-      if (!emailValue) {
-        errors.push('Bitte geben Sie Ihre E-Mail-Adresse an.');
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
-        errors.push('Bitte geben Sie eine gültige E-Mail-Adresse an.');
-      }
-
-      if (!phoneValue) {
-        errors.push('Bitte geben Sie eine Telefonnummer an.');
-      } else if (!/^\+?[0-9 ()\-\/]{6,20}$/.test(phoneValue)) {
-        errors.push('Bitte prüfen Sie die Telefonnummer.');
-      }
-
-      if (!addressValue) {
-        errors.push('Bitte geben Sie eine Adresse an.');
-      }
-
-      if (heightValue === null || heightValue <= 0) {
-        errors.push('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
-      }
-
-      if (lengthValue === null || lengthValue <= 0) {
-        errors.push('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
-      }
-
-      if (!consentInput.checked) {
-        errors.push('Bitte bestätigen Sie die Datenschutzerklärung.');
-      }
-
-      if (errors.length) {
-        alert(errors.join('\n'));
-        return;
-      }
-
-      const selectedReasons = reasonInputs.filter(input => input.checked).map(input => input.value);
-      const selectedGuards = guardInputs.filter(input => input.checked).map(input => input.value);
-      const messageParts = [];
-      if (selectedReasons.length) {
-        messageParts.push(`Grund für die Reinigung: ${selectedReasons.join(', ')}`);
-      }
-      if (selectedGuards.length) {
-        messageParts.push(`Dachrinnenschutz: ${selectedGuards.join(', ')}`);
-      }
-      const messageValue = messageParts.join(' | ');
-
-      const originalButtonText = submitButton.textContent;
-      submitButton.disabled = true;
-      submitButton.setAttribute('aria-disabled', 'true');
-      submitButton.classList.add('opacity-60', 'cursor-not-allowed');
-      submitButton.textContent = 'Wird gesendet…';
-
-      const contact = {
-        vorname: firstName,
-        nachname: lastName,
-        email: emailValue,
-        telefon: phoneValue,
-        nachricht: messageValue,
-        wunschtermin: ''
-      };
-
-      const payload = {
-        typ: 'Homepage-Anfrage',
-        adresse: addressValue,
-        hoehe: heightValue,
-        lfm: lengthValue,
-        gruende: selectedReasons,
-        schutzOptionen: selectedGuards
-      };
-
-      const requestBody = {
-        meta: {
-          source: 'homepage-form',
-          version: '2.0.0',
-          timestamp: new Date().toISOString()
+          this.startAutoRotate();
         },
-        contact,
-        payload,
-        consent: consentInput.checked ? 'ja' : 'nein'
+        previous() {
+          if (!this.reviews.length) {
+            return;
+          }
+          this.activeIndex = (this.activeIndex - 1 + this.reviews.length) % this.reviews.length;
+          this.startAutoRotate();
+        },
+        goTo(index) {
+          if (typeof index !== 'number' || index < 0 || index >= this.reviews.length) {
+            return;
+          }
+          this.activeIndex = index;
+          this.startAutoRotate();
+        },
+        startAutoRotate() {
+          this.stopAutoRotate();
+          if (this.reviews.length <= 1) {
+            return;
+          }
+          this.autoRotateId = setInterval(() => {
+            if (document.hidden) {
+              return;
+            }
+            this.activeIndex = (this.activeIndex + 1) % this.reviews.length;
+          }, 9000);
+        },
+        stopAutoRotate() {
+          if (this.autoRotateId) {
+            clearInterval(this.autoRotateId);
+            this.autoRotateId = null;
+          }
+        },
+        starIcon(star, rating) {
+          if (rating >= star) {
+            return 'star';
+          }
+          if (rating >= star - 0.5) {
+            return 'star_half';
+          }
+          return 'grade';
+        },
+        formatMeta(review) {
+          const parts = [];
+          if (review.city) {
+            parts.push(review.city);
+          }
+          if (review.formattedDate) {
+            parts.push(review.formattedDate);
+          }
+          return parts.join(' • ');
+        }
       };
-
-      try {
-        const response = await fetch('/_functions/webhookbridge', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody)
-        });
-
-        let result = null;
-        try {
-          result = await response.json();
-        } catch (jsonError) {
-          // ignore JSON parsing errors – will be handled by status check below
-        }
-
-        if (!response.ok || (result && result.ok === false)) {
-          const errorMessage = result?.error || `Unerwarteter Status ${response.status}`;
-          throw new Error(errorMessage);
-        }
-
-        alert('Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
-        contactForm.reset();
-      } catch (error) {
-        console.error('Fehler beim Senden des Formulars:', error);
-        alert('Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.');
-      } finally {
-        submitButton.disabled = false;
-        submitButton.removeAttribute('aria-disabled');
-        submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
-        submitButton.textContent = originalButtonText;
-      }
-    });
-    });
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const reviewsSection = document.querySelector('#dynamic-reviews');
@@ -885,45 +1027,9 @@ Original lesen
       }
 
       const listElement = reviewsSection.querySelector('#reviews-list');
-      const loadingElement = reviewsSection.querySelector('#reviews-loading');
-      const errorElement = reviewsSection.querySelector('#reviews-error');
-      const emptyElement = reviewsSection.querySelector('#reviews-empty');
-
       if (!listElement) {
         return;
       }
-
-      const ENDPOINTS = createReviewEndpoints(10);
-
-      const showElement = (element, shouldShow) => {
-        if (!element) {
-          return;
-        }
-        if (shouldShow) {
-          element.classList.remove('hidden');
-        } else {
-          element.classList.add('hidden');
-        }
-      };
-
-      const formatDate = value => {
-        if (!value) {
-          return '';
-        }
-        const date = value instanceof Date ? value : new Date(value);
-        if (Number.isNaN(date.getTime())) {
-          return '';
-        }
-        return date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
-      };
-
-      const clampRating = value => {
-        const numeric = Number.parseFloat(value);
-        if (!Number.isFinite(numeric)) {
-          return 0;
-        }
-        return Math.min(Math.max(numeric, 0), 5);
-      };
 
       const createStarRow = ratingValue => {
         const rating = clampRating(ratingValue);
@@ -956,95 +1062,240 @@ Original lesen
         const card = document.createElement('article');
         card.className = 'bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm flex flex-col gap-4';
 
+        if (review.highlighted) {
+          const badge = document.createElement('span');
+          badge.className = 'self-start text-xs font-semibold uppercase tracking-wide bg-primary text-white px-3 py-1 rounded-full';
+          badge.textContent = 'Top-Bewertung';
+          card.appendChild(badge);
+        }
+
         const name = document.createElement('h4');
         name.className = 'text-lg font-semibold text-gray-900 dark:text-white';
-        name.textContent = review?.name || 'Kunde';
+        name.textContent = review.name || 'Kunde';
         card.appendChild(name);
 
-        card.appendChild(createStarRow(review?.rating));
+        card.appendChild(createStarRow(review.rating));
 
-        if (review?.comment) {
+        if (review.text) {
           const comment = document.createElement('p');
           comment.className = 'text-sm md:text-base text-text-light dark:text-text-dark italic';
-          comment.textContent = review.comment;
+          comment.textContent = review.text;
           card.appendChild(comment);
         }
 
         const meta = document.createElement('p');
         meta.className = 'text-xs text-text-light dark:text-text-dark';
-        const formattedDate = formatDate(review?.date);
-        meta.textContent = formattedDate ? `Bewertet am ${formattedDate}` : 'Bewertung ohne Datumsangabe';
+        meta.textContent = review.formattedDate ? `Bewertet am ${review.formattedDate}` : 'Bewertung ohne Datumsangabe';
         card.appendChild(meta);
+
+        if (review.city) {
+          const city = document.createElement('p');
+          city.className = 'text-xs text-text-light dark:text-text-dark';
+          city.textContent = review.city;
+          card.appendChild(city);
+        }
+
+        if (review.source || review.link) {
+          const source = document.createElement('p');
+          source.className = 'text-xs text-text-light dark:text-text-dark';
+          if (review.link) {
+            const anchor = document.createElement('a');
+            anchor.href = review.link;
+            anchor.target = '_blank';
+            anchor.rel = 'noopener';
+            anchor.className = 'text-primary hover:text-primary-dark font-medium';
+            anchor.textContent = review.source || 'Zur Quelle';
+            source.appendChild(anchor);
+          } else {
+            source.textContent = review.source;
+          }
+          card.appendChild(source);
+        }
 
         return card;
       };
 
-      const renderReviews = reviews => {
-        listElement.innerHTML = '';
+      if (!NORMALIZED_REVIEWS.length) {
+        const placeholder = document.createElement('p');
+        placeholder.className = 'text-center text-text-light dark:text-text-dark';
+        placeholder.textContent = 'Aktuell liegen keine Bewertungen vor.';
+        listElement.appendChild(placeholder);
+        return;
+      }
 
-        reviews.forEach(review => {
-          const card = createReviewCard(review);
-          listElement.appendChild(card);
-        });
+      NORMALIZED_REVIEWS.forEach(review => {
+        listElement.appendChild(createReviewCard(review));
+      });
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const contactForm = document.querySelector('#contact-form');
+      if (!contactForm) {
+        return;
+      }
+
+      const firstNameInput = contactForm.querySelector('#first-name');
+      const lastNameInput = contactForm.querySelector('#last-name');
+      const emailInput = contactForm.querySelector('#email');
+      const phoneInput = contactForm.querySelector('#phone');
+      const addressInput = contactForm.querySelector('#address');
+      const heightInput = contactForm.querySelector('#gutter-height');
+      const lengthInput = contactForm.querySelector('#gutter-length');
+      const consentInput = contactForm.querySelector('#consent');
+      const reasonInputs = Array.from(contactForm.querySelectorAll('input[name="reasons"]'));
+      const guardInputs = Array.from(contactForm.querySelectorAll('input[name="guards"]'));
+      const submitButton = contactForm.querySelector('button[type="submit"]');
+
+      if (!firstNameInput || !lastNameInput || !emailInput || !phoneInput || !addressInput || !heightInput || !lengthInput || !consentInput || !submitButton) {
+        return;
+      }
+
+      const parseNumberInput = input => {
+        if (!input) {
+          return null;
+        }
+        const rawValue = input.value.replace(',', '.').trim();
+        if (!rawValue) {
+          return null;
+        }
+        const numericValue = Number.parseFloat(rawValue);
+        return Number.isFinite(numericValue) ? numericValue : null;
       };
 
-      const loadReviews = async () => {
-        showElement(loadingElement, true);
-        showElement(errorElement, false);
-        showElement(emptyElement, false);
-        showElement(listElement, false);
+      contactForm.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const errors = [];
+        const firstName = firstNameInput.value.trim();
+        const lastName = lastNameInput.value.trim();
+        const emailValue = emailInput.value.trim();
+        const phoneValue = phoneInput.value.trim();
+        const addressValue = addressInput.value.trim();
+        const heightValue = parseNumberInput(heightInput);
+        const lengthValue = parseNumberInput(lengthInput);
+
+        if (!firstName) {
+          errors.push('Bitte geben Sie Ihren Vornamen an.');
+        }
+
+        if (!lastName) {
+          errors.push('Bitte geben Sie Ihren Nachnamen an.');
+        }
+
+        if (!emailValue) {
+          errors.push('Bitte geben Sie Ihre E-Mail-Adresse an.');
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+          errors.push('Bitte geben Sie eine gültige E-Mail-Adresse an.');
+        }
+
+        if (!phoneValue) {
+          errors.push('Bitte geben Sie eine Telefonnummer an.');
+        } else if (!/^\+?[0-9 ()\-\/]{6,20}$/.test(phoneValue)) {
+          errors.push('Bitte prüfen Sie die Telefonnummer.');
+        }
+
+        if (!addressValue) {
+          errors.push('Bitte geben Sie eine Adresse an.');
+        }
+
+        if (heightValue === null || heightValue <= 0) {
+          errors.push('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
+        }
+
+        if (lengthValue === null || lengthValue <= 0) {
+          errors.push('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
+        }
+
+        if (!consentInput.checked) {
+          errors.push('Bitte bestätigen Sie die Datenschutzerklärung.');
+        }
+
+        if (errors.length) {
+          alert(errors.join('\n'));
+          return;
+        }
+
+        const selectedReasons = reasonInputs.filter(input => input.checked).map(input => input.value);
+        const selectedGuards = guardInputs.filter(input => input.checked).map(input => input.value);
+        const messageParts = [];
+        if (selectedReasons.length) {
+          messageParts.push(`Grund für die Reinigung: ${selectedReasons.join(', ')}`);
+        }
+        if (selectedGuards.length) {
+          messageParts.push(`Dachrinnenschutz: ${selectedGuards.join(', ')}`);
+        }
+        const messageValue = messageParts.join(' | ');
+
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.setAttribute('aria-disabled', 'true');
+        submitButton.classList.add('opacity-60', 'cursor-not-allowed');
+        submitButton.textContent = 'Wird gesendet…';
+
+        const contact = {
+          vorname: firstName,
+          nachname: lastName,
+          email: emailValue,
+          telefon: phoneValue,
+          nachricht: messageValue,
+          wunschtermin: ''
+        };
+
+        const payload = {
+          typ: 'Homepage-Anfrage',
+          adresse: addressValue,
+          hoehe: heightValue,
+          lfm: lengthValue,
+          gruende: selectedReasons,
+          schutzOptionen: selectedGuards
+        };
+
+        const requestBody = {
+          meta: {
+            source: 'homepage-form',
+            version: '2.0.0',
+            timestamp: new Date().toISOString()
+          },
+          contact,
+          payload,
+          consent: consentInput.checked ? 'ja' : 'nein'
+        };
 
         try {
-          let payload = null;
-          let lastError = null;
+          const response = await fetch('/_functions/webhookbridge', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+          });
 
-          for (const endpoint of ENDPOINTS) {
-            try {
-              const response = await fetch(endpoint, { cache: 'no-store' });
-              if (!response.ok) {
-                throw new Error(`Serverantwort ${response.status}`);
-              }
-
-              payload = await response.json();
-
-              if (payload?.ok === false) {
-                const message = payload?.error || 'Die Kundenbewertungen konnten nicht geladen werden.';
-                throw new Error(message);
-              }
-
-              break;
-            } catch (requestError) {
-              lastError = requestError;
-            }
+          let result = null;
+          try {
+            result = await response.json();
+          } catch (jsonError) {
+            // ignore JSON parsing errors – will be handled by status check below
           }
 
-          if (!payload) {
-            throw lastError || new Error('Die Kundenbewertungen konnten nicht geladen werden.');
+          if (!response.ok || (result && result.ok === false)) {
+            const errorMessage = result?.error || `Unerwarteter Status ${response.status}`;
+            throw new Error(errorMessage);
           }
 
-          const reviews = Array.isArray(payload?.items) ? payload.items : [];
-
-          if (!reviews.length) {
-            showElement(emptyElement, true);
-            return;
-          }
-
-          renderReviews(reviews);
-          showElement(listElement, true);
+          alert('Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
+          contactForm.reset();
         } catch (error) {
-          console.error('Bewertungen konnten nicht geladen werden:', error);
-          if (errorElement) {
-            errorElement.textContent = 'Die Kundenbewertungen konnten nicht geladen werden. Bitte versuchen Sie es später erneut.';
-          }
-          showElement(errorElement, true);
+          console.error('Fehler beim Senden des Formulars:', error);
+          alert('Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.');
         } finally {
-          showElement(loadingElement, false);
+          submitButton.disabled = false;
+          submitButton.removeAttribute('aria-disabled');
+          submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
+          submitButton.textContent = originalButtonText;
         }
-      };
-
-      loadReviews();
-    });
-  </script>
+      });
+      });
+    
+</script>
 </div>
 <script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body></html>
