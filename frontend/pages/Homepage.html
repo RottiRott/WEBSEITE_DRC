@@ -337,7 +337,7 @@ Original lesen
 <div class="container mx-auto max-w-2xl text-center">
 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
-<form class="space-y-6 text-left">
+<form class="space-y-6 text-left" id="contact-form">
 <div>
 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="name">Name</label>
 <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="name" name="name" required="" type="text"/>
@@ -568,6 +568,106 @@ Original lesen
       }
     };
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.querySelector('#contact-form');
+    if (!contactForm) {
+      return;
+    }
+
+    const nameInput = contactForm.querySelector('#name');
+    const emailInput = contactForm.querySelector('#email');
+    const phoneInput = contactForm.querySelector('#phone');
+    const messageInput = contactForm.querySelector('#message');
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+
+    if (!nameInput || !emailInput || !messageInput || !submitButton) {
+      return;
+    }
+
+    contactForm.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      const errors = [];
+      const nameValue = nameInput.value.trim();
+      const emailValue = emailInput.value.trim();
+      const phoneValue = phoneInput ? phoneInput.value.trim() : '';
+      const messageValue = messageInput.value.trim();
+
+      if (!nameValue) {
+        errors.push('Bitte geben Sie Ihren Namen an.');
+      }
+
+      if (!emailValue) {
+        errors.push('Bitte geben Sie Ihre E-Mail-Adresse an.');
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        errors.push('Bitte geben Sie eine gültige E-Mail-Adresse an.');
+      }
+
+      if (!messageValue) {
+        errors.push('Bitte schildern Sie Ihr Anliegen.');
+      }
+
+      if (phoneValue && !/^[+\d()\s-]{4,}$/.test(phoneValue)) {
+        errors.push('Bitte prüfen Sie die Telefonnummer.');
+      }
+
+      if (errors.length) {
+        alert(errors.join('\n'));
+        return;
+      }
+
+      const originalButtonText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.setAttribute('aria-disabled', 'true');
+      submitButton.classList.add('opacity-60', 'cursor-not-allowed');
+      submitButton.textContent = 'Wird gesendet…';
+
+      const [firstName, ...lastNameParts] = nameValue.split(/\s+/);
+      const requestBody = {
+        meta: {
+          source: 'homepage-form',
+          timestamp: new Date().toISOString()
+        },
+        payload: {
+          typ: 'Homepage-Anfrage'
+        },
+        data: {
+          firstName: firstName || '',
+          lastName: lastNameParts.join(' ') || '',
+          fullName: nameValue,
+          email: emailValue,
+          phone: phoneValue || null,
+          message: messageValue
+        }
+      };
+
+      try {
+        const response = await fetch('/_functions/webhookbridge', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Unerwarteter Status ${response.status}`);
+        }
+
+        alert('Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
+        contactForm.reset();
+      } catch (error) {
+        console.error('Fehler beim Senden des Formulars:', error);
+        alert('Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.removeAttribute('aria-disabled');
+        submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
+        submitButton.textContent = originalButtonText;
+      }
+    });
+  });
 </script>
 </div>
 <script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
