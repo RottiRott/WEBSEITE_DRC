@@ -6,7 +6,7 @@
   <base href="https://www.dachrinnecheck.de/" />
   <title>Preisrechner Dachrinnenreinigung NRW | DachrinneCheck</title>
   <meta name="description" content="Berechnen Sie die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf &amp; ganz NRW. Der DachrinneCheck Preisrechner liefert transparente Richtpreise für Dachrinne Reinigen, Laubschutz &amp; Service." />
-  <link rel="canonical" href="https://www.dachrinnecheck.de/kostenrechner.html" />
+  <link rel="canonical" href="https://www.dachrinnecheck.de/kostenrechner" />
   <meta name="robots" content="index,follow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,14 +14,14 @@
   <link rel="icon" type="image/svg+xml" href="assets/img/dachrinnecheck-logo.svg" />
   <meta property="og:title" content="Preisrechner Dachrinnenreinigung NRW | DachrinneCheck" />
   <meta property="og:description" content="Berechnen Sie die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf &amp; ganz NRW. Der DachrinneCheck Preisrechner liefert transparente Richtpreise für Dachrinne Reinigen, Laubschutz &amp; Service." />
-  <meta property="og:url" content="https://www.dachrinnecheck.de/kostenrechner.html" />
+  <meta property="og:url" content="https://www.dachrinnecheck.de/kostenrechner" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="de_DE" />
   <meta property="og:site_name" content="DachrinneCheck" />
   <meta property="og:image" content="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png" />
   <meta property="og:image:alt" content="Sauber gereinigte Dachrinne an einem Einfamilienhaus in Willich" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://www.dachrinnecheck.de/kostenrechner.html" />
+  <meta name="twitter:url" content="https://www.dachrinnecheck.de/kostenrechner" />
   <meta name="twitter:title" content="Preisrechner Dachrinnenreinigung NRW | DachrinneCheck" />
   <meta name="twitter:description" content="Berechnen Sie die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf &amp; ganz NRW. Der DachrinneCheck Preisrechner liefert transparente Richtpreise für Dachrinne Reinigen, Laubschutz &amp; Service." />
   <meta name="twitter:image" content="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png" />
@@ -368,15 +368,15 @@
   <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
     <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
       <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
-        <a class="inline-flex items-center" data-nav-logo href="index.html">
+        <a class="inline-flex items-center" data-nav-logo href="/">
           <img alt="DachrinneCheck Logo für Dachrinnenreinigung NRW" class="h-16 md:h-20 w-auto" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
           <span class="sr-only">Zur Startseite</span>
         </a>
         <div class="hidden md:flex items-center gap-6 lg:gap-8 nav-inline" data-nav-inline>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#services">Services</a>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#about">Über uns</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="/#services">Services</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="/#about">Über uns</a>
           <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="#contact">Kontakt</a>
-          <a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="kostenrechner.html">
+          <a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="/kostenrechner">
             Zum Kostenrechner
           </a>
           <a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="#contact">
@@ -398,12 +398,12 @@
           </button>
           <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700 nav-dialog-content">
             <div class="nav-dialog-links w-full flex flex-col items-center space-y-4">
-              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#services">Services</a>
-              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#about">Über uns</a>
+              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="/#services">Services</a>
+              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="/#about">Über uns</a>
               <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="#contact">Kontakt</a>
             </div>
             <div class="nav-dialog-actions w-full flex flex-col items-center space-y-3">
-              <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="kostenrechner.html">
+              <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="/kostenrechner">
                 Zum Kostenrechner
               </a>
               <a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="#contact">
@@ -530,7 +530,7 @@
                   <label for="cbConsent" class="note">
                     Ich willige ein, dass meine Angaben zur Kontaktaufnahme, Angebotserstellung und Terminabstimmung verarbeitet und gespeichert werden.
                     Die Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen. Hinweise in der
-                    <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.
+                    <a href="/datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a>.
                   </label>
                 </div>
 
@@ -564,9 +564,9 @@
     <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
       <div class="container mx-auto px-4 text-center text-text-dark">
         <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
-          <a class="hover:text-primary transition-colors text-sm" href="./datenschutz.html">Datenschutz</a>
-          <a class="hover:text-primary transition-colors text-sm" href="./impressum.html">Impressum</a>
-          <a class="hover:text-primary transition-colors text-sm" href="kostenrechner.html">Kostenrechner</a>
+          <a class="hover:text-primary transition-colors text-sm" href="/datenschutz">Datenschutz</a>
+          <a class="hover:text-primary transition-colors text-sm" href="/impressum">Impressum</a>
+          <a class="hover:text-primary transition-colors text-sm" href="/kostenrechner">Kostenrechner</a>
           <a class="hover:text-primary transition-colors text-sm" href="#contact">Kontakt</a>
         </div>
         <p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
