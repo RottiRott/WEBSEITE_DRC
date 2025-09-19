@@ -54,6 +54,11 @@
       background-size: cover;
       background-attachment: fixed;
     }
+    @media (min-width: 1024px) {
+      .hero-section {
+        background-position: 70% center;
+      }
+    }
     @media (max-width: 768px) {
       .hero-section {
         background-attachment: scroll;
@@ -198,7 +203,7 @@
 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Umfassende Dachrinnenpflege</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark">Wir bieten eine Reihe von Dienstleistungen an, um sicherzustellen, dass Ihre Dachrinnen in Top-Zustand sind.</p>
 </div>
-<div class="grid md:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 <div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
 <div class="flex justify-center mb-5 text-primary">
 <svg fill="currentColor" height="48" viewBox="0 0 256 256" width="48" xmlns="http://www.w3.org/2000/svg">
