@@ -211,6 +211,21 @@
     observer.observe(inlineNav);
   }
 
+  const logoImage = logoLink.querySelector('img');
+  if (logoImage) {
+    const handleLogoLoad = () => {
+      updateCollapse();
+    };
+    if (logoImage.complete && logoImage.naturalWidth > 0) {
+      handleLogoLoad();
+    } else {
+      logoImage.addEventListener('load', handleLogoLoad, { once: true });
+      logoImage.addEventListener('error', handleLogoLoad, { once: true });
+    }
+  }
+
+  window.addEventListener('load', updateCollapse);
+
   window.addEventListener('resize', resizeHandler);
   window.addEventListener('orientationchange', resizeHandler);
 

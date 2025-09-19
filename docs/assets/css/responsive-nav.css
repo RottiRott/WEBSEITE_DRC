@@ -2,6 +2,24 @@
   --nav-focus-color: #0077B6;
 }
 
+.responsive-header [data-nav-logo] img,
+.responsive-header .brand-logo {
+  display: block;
+  height: auto;
+  max-height: clamp(40px, 6vh, 72px);
+  width: auto;
+  max-width: clamp(140px, 18vw, 260px);
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .responsive-header [data-nav-logo] img,
+  .responsive-header .brand-logo {
+    max-height: clamp(36px, 9vw, 56px);
+  }
+}
+
 .responsive-header .nav-inline {
   flex-wrap: nowrap;
   align-items: center;

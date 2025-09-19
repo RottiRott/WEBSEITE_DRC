@@ -92,7 +92,7 @@
     try {
       return JSON.parse(element.textContent || 'null');
     } catch (error) {
-      console.error(`Konnte JSON aus #${id} nicht lesen:`, error);
+      console.warn(`Konnte JSON aus #${id} nicht lesen:`, error);
       return null;
     }
   }
@@ -487,7 +487,7 @@
         showSuccess('Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
         window.scrollTo({ top: form.offsetTop - 120, behavior: 'smooth' });
       } catch (error) {
-        console.error('Fehler beim Senden des Formulars:', error);
+        console.warn('Fehler beim Senden des Formulars:', error);
         showErrors(['Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.']);
       } finally {
         submitButton.disabled = false;
