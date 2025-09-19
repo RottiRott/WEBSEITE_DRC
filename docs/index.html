@@ -56,9 +56,6 @@
       height: min(70vh, 720px);
       max-height: 720px;
     }
-    .hero-background {
-      position: fixed;
-    }
     [x-cloak] {
       display: none !important;
     }
@@ -87,7 +84,7 @@
 </style>
   </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-<div class="relative z-10 w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
+  <div class="relative z-10 w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
 <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
 <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
 <a class="inline-flex items-center" data-nav-logo href="index.html">
@@ -137,9 +134,9 @@
 </div>
 </header>
 <section class="relative flex flex-col items-start justify-center text-white overflow-hidden hero-section">
-<img alt="Fachkraft reinigt eine Dachrinne an einem Wohnhaus in Nordrhein-Westfalen" class="absolute inset-0 w-full h-full object-cover object-center -z-10 hero-background pointer-events-none" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
-<div class="absolute inset-0 bg-slate-900/60"></div>
-<div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
+    <img alt="Fachkraft reinigt eine Dachrinne an einem Wohnhaus in Nordrhein-Westfalen" class="pointer-events-none fixed inset-0 -z-10 h-full w-full object-cover object-center" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
+    <div class="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-900/80"></div>
+    <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
 <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
 <p class="text-lg md:text-2xl mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
 <div class="flex flex-col sm:flex-row gap-4">
