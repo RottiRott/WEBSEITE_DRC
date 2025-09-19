@@ -246,6 +246,15 @@
       element.classList.add('is-visible');
     };
 
+    const prefersReducedMotion = window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)')
+      : null;
+
+    if (prefersReducedMotion && prefersReducedMotion.matches) {
+      revealElements.forEach(makeVisible);
+      return;
+    }
+
     if (!('IntersectionObserver' in window)) {
       revealElements.forEach(makeVisible);
       return;
