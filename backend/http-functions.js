@@ -1,8 +1,17 @@
 // backend/http-functions.js
 import { ok, badRequest, serverError } from 'wix-http-functions';
+import wixData from 'wix-data';
 
 function json(body, statusFn = ok) {
   return statusFn({ headers: { 'Content-Type': 'application/json; charset=utf-8' }, body });
+}
+
+function withCors(response) {
+  if (!response.headers) {
+    response.headers = {};
+  }
+  response.headers['Access-Control-Allow-Origin'] = '*';
+  return response;
 }
 
 // GET /_functions/testadminemail?do=ping
@@ -57,5 +66,39 @@ export async function post_mailtest(request) {
     return json({ ok: !!r?.ok, detail: r }, r?.ok ? ok : badRequest);
   } catch (e) {
     return json({ ok: false, error: String(e) }, serverError);
+  }
+}
+
+export async function get_reviews(request) {
+  const DEFAULT_LIMIT = 10;
+  const MAX_LIMIT = 50;
+
+  const rawLimit = request?.query?.limit;
+  const rawPage = request?.query?.page;
+
+  let limit = Number.parseInt(rawLimit, 10);
+  if (!Number.isFinite(limit) || limit <= 0) {
+    limit = DEFAULT_LIMIT;
+  }
+  limit = Math.max(1, Math.min(limit, MAX_LIMIT));
+
+  let page = Number.parseInt(rawPage, 10);
+  if (!Number.isFinite(page) || page < 0) {
+    page = 0;
+  }
+
+  const skip = page * limit;
+
+  try {
+    const query = wixData.query('Reviews').skip(skip).limit(limit).descending('date');
+    const results = await query.find();
+
+    const items = Array.isArray(results?.items)
+      ? results.items.map(({ name, comment, rating, date }) => ({ name, comment, rating, date }))
+      : [];
+
+    return withCors(json({ items }, ok));
+  } catch (error) {
+    return withCors(json({ ok: false, error: 'SERVER_ERROR', detail: String(error) }, serverError));
   }
 }
