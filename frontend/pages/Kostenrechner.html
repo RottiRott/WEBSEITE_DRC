@@ -1,18 +1,67 @@
 <!DOCTYPE html>
-<html lang="de">
+<html class="scroll-smooth" lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Dachrinnenreinigung Preisrechner – jetzt Kosten online berechnen | DachrinneCheck</title>
   <meta name="description" content="Nutzen Sie den Dachrinnenreinigung Preisrechner von DachrinneCheck und berechnen Sie in wenigen Sekunden die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf & Umgebung. Richtpreis sofort & transparent.">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#0077B6",
+            "primary-dark": "#005E90",
+            "background-light": "#F8F9FA",
+            "background-dark": "#1A202C",
+            "text-light": "#6C757D",
+            "text-dark": "#E2E8F0",
+            "card-light": "#FFFFFF",
+            "card-dark": "#2D3748",
+          },
+          fontFamily: {
+            display: ["Poppins", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+            lg: "0.75rem",
+            xl: "1rem",
+            full: "9999px",
+          },
+          boxShadow: {
+            'custom': '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+          }
+        },
+      },
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
   <style>
     /* Allgemeine Variablen */
     :root{
-      --bg:#f7f8fb; --card:#ffffff; --ink:#0f172a; --muted:#6b7280;
-      --accent:#1B3898; --cta:#1B3898; --cta-ink:#fff; --border:#e5e7eb;
-      --warn:#b45309; --ok:#059669;
+      --bg:#F8F9FA;
+      --card:#FFFFFF;
+      --ink:#0F172A;
+      --muted:#6C757D;
+      --accent:#0077B6;
+      --cta:#0077B6;
+      --cta-ink:#FFFFFF;
+      --border:#E2E8F0;
+      --warn:#b45309;
+      --ok:#059669;
+    }
+    .dark{
+      --bg:#1A202C;
+      --card:#2D3748;
+      --ink:#E2E8F0;
+      --muted:#A0AEC0;
+      --border:#2F3A4A;
     }
     *{box-sizing:border-box}
 
@@ -21,8 +70,11 @@
       margin:0;
       background:var(--bg);
       color:var(--ink);
-      font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial;-webkit-text-size-adjust:100%;
-      height:100%; /* Wichtig für die korrekte Höhenberechnung im iFrame */
+      font-family:'Poppins',sans-serif;
+      line-height:1.6;
+      font-size:16px;
+      -webkit-text-size-adjust:100%;
+      min-height:100%;
       width:100%;
       max-width:100%;
       overflow-x:hidden; /* Verhindert horizontales Scrollen */
@@ -30,30 +82,53 @@
       -webkit-overflow-scrolling:touch; /* Verbessertes Scroll-Verhalten auf iOS */
       touch-action:pan-y; /* Erlaubt nur vertikales Panning, verhindert versehentliches horizontales Scrollen */
       overscroll-behavior-y:contain; /* Verhindert, dass Scrollen im iFrame das übergeordnete Fenster scrollt */
+      transition:background-color .3s ease,color .3s ease;
     }
 
     /* Sicherstellen, dass Hauptcontainer flexibel sind, aber nicht überlaufen */
     .wrap{
       max-width:1100px;
-      margin:24px auto;
-      padding:0 16px;
+      margin:0 auto;
+      padding:0 1.5rem 2.5rem;
       min-width:0; /* Verhindert Überlauf bei flexiblen Layouts */
       width:100%; /* Wichtig für die korrekte Breite im iFrame */
+      display:flex;
+      flex-direction:column;
+      gap:24px;
     }
 
-    .hero{background:linear-gradient(135deg,#0ea5e910,#e11d4810);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:16px}
-    h1{margin:0 0 6px;font-size:clamp(22px,4vw,30px)}
-    p.lead{margin:0;color:var(--muted)}
+    .hero{
+      position:relative;
+      background:linear-gradient(140deg,rgba(0,119,182,0.14),rgba(0,119,182,0.04));
+      border:1px solid rgba(0,0,0,0.04);
+      border-radius:24px;
+      padding:24px;
+      margin-bottom:0;
+      box-shadow:0 10px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1);
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:auto -40px -80px auto;
+      width:240px;
+      height:240px;
+      background:radial-gradient(circle at center,rgba(0,119,182,0.3),transparent 60%);
+      opacity:.6;
+      pointer-events:none;
+    }
+    h1{margin:0 0 10px;font-size:clamp(28px,5vw,44px);font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+    p.lead{margin:0;color:var(--muted);font-size:1.05rem;max-width:52ch}
 
-    .usps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px}
-    .usp{display:flex;gap:8px;align-items:center;font-size:.95rem;background:#fff;border:1px dashed var(--border);border-radius:12px;padding:10px}
+    .usps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+    .usp{display:flex;gap:10px;align-items:center;font-size:.95rem;background:rgba(255,255,255,0.92);border:1px solid rgba(0,0,0,0.05);border-radius:14px;padding:12px 14px;box-shadow:0 12px 30px -18px rgba(15,23,42,0.4);backdrop-filter:blur(4px)}
     .usp svg{flex:0 0 18px}
 
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start; /* min-width:0; entfernt, da es durch .wrap & body abgedeckt ist */}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
     @media (max-width:900px){.grid-2{grid-template-columns:1fr}}
 
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column; /* max-width & width sind in der Regel nicht nötig, wenn grid-2 korrekt ist */}
-    .card h2{margin:0 0 8px;font-size:18px}
+    .card{background:var(--card);border:1px solid rgba(15,23,42,0.08);border-radius:20px;padding:24px;display:flex;flex-direction:column;box-shadow:0 10px 25px -5px rgba(0,0,0,0.08),0 12px 20px -8px rgba(15,23,42,0.12)}
+    .card h2{margin:0 0 12px;font-size:1.4rem;color:var(--ink);font-weight:700}
 
     .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;align-items:end}
     .fields-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;align-items:end}
@@ -61,27 +136,31 @@
     @media (max-width:720px){.fields,.fields-2,.fields-3{grid-template-columns:1fr}}
 
     .field{display:flex;flex-direction:column;gap:6px;min-width:0} /* min-width:0 ist hier gut, um Überlauf bei zu langen Eingaben zu vermeiden */
-    label{font-weight:600}
+    label{font-weight:600;color:var(--ink);font-size:.95rem}
 
     input[type="text"],input[type="number"],input[type="email"],input[type="tel"],input[type="date"],select,textarea{
-      width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#fff;outline:none;
+      width:100%;padding:12px 14px;border:1px solid rgba(15,23,42,0.12);border-radius:14px;background:rgba(255,255,255,0.96);outline:none;
       min-width:0; /* Sicherstellen, dass Input-Felder nicht überlaufen */
+      transition:border-color .2s ease,box-shadow .2s ease,background-color .2s ease;
     }
-    input:focus,textarea:focus,select:focus{box-shadow:0 0 0 4px #0ea5e922;border-color:#7dd3fc}
+    input:focus,textarea:focus,select:focus{box-shadow:0 0 0 4px rgba(0,119,182,0.15);border-color:rgba(0,119,182,0.45);background:#fff}
     input[readonly]{background:#f3f4f6}
 
     .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-start} /* Explizites justify-content */
     .hint{font-size:.9rem;color:var(--muted)}
     .map{height:220px;border-radius:12px;border:1px solid var(--border);overflow:hidden;pointer-events:none}
 
-    .total{margin-top:auto;border-top:1px dashed var(--border);padding-top:12px;display:flex;justify-content:space-between;align-items:center}
-    .price{font-weight:900;font-size:1.5rem}
+    .total{margin-top:auto;border-top:1px solid rgba(15,23,42,0.1);padding-top:18px;display:flex;justify-content:space-between;align-items:center}
+    .price{font-weight:900;font-size:1.75rem;color:var(--accent)}
 
-    .btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer;transition:transform .04s ease;
+    .btn{appearance:none;border:0;border-radius:999px;padding:12px 20px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background-color .2s ease;
       touch-action: manipulation; /* Verbessert die Reaktionsfähigkeit auf Touch-Geräten */
+      box-shadow:0 10px 20px -10px rgba(0,119,182,0.6);
+      font-size:1rem;
     }
-    .btn:active{transform:translateY(1px)}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px -12px rgba(0,119,182,0.65);background:var(--cta)}
+    .btn:active{transform:translateY(0);box-shadow:0 8px 18px -10px rgba(0,119,182,0.6)}
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
     .btn.secondary{background:#111827}
     .btn.cta{background:var(--cta);color:var(--cta-ink)}
 
@@ -91,9 +170,32 @@
     .minnote{color:var(--warn);font-size:.9rem}
     .error{color:#b91c1c;font-size:.85rem}
     .ok{color:var(--ok);font-size:.85rem}
+    .note a{color:var(--accent);font-weight:600;text-decoration:none}
+    .note a:hover{text-decoration:underline}
 
-    .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
-    .trust .badge{background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px;text-align:center;font-size:.9rem}
+    .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+    .trust .badge{background:rgba(255,255,255,0.96);border:1px solid rgba(15,23,42,0.08);border-radius:14px;padding:10px;text-align:center;font-size:.95rem;font-weight:600;color:var(--ink);box-shadow:0 10px 24px -14px rgba(15,23,42,0.35)}
+
+    .dark .hero{background:linear-gradient(140deg,rgba(0,119,182,0.25),rgba(17,24,39,0.6));border-color:rgba(226,232,240,0.08)}
+    .dark .hero::after{background:radial-gradient(circle at center,rgba(99,179,237,0.35),transparent 65%);opacity:.5}
+    .dark .usp{background:rgba(45,55,72,0.9);border-color:rgba(226,232,240,0.12);color:var(--ink);box-shadow:0 18px 32px -20px rgba(0,0,0,0.65)}
+    .dark .card{border-color:rgba(226,232,240,0.12);box-shadow:0 18px 30px -18px rgba(0,0,0,0.55)}
+    .dark .card h2{color:var(--ink)}
+    .dark input[type="text"],
+    .dark input[type="number"],
+    .dark input[type="email"],
+    .dark input[type="tel"],
+    .dark input[type="date"],
+    .dark select,
+    .dark textarea{background:rgba(30,41,59,0.82);border-color:rgba(226,232,240,0.18);color:var(--ink)}
+    .dark input:focus,
+    .dark textarea:focus,
+    .dark select:focus{box-shadow:0 0 0 4px rgba(99,179,237,0.18);border-color:rgba(99,179,237,0.45);background:rgba(30,41,59,0.92)}
+    .dark input[readonly]{background:rgba(45,55,72,0.8)}
+    .dark .row label{background:rgba(30,41,59,0.82);border-color:rgba(226,232,240,0.18);color:var(--ink)}
+    .dark .trust .badge{background:rgba(45,55,72,0.9);border-color:rgba(226,232,240,0.12);box-shadow:0 18px 34px -18px rgba(0,0,0,0.6)}
+    .dark .note a{color:#63B3ED}
+    .dark .guard-label{background:rgba(59,130,246,0.12);border-color:rgba(99,179,237,0.35)}
 
     /* Mobile spezifische Anpassungen */
     @media (max-width:720px){
@@ -103,22 +205,23 @@
     .mobile-total{display:none}
 
     @media (max-width:900px){
-      .mobile-total{position:fixed;left:0;right:0;bottom:0;z-index:2000;background:#fff;border-top:1px solid var(--border);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -6px 18px rgba(0,0,0,.06)}
-      .mobile-total .price{font-size:1.25rem}
+      .mobile-total{position:fixed;left:0;right:0;bottom:0;z-index:2000;background:rgba(255,255,255,0.95);border-top:1px solid rgba(15,23,42,0.08);padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 -12px 28px rgba(15,23,42,0.15);backdrop-filter:blur(8px)}
+      .dark .mobile-total{background:rgba(26,32,44,0.94);border-top:1px solid rgba(226,232,240,0.12);box-shadow:0 -14px 32px rgba(0,0,0,0.45)}
+      .mobile-total .price{font-size:1.35rem}
       /* padding-bottom anpassen, um den Fixed Footer zu berücksichtigen */
-      .wrap{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px));}
+      .wrap{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));}
     }
     @media (max-width:900px){#btnSubmit{display:none !important}}
 
     /* --- Mobile polish & accessibility --- */
     @media (max-width:900px){
       input,select,textarea,button{ font-size:16px; }
-      .btn{ padding:14px 18px; border-radius:14px; }
-      .hero,.card{ padding:14px; }
-      .row label{ padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:#fff; }
+      .btn{ padding:14px 20px; border-radius:18px; }
+      .hero,.card{ padding:18px; }
+      .row label{ padding:10px 12px; border:1px solid rgba(15,23,42,0.12); border-radius:14px; background:rgba(255,255,255,0.96); }
     }
     .row input[type="radio"]{ accent-color: var(--accent); }
-    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(110px + env(safe-area-inset-bottom,0px)); background:#111827; color:#fff; padding:12px 14px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18); z-index:3000; display:none; }
+    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(110px + env(safe-area-inset-bottom,0px)); background:rgba(17,24,39,0.96); color:#fff; padding:14px 18px; border-radius:14px; box-shadow:0 18px 38px rgba(15,23,42,.35); z-index:3000; display:none; border:1px solid rgba(255,255,255,0.08); }
     .toast.show{ display:block; }
 
     /* --- Wix/mobile overflow guards --- */
@@ -143,149 +246,199 @@
     }
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <div class="hero">
-      <h1>Dachrinnenreinigung Preisrechner – jetzt Kosten online berechnen</h1>
-      <p class="lead">Nutzen Sie unseren Dachrinnenreinigung Preisrechner und berechnen Sie in wenigen Sekunden die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf & Umgebung. Der Richtpreis ist transparent und beinhaltet Anfahrt, Rüstzeiten und Zuschläge.</p>
-
-      <div class="usps">
-        <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><span>Schnelle Rückmeldung <b>≤ 24 h</b></span></div>
-        <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg><span>Versichert & Sicher bis <b>14 m</b></span></div>
-        <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>Transparenter Richtpreis – <b>ohne Überraschungen</b></span></div>
+<body class="bg-background-light dark:bg-background-dark font-display">
+  <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
+    <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300" x-data="{ scrolled: false }">
+      <div class="container mx-auto flex justify-between items-center px-4 py-3">
+        <a class="flex items-center space-x-2" href="Homepage.html">
+          <img alt="DachrinneCheck Logo" class="h-8 md:h-10 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDUwsUkZiOQGudlSvG8RP54rjICA_UtbCsjyLeYAsmgvUDAswww4fE8NATy2ZXn64Vda2sPwDbxdsoHUkdswDIDTs76cRCsQsF8UIKJE5qmf58AYo7fj5wS9KKGdR8P1rR8RqhIjjp2UvkrW6deQq7SYqP3LQMwFEV60gIaRzVHvU8Fv98aUd_ECL3f4Vxd_tANFbax60qFJ9GOXe_zFj6wh3G0na53gPHQau0m7x1c2o4sihqQUPB7OJr01bDQlAf_KdEhN8-8A"/>
+          <span class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">DachrinneCheck</span>
+        </a>
+        <div class="hidden md:flex items-center space-x-6">
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="Homepage.html#services">Services</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="Homepage.html#about">Über uns</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#kontakt">Kontakt</a>
+          <a class="bg-primary text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="#kontakt">
+            Angebot anfordern
+          </a>
+        </div>
+        <div class="md:hidden">
+          <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-900 dark:text-white p-2" aria-label="Menü öffnen">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+          </button>
+        </div>
       </div>
-    </div>
+      <div :class="{'max-h-96': mobileMenuOpen, 'max-h-0': !mobileMenuOpen}" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out">
+        <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="Homepage.html#services">Services</a>
+          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="Homepage.html#about">Über uns</a>
+          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="#kontakt">Kontakt</a>
+          <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-4" href="#kontakt">
+            Angebot anfordern
+          </a>
+        </div>
+      </div>
+    </header>
+    <main class="pt-24 pb-24">
+      <div class="px-4">
+        <div class="wrap">
+          <section class="hero" id="preisrechner">
+            <span class="inline-flex items-center text-xs md:text-sm font-semibold tracking-widest uppercase text-primary bg-white/80 dark:bg-white/10 border border-primary/10 dark:border-white/10 rounded-full px-4 py-1 mb-4">Sofortige Kostenschätzung</span>
+            <h1 class="text-gray-900 dark:text-white">Dachrinnenreinigung Preisrechner – jetzt Kosten online berechnen</h1>
+            <p class="lead text-text-light dark:text-text-dark">Nutzen Sie unseren Dachrinnenreinigung Preisrechner und berechnen Sie in wenigen Sekunden die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf &amp; Umgebung. Der Richtpreis ist transparent und beinhaltet Anfahrt, Rüstzeiten und Zuschläge.</p>
 
-    <div class="grid-2">
-      <section class="card" id="calcCard">
-        <h2>Jetzt Richtpreis berechnen & Anfrage absenden</h2>
-
-        <div class="fields-2">
-          <div class="field" style="grid-column:1/-1">
-            <label>Reinigungstyp</label>
-            <div class="row">
-              <label><input type="radio" name="typ" value="Erstreinigung" checked> Erstreinigung</label>
-              <label><input type="radio" name="typ" value="Folgereinigung"> Folgereinigung</label>
+            <div class="usps">
+              <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span class="text-gray-700 dark:text-text-dark">Schnelle Rückmeldung <b>≤ 24 h</b></span></div>
+              <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg><span class="text-gray-700 dark:text-text-dark">Versichert &amp; Sicher bis <b>14 m</b></span></div>
+              <div class="usp"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span class="text-gray-700 dark:text-text-dark">Transparenter Richtpreis – <b>ohne Überraschungen</b></span></div>
             </div>
-          </div>
-          <div class="field">
-            <label for="lfm">Länge Dachrinne [lfm]</label>
-            <input id="lfm" type="number" min="1" step="0.5" value="12" inputmode="decimal" required />
-          </div>
-          <div class="field">
-            <label for="hoehe">Höhe Dachrinne [m]</label>
-            <input id="hoehe" type="number" min="2" step="0.1" value="6.0" inputmode="decimal" required />
+          </section>
+
+          <div class="grid-2" id="calculator">
+            <section class="card bg-card-light dark:bg-card-dark" id="calcCard">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Jetzt Richtpreis berechnen &amp; Anfrage absenden</h2>
+
+              <div class="fields-2">
+                <div class="field" style="grid-column:1/-1">
+                  <label>Reinigungstyp</label>
+                  <div class="row">
+                    <label><input type="radio" name="typ" value="Erstreinigung" checked> Erstreinigung</label>
+                    <label><input type="radio" name="typ" value="Folgereinigung"> Folgereinigung</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="lfm">Länge Dachrinne [lfm]</label>
+                  <input id="lfm" type="number" min="1" step="0.5" value="12" inputmode="decimal" required />
+                </div>
+                <div class="field">
+                  <label for="hoehe">Höhe Dachrinne [m]</label>
+                  <input id="hoehe" type="number" min="2" step="0.1" value="6.0" inputmode="decimal" required />
+                </div>
+              </div>
+
+              <div class="fields" style="margin-top:4px">
+                <div class="field" style="grid-column:1/-1">
+                  <label for="adresse">Objektadresse</label>
+                  <input id="adresse" type="text" placeholder="Straße Hausnr, PLZ Ort" list="addrList" autocomplete="street-address" maxlength="120" />
+                  <datalist id="addrList"></datalist>
+                  <div class="hint">Distanz ab DachrinneCheck wird berechnet</div>
+                </div>
+                <div class="field">
+                  <label>Entfernung [km]</label>
+                  <input id="km" type="number" readonly placeholder="Automatisch ermittelt" />
+                </div>
+                <div class="field">
+                  <label>Map-Vorschau</label>
+                  <div id="map" class="map"></div>
+                </div>
+              </div>
+
+              <div class="fields" style="margin-top:4px">
+                <div class="field" style="grid-column:1/-1">
+                  <label class="guard-label"><input id="schutzVorhanden" type="checkbox" /> Dachrinnenschutz vorhanden?</label>
+                </div>
+              </div>
+
+              <div id="schutzSection" class="fields-3" style="margin-top:8px">
+                <div class="field">
+                  <label>Reinigung Dachrinnenschutz [lfm]</label>
+                  <input id="schutzReinigung" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <label>Montage Laubschutz [lfm]</label>
+                  <input id="schutzMontage" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </div>
+                <div class="field">
+                  <label>Demontage Laubschutz [lfm]</label>
+                  <input id="schutzDemontage" type="number" min="0" step="1" value="0" inputmode="numeric" />
+                </div>
+                <div class="field" style="grid-column:1/-1">
+                  <div class="note">Bei <b>Höhe &gt; 5 m</b> mit vorhandenem Schutz wird <b>automatisch ein Steiger</b> berücksichtigt.</div>
+                </div>
+              </div>
+
+              <div class="total">
+                <div class="stack">
+                  <div class="note">Voraussichtlicher Endpreis (Richtwert)</div>
+                  <div class="price" id="endpreis">–</div>
+                  <div class="minnote" id="minnote" style="display:none">Mindestauftrag angewandt.</div>
+                  <div class="note">Diese Woche noch freie Slots – jetzt anfragen.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card bg-card-light dark:bg-card-dark" id="kontakt">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Kontakt &amp; Anfrage</h2>
+              <form id="kontaktForm" class="stack" novalidate>
+                <div class="fields">
+                  <div class="field"><label>Vorname</label><input id="inFirst" type="text" required maxlength="40" autocomplete="given-name" /></div>
+                  <div class="field"><label>Nachname</label><input id="inLast" type="text" required maxlength="40" autocomplete="family-name" /></div>
+                  <div class="field">
+                    <label>E-Mail</label>
+                    <input id="inEmail" type="email" required autocomplete="email" inputmode="email" maxlength="80"
+                           pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" />
+                    <div id="emailMsg" class="error" style="display:none">Bitte eine gültige E-Mail angeben (z.B. name@domain.de).</div>
+                  </div>
+                  <div class="field">
+                    <label>Telefon</label>
+                    <input id="inPhone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="25"
+                           pattern="^\+?[0-9 ()\-/]{6,20}$" />
+                    <div id="phoneMsg" class="error" style="display:none">Bitte eine gültige Telefonnummer angeben.</div>
+                  </div>
+                  <div class="field" style="grid-column:1/-1"><label>Objektadresse</label><input id="inFormAddress" type="text" readonly /></div>
+                  <div class="field"><label>Wunschtermin</label><input id="dpWish" type="date" /></div>
+                  <div class="field" style="grid-column:1/-1;min-height:auto"><label>Nachricht (optional)</label><textarea id="inMsg" rows="4" placeholder="Besonderheiten / Zugang / Wunschzeiten …" maxlength="1000"></textarea></div>
+                </div>
+
+                <div class="consent">
+                  <input type="checkbox" id="cbConsent" required />
+                  <label for="cbConsent" class="note">
+                    Ich willige ein, dass meine Angaben zur Kontaktaufnahme, Angebotserstellung und Terminabstimmung verarbeitet und gespeichert werden.
+                    Die Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen. Hinweise in der
+                    <a href="Datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.
+                  </label>
+                </div>
+
+                <button class="btn cta" id="btnSubmit" disabled>Anfrage absenden</button>
+
+                <div class="note">
+                  Mit dem Absenden werden Ihre Angaben zusammen mit der Kalkulation an unser Postfach übermittelt.
+                  Für die Distanzberechnung nutzen wir OpenStreetMap (Nominatim/OSRM).
+                </div>
+
+                <div class="trust">
+                  <div class="badge">✓ Regional aus Willich</div>
+                  <div class="badge">✓ Fest installiertes Profi-System</div>
+                  <div class="badge">✓ Termin nach Arbeit möglich</div>
+                </div>
+              </form>
+            </section>
           </div>
         </div>
+      </div>
 
-        <div class="fields" style="margin-top:4px">
-          <div class="field" style="grid-column:1/-1">
-            <label for="adresse">Objektadresse</label>
-            <input id="adresse" type="text" placeholder="Straße Hausnr, PLZ Ort" list="addrList" autocomplete="street-address" maxlength="120" />
-            <datalist id="addrList"></datalist>
-            <div class="hint">Distanz ab DachrinneCheck wird berechnet</div>
-          </div>
-          <div class="field">
-            <label>Entfernung [km]</label>
-            <input id="km" type="number" readonly placeholder="Automatisch ermittelt" />
-          </div>
-          <div class="field">
-            <label>Map-Vorschau</label>
-            <div id="map" class="map"></div>
-          </div>
+      <div class="mobile-total" id="mobileTotal" aria-live="polite" role="status">
+        <div>
+          <div class="note">Richtpreis</div>
+          <div class="price" id="endpreis_mobile">–</div>
         </div>
+        <button class="btn" id="btnStickySubmit" type="button" onclick="document.getElementById('kontaktForm').requestSubmit();" disabled>Anfrage absenden</button>
+      </div>
+    </main>
 
-        <div class="fields" style="margin-top:4px">
-          <div class="field" style="grid-column:1/-1">
-            <label class="guard-label"><input id="schutzVorhanden" type="checkbox" /> Dachrinnenschutz vorhanden?</label>
-          </div>
+    <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
+      <div class="container mx-auto px-4 text-center text-text-dark">
+        <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
+          <a class="hover:text-primary transition-colors text-sm" href="Datenschutz.html">Datenschutz</a>
+          <a class="hover:text-primary transition-colors text-sm" href="#">AGB</a>
+          <a class="hover:text-primary transition-colors text-sm" href="#kontakt">Kontakt</a>
         </div>
-
-        <div id="schutzSection" class="fields-3" style="margin-top:8px">
-          <div class="field">
-            <label>Reinigung Dachrinnenschutz [lfm]</label>
-            <input id="schutzReinigung" type="number" min="0" step="1" value="0" inputmode="numeric" />
-          </div>
-          <div class="field">
-            <label>Montage Laubschutz [lfm]</label>
-            <input id="schutzMontage" type="number" min="0" step="1" value="0" inputmode="numeric" />
-          </div>
-          <div class="field">
-            <label>Demontage Laubschutz [lfm]</label>
-            <input id="schutzDemontage" type="number" min="0" step="1" value="0" inputmode="numeric" />
-          </div>
-          <div class="field" style="grid-column:1/-1">
-            <div class="note">Bei <b>Höhe &gt; 5 m</b> mit vorhandenem Schutz wird <b>automatisch ein Steiger</b> berücksichtigt.</div>
-          </div>
-        </div>
-
-        <div class="total">
-          <div class="stack">
-            <div class="note">Voraussichtlicher Endpreis (Richtwert)</div>
-            <div class="price" id="endpreis">–</div>
-            <div class="minnote" id="minnote" style="display:none">Mindestauftrag angewandt.</div>
-            <div class="note">Diese Woche noch freie Slots – jetzt anfragen.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Kontakt & Anfrage</h2>
-        <form id="kontaktForm" class="stack" novalidate>
-          <div class="fields">
-            <div class="field"><label>Vorname</label><input id="inFirst" type="text" required maxlength="40" autocomplete="given-name" /></div>
-            <div class="field"><label>Nachname</label><input id="inLast" type="text" required maxlength="40" autocomplete="family-name" /></div>
-            <div class="field">
-              <label>E-Mail</label>
-              <input id="inEmail" type="email" required autocomplete="email" inputmode="email" maxlength="80"
-                     pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" />
-              <div id="emailMsg" class="error" style="display:none">Bitte eine gültige E-Mail angeben (z.B. name@domain.de).</div>
-            </div>
-            <div class="field">
-              <label>Telefon</label>
-              <input id="inPhone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="25"
-                     pattern="^\+?[0-9 ()\-\/]{6,20}$" />
-              <div id="phoneMsg" class="error" style="display:none">Bitte eine gültige Telefonnummer angeben.</div>
-            </div>
-            <div class="field" style="grid-column:1/-1"><label>Objektadresse</label><input id="inFormAddress" type="text" readonly /></div>
-            <div class="field"><label>Wunschtermin</label><input id="dpWish" type="date" /></div>
-            <div class="field" style="grid-column:1/-1;min-height:auto"><label>Nachricht (optional)</label><textarea id="inMsg" rows="4" placeholder="Besonderheiten / Zugang / Wunschzeiten …" maxlength="1000"></textarea></div>
-          </div>
-
-          <div class="consent">
-            <input type="checkbox" id="cbConsent" required />
-            <label for="cbConsent" class="note">
-              Ich willige ein, dass meine Angaben zur Kontaktaufnahme, Angebotserstellung und Terminabstimmung verarbeitet und gespeichert werden.
-              Die Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen. Hinweise in der
-              <a href="/datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a>.
-            </label>
-          </div>
-
-          <button class="btn cta" id="btnSubmit" disabled>Anfrage absenden</button>
-
-          <div class="note">
-            Mit dem Absenden werden Ihre Angaben zusammen mit der Kalkulation an unser Postfach übermittelt.
-            Für die Distanzberechnung nutzen wir OpenStreetMap (Nominatim/OSRM).
-          </div>
-
-          <div class="trust">
-            <div class="badge">✓ Regional aus Willich</div>
-            <div class="badge">✓ Fest installiertes Profi-System</div>
-            <div class="badge">✓ Termin nach Arbeit möglich</div>
-          </div>
-        </form>
-      </section>
-    </div>
+        <p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
+      </div>
+    </footer>
   </div>
 
-  <div class="mobile-total" id="mobileTotal" aria-live="polite" role="status">
-    <div>
-      <div class="note">Richtpreis</div>
-      <div class="price" id="endpreis_mobile">–</div>
-    </div>
-    <button class="btn" id="btnStickySubmit" type="button" onclick="document.getElementById('kontaktForm').requestSubmit();" disabled>Anfrage absenden</button>
-  </div>
-
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
   <script>
   /* ===== Konfiguration ===== */
