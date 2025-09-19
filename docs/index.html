@@ -100,18 +100,18 @@
 <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
 <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300" x-data="{ scrolled: false }">
 <div class="container mx-auto flex justify-between items-center px-4 py-3">
-  <a class="flex items-center group" href="index.html">
-    <img alt="DachrinneCheck Logo" class="h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105" src="assets/img/dachrinnecheck-logo.svg"/>
-    <span class="sr-only">Zur Startseite</span>
-  </a>
-  <div class="hidden md:flex items-center space-x-6">
-    <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#services">Services</a>
-    <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#about">Über uns</a>
-    <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#contact">Kontakt</a>
-    <a class="bg-primary text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="#contact">
+<a class="flex items-center space-x-2" href="#">
+<img alt="DachrinneCheck Logo" class="h-8 md:h-10 w-auto" src="https://static.wixstatic.com/media/6d33a0_2223a215c84a4ac48ca665382936b8d5~mv2.png"/>
+<span class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">DachrinneCheck</span>
+</a>
+<div class="hidden md:flex items-center space-x-6">
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#services">Services</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#about">Über uns</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#contact">Kontakt</a>
+<a class="bg-primary text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="#contact">
               Angebot anfordern
             </a>
-  </div>
+</div>
 <div class="md:hidden">
 <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-900 dark:text-white p-2">
 <span class="material-symbols-outlined text-3xl">menu</span>
