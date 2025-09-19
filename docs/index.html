@@ -90,6 +90,17 @@
         transform: translateY(-8px);
         box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15), 0 12px 15px -8px rgba(0, 0, 0, 0.15);
     }
+    .hero-heading {
+      font-size: clamp(2.25rem, 4vw + 1rem, 4.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+    @media (max-width: 640px) {
+      .hero-heading {
+        font-size: clamp(2rem, 6vw + 1rem, 3rem);
+      }
+    }
     @keyframes reveal {
       from {
         opacity: 0;
@@ -190,8 +201,8 @@
 </header>
 <section class="relative flex flex-col items-start justify-center overflow-hidden hero-section text-gray-900 dark:text-white">
   <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
-<h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6">Professionelle Dachrinnenreinigung in NRW</h1>
-<p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-text-light dark:text-text-dark">Schützen Sie Ihr Eigentum vor Wasserschäden – wir reinigen Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW. Fordern Sie noch heute ein kostenloses Angebot an.</p>
+<h1 class="hero-heading font-black leading-tight tracking-tight text-gray-900 dark:text-white mb-4 md:mb-6">Dachrinnenreinigung in NRW – sauber, sicher und termintreu</h1>
+<p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-text-light dark:text-text-dark">Wir halten Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW frei von Schmutz – zuverlässig, sicher und mit moderner Ausrüstung. Nutzen Sie unseren Kostenrechner und erhalten Sie Ihr Angebot innerhalb von 24 Stunden.</p>
 <div class="flex flex-col sm:flex-row gap-4">
           <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="kostenrechner.html">
             Zum Kostenrechner
@@ -207,7 +218,7 @@
 <div class="text-center max-w-3xl mx-auto">
 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Über DachrinneCheck</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark leading-relaxed">
-            Willkommen bei DachrinneCheck, Ihrem zuverlässigen Partner für professionelle Dachrinnenreinigung in Nordrhein-Westfalen. Unsere Mission ist es, Ihr Zuhause vor Wasserschäden zu schützen, indem wir sicherstellen, dass Ihre Dachrinnen sauber, frei und voll funktionsfähig sind. Unser Dachrinnenservice umfasst das behutsame Reinigen Ihrer Dachrinne, optionalen Laubschutz und vorausschauende Inspektionen. Wir verpflichten uns zu qualitativ hochwertigem Service mit Fokus auf Zuverlässigkeit, Effizienz und Kundenzufriedenheit – und bieten mit unserem <a class="text-primary hover:text-primary-dark font-semibold" href="kostenrechner.html">Dachrinnenreinigung Kostenrechner</a> eine elegante Möglichkeit zur schnellen Preiskalkulation.
+            Bei DachrinneCheck verbinden wir regionale Nähe mit moderner Reinigungstechnik. Wir entfernen Laub, Schmutz und Ablagerungen schonend, prüfen Übergänge sowie Fallrohre und sichern Ihr Gebäude zuverlässig gegen Wasserschäden ab. Persönliche Ansprechpartner, transparente Kommunikation und unser <a class="text-primary hover:text-primary-dark font-semibold" href="kostenrechner.html">Dachrinnenreinigung Kostenrechner</a> sorgen dafür, dass Sie jederzeit wissen, woran Sie sind.
           </p>
 </div>
 </div>
@@ -215,8 +226,8 @@
 <section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal">
 <div class="container mx-auto">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie unsere Arbeit in Aktion</h2>
-<p class="text-base md:text-lg text-text-light dark:text-text-dark">Schauen Sie sich unser Video an, um einen Einblick in unseren professionellen Reinigungsprozess und die Ergebnisse zu erhalten, die wir liefern.</p>
+<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">So arbeitet DachrinneCheck vor Ort</h2>
+<p class="text-base md:text-lg text-text-light dark:text-text-dark">Begleiten Sie uns im Video bei einer typischen Reinigung: vom sicheren Aufbau über die gründliche Entfernung von Schmutz bis zum abschließenden Funktionscheck Ihrer Dachrinne.</p>
 </div>
 <div class="max-w-4xl mx-auto">
           <div class="rounded-xl overflow-hidden shadow-custom hover-lift">
@@ -233,8 +244,8 @@
 <section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal">
 <div class="container mx-auto">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie den Unterschied</h2>
-<p class="text-base md:text-lg text-text-light dark:text-text-dark">Unsere Vorher-Nachher-Galerie zeigt die Qualität und Effektivität unserer Dienstleistungen.</p>
+<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Vorher-Nachher: der Unterschied mit DachrinneCheck</h2>
+<p class="text-base md:text-lg text-text-light dark:text-text-dark">Unsere Referenzen zeigen, wie gründlich wir Ablagerungen entfernen und Abläufe freilegen – für dauerhaft funktionsfähige Dachrinnen.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
 <div class="rounded-xl overflow-hidden shadow-custom bg-card-light dark:bg-card-dark hover-lift reveal">
@@ -263,8 +274,8 @@
 <section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal" id="services">
 <div class="container mx-auto">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Umfassende Dachrinnenpflege</h2>
-<p class="text-base md:text-lg text-text-light dark:text-text-dark">Wir bieten eine Reihe von Dienstleistungen an, um sicherzustellen, dass Ihre Dachrinnen in Top-Zustand sind.</p>
+<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Unser Dachrinnenservice im Überblick</h2>
+<p class="text-base md:text-lg text-text-light dark:text-text-dark">Wir kombinieren Reinigung, Schutz und Inspektion zu einem stimmigen Servicepaket – individuell abgestimmt auf Ihr Gebäude und Ihre Anforderungen.</p>
 </div>
 <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 <div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
@@ -274,7 +285,7 @@
 </svg>
 </div>
 <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Dachrinnenreinigung</h3>
-<p class="text-text-light dark:text-text-dark text-sm md:text-base">Gründliche Reinigung von Dachrinnen und Fallrohren in NRW, damit Sie Ihre Dachrinne reinigen lassen können und Laub sowie Verstopfungen dauerhaft entfernt werden.</p>
+<p class="text-text-light dark:text-text-dark text-sm md:text-base">Wir entfernen Laub, Schlamm und Bewuchs aus Dachrinnen und Fallrohren, entsorgen den Schmutz fachgerecht und sichern so einen freien Wasserabfluss.</p>
 </div>
 <div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
 <div class="flex justify-center mb-5 text-primary">
@@ -283,7 +294,7 @@
 </svg>
 </div>
 <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Laubschutz &amp; Schmutzentfernung</h3>
-<p class="text-text-light dark:text-text-dark text-sm md:text-base">Laubschutz, Moosentfernung und gepflegte Außenbereiche, damit Ihre Immobilie in Willich, Krefeld oder Düsseldorf repräsentativ bleibt.</p>
+<p class="text-text-light dark:text-text-dark text-sm md:text-base">Wir beraten, montieren und reinigen Laubschutzsysteme, entfernen Moos an der Traufe und sorgen dafür, dass Ihre Dachkante dauerhaft ordentlich wirkt.</p>
 </div>
 <div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
 <div class="flex justify-center mb-5 text-primary">
@@ -292,7 +303,7 @@
 </svg>
 </div>
 <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Dachrinneninspektion</h3>
-<p class="text-text-light dark:text-text-dark text-sm md:text-base">Detaillierte Inspektion Ihrer Dachrinnen, um potenzielle Probleme frühzeitig zu erkennen und den Dachrinnenservice planbar zu halten.</p>
+<p class="text-text-light dark:text-text-dark text-sm md:text-base">Wir prüfen Halterungen, Dichtungen und kritische Übergänge, erkennen Schäden frühzeitig und geben klare Empfehlungen für sinnvolle Wartungsintervalle.</p>
 </div>
 </div>
 </div>
@@ -408,8 +419,8 @@ Original lesen
 </section>
 <section class="py-16 md:py-24 px-4 bg-card-light dark:bg-card-dark" id="contact">
 <div class="container mx-auto max-w-2xl text-center">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
-<p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
+<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Jetzt unverbindliches Angebot erhalten</h2>
+<p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Teilen Sie uns ein paar Eckdaten mit – wir prüfen Ihren Bedarf, melden uns innerhalb eines Werktags und stimmen den nächsten Schritt persönlich mit Ihnen ab.</p>
 <form class="space-y-8 text-left" id="contact-form">
   <div class="grid gap-6 md:grid-cols-2">
     <div>

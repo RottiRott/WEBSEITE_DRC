@@ -144,15 +144,21 @@
     .usp{display:flex;gap:10px;align-items:center;font-size:.95rem;background:rgba(255,255,255,0.92);border:1px solid rgba(0,0,0,0.05);border-radius:14px;padding:12px 14px;box-shadow:0 12px 30px -18px rgba(15,23,42,0.4);backdrop-filter:blur(4px)}
     .usp svg{flex:0 0 18px}
 
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
-    @media (max-width:900px){.grid-2{grid-template-columns:1fr}}
+    .grid-2{display:grid;gap:24px;align-items:start;justify-content:center;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));max-width:100%;}
+    @media (max-width:900px){
+      .grid-2{grid-template-columns:minmax(0,1fr);}
+      .grid-2>.card{margin-inline:auto;width:100%;max-width:600px;}
+    }
+    @media (min-width:901px){
+      .grid-2>.card{height:100%;}
+    }
 
     .card{background:var(--card);border:1px solid rgba(15,23,42,0.08);border-radius:20px;padding:24px;display:flex;flex-direction:column;box-shadow:0 10px 25px -5px rgba(0,0,0,0.08),0 12px 20px -8px rgba(15,23,42,0.12)}
     .card h2{margin:0 0 12px;font-size:1.4rem;color:var(--ink);font-weight:700}
 
-    .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;align-items:end}
-    .fields-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;align-items:end}
-    .fields-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;align-items:end;justify-items:stretch}
+    .fields-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;align-items:end;justify-items:stretch}
+    .fields-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;justify-items:stretch}
     @media (max-width:720px){.fields,.fields-2,.fields-3{grid-template-columns:1fr}}
 
     .field{display:flex;flex-direction:column;gap:6px;min-width:0} /* min-width:0 ist hier gut, um Überlauf bei zu langen Eingaben zu vermeiden */
