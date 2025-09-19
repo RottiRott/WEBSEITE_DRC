@@ -65,7 +65,6 @@
 <style>
     :root {
       --hero-parallax-offset: 0px;
-      --hero-base-offset: -48px;
     }
 
     body {
@@ -90,10 +89,10 @@
       pointer-events: none;
       background-image: url('https://static.wixstatic.com/media/6d33a0_4b119f6a0acd406586689276b4d3370d~mv2.jpg');
       background-size: cover;
-      background-position: center calc(38% + (var(--hero-parallax-offset, 0px) * -0.08));
+      background-position: center top;
       background-repeat: no-repeat;
-      transform: translate3d(0, calc(var(--hero-base-offset, -48px) + var(--hero-parallax-offset, 0px) * -0.18), 0) scale(1.15);
-      transform-origin: center;
+      transform: translate3d(0, clamp(-140px, calc(var(--hero-parallax-offset, 0px) * -0.14), 0px), 0) scale(1.28);
+      transform-origin: top center;
       transition: transform 0.2s ease-out, background-position 0.3s ease-out;
       will-change: transform, background-position;
     }
@@ -129,8 +128,8 @@
       .hero-heading {
         font-size: clamp(2rem, 6vw + 1rem, 3rem);
       }
-      :root {
-        --hero-base-offset: -32px;
+      .hero-section::before {
+        transform: translate3d(0, clamp(-96px, calc(var(--hero-parallax-offset, 0px) * -0.1), 0px), 0) scale(1.22);
       }
     }
     @media (max-width: 768px) {
