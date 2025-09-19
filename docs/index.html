@@ -79,10 +79,37 @@
       max-height: 720px;
       overflow: hidden;
       isolation: isolate;
-      background: transparent !important;
+      background-color: #0f172a;
+    }
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: url('https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transform: translate3d(0, calc(var(--hero-parallax-offset, 0px) * -0.2), 0) scale(1.12);
+      transform-origin: center;
+      transition: transform 0.2s ease-out;
+      will-change: transform;
+    }
+    .hero-section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.5) 45%, rgba(15, 23, 42, 0.75) 100%);
+      mix-blend-mode: multiply;
     }
     [x-cloak] {
       display: none !important;
+    }
+    .text-shadow {
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
     .hover-lift {
         transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
@@ -200,10 +227,10 @@
 </nav>
 </div>
 </header>
-<section class="relative flex flex-col items-start justify-center overflow-hidden hero-section text-gray-900 dark:text-white">
-  <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
-<h1 class="hero-heading font-black leading-tight tracking-tight text-gray-900 dark:text-white mb-4 md:mb-6">Dachrinnenreinigung in NRW – sauber, sicher und termintreu</h1>
-<p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-text-light dark:text-text-dark">Wir halten Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW frei von Schmutz – zuverlässig, sicher und mit moderner Ausrüstung. Nutzen Sie unseren Kostenrechner und erhalten Sie Ihr Angebot innerhalb von 24 Stunden.</p>
+<section class="relative flex flex-col items-start justify-center overflow-hidden hero-section text-white">
+  <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20 text-white">
+<h1 class="hero-heading font-black leading-tight tracking-tight text-shadow mb-4 md:mb-6">Dachrinnenreinigung in NRW – sauber, sicher und termintreu</h1>
+<p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-shadow text-slate-100">Wir halten Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW frei von Schmutz – zuverlässig, sicher und mit moderner Ausrüstung. Nutzen Sie unseren Kostenrechner und erhalten Sie Ihr Angebot innerhalb von 24 Stunden.</p>
 <div class="flex flex-col sm:flex-row gap-4">
           <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="kostenrechner.html">
             Zum Kostenrechner
@@ -545,10 +572,9 @@ Original lesen
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const rootElement = document.documentElement;
-    const heroBackground = document.querySelector('.hero-background-layer');
     const heroSection = document.querySelector('.hero-section');
 
-    if (!rootElement || !heroBackground || !heroSection) {
+    if (!rootElement || !heroSection) {
       return;
     }
 
