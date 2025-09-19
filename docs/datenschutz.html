@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
     tailwind.config = {
@@ -39,32 +40,47 @@
     h2 { scroll-margin-top: 6rem; }
   </style>
 </head>
-<body class="bg-background-light text-slate-900">
-  <header class="bg-white/80 backdrop-blur shadow-sm border-b border-slate-200">
-    <div class="max-w-5xl mx-auto px-4 py-6 md:py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
-      <div class="flex flex-col items-start gap-3">
-        <a href="index.html" class="inline-flex items-center">
-          <img src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" alt="DachrinneCheck Logo" class="h-16 md:h-20 w-auto"/>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900">
+  <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
+    <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300" x-data="{ scrolled: false }">
+      <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5">
+        <a class="inline-flex items-center" href="index.html">
+          <img alt="DachrinneCheck Logo" class="h-16 md:h-20 w-auto" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
           <span class="sr-only">Zur Startseite</span>
         </a>
-        <p class="text-sm text-text-light">Professionelle Dachrinnenreinigung in NRW</p>
+        <div class="hidden md:flex items-center gap-6 lg:gap-8">
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#services">Services</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#about">Über uns</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#contact">Kontakt</a>
+          <a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="kostenrechner.html">
+            Zum Kostenrechner
+          </a>
+          <a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="index.html#contact">
+            Angebot anfordern
+          </a>
+        </div>
+        <div class="md:hidden">
+          <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-900 dark:text-white p-2" aria-label="Menü öffnen">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+          </button>
+        </div>
       </div>
-      <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 text-sm md:text-base text-text-light">
-        <nav class="flex flex-wrap items-center gap-5 md:gap-8">
-          <a class="hover:text-primary transition" href="index.html">Startseite</a>
-          <a class="hover:text-primary transition" href="index.html#services">Leistungen</a>
-          <a class="hover:text-primary transition" href="index.html#contact">Kontakt</a>
-          <a class="text-primary font-semibold hover:text-primary-dark transition" href="datenschutz.html">Datenschutz</a>
-          <a class="hover:text-primary transition" href="impressum.html">Impressum</a>
-        </nav>
-        <a class="inline-flex justify-center items-center bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm md:text-base hover:bg-primary-dark transition-all duration-300 shadow" href="kostenrechner.html">
-          Zum Kostenrechner
-        </a>
+      <div :class="{'max-h-96': mobileMenuOpen, 'max-h-0': !mobileMenuOpen}" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out">
+        <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#services">Services</a>
+          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#about">Über uns</a>
+          <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#contact">Kontakt</a>
+          <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2" href="kostenrechner.html">
+            Zum Kostenrechner
+          </a>
+          <a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2" href="index.html#contact">
+            Angebot anfordern
+          </a>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="max-w-4xl mx-auto px-4 py-12 space-y-12">
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-12">
     <section class="bg-card-light shadow-custom rounded-2xl p-8 space-y-6">
       <div class="space-y-3">
         <h1 class="text-3xl font-semibold text-slate-900">Datenschutzerklärung</h1>
@@ -161,18 +177,21 @@
       <h2 class="text-2xl font-semibold text-slate-900">11. Aktualität und Änderungen dieser Datenschutzerklärung</h2>
       <p>Diese Datenschutzerklärung ist aktuell gültig und hat den Stand März 2024. Durch die Weiterentwicklung unserer Website oder aufgrund geänderter gesetzlicher beziehungsweise behördlicher Vorgaben kann es notwendig werden, diese Datenschutzerklärung zu ändern. Die jeweils aktuelle Fassung kann jederzeit auf dieser Seite von Ihnen abgerufen und ausgedruckt werden.</p>
     </section>
-  </main>
+    </main>
 
-  <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
-    <div class="max-w-4xl mx-auto px-4 text-center text-text-dark text-sm space-y-4">
-      <div class="flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-8">
-        <a class="hover:text-primary transition" href="index.html">Startseite</a>
-        <a class="hover:text-primary transition" href="kostenrechner.html">Kostenrechner</a>
-        <a class="hover:text-primary transition" href="impressum.html">Impressum</a>
-        <a class="hover:text-primary transition" href="index.html#contact">Kontakt</a>
+    <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
+      <div class="container mx-auto px-4 text-center text-text-dark">
+        <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
+          <a class="hover:text-primary transition-colors text-sm" href="./datenschutz.html">Datenschutz</a>
+          <a class="hover:text-primary transition-colors text-sm" href="./impressum.html">Impressum</a>
+          <a class="hover:text-primary transition-colors text-sm" href="kostenrechner.html">Kostenrechner</a>
+          <a class="hover:text-primary transition-colors text-sm" href="index.html#contact">Kontakt</a>
+        </div>
+        <p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
       </div>
-      <p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
-    </div>
-  </footer>
+    </footer>
+  </div>
+
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
