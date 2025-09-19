@@ -65,6 +65,7 @@
 <style>
     :root {
       --hero-parallax-offset: 0px;
+      --hero-base-offset: -48px;
     }
 
     body {
@@ -87,14 +88,14 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      background-image: url('https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png');
+      background-image: url('https://static.wixstatic.com/media/6d33a0_4b119f6a0acd406586689276b4d3370d~mv2.jpg');
       background-size: cover;
-      background-position: center;
+      background-position: center calc(38% + (var(--hero-parallax-offset, 0px) * -0.08));
       background-repeat: no-repeat;
-      transform: translate3d(0, calc(var(--hero-parallax-offset, 0px) * -0.2), 0) scale(1.12);
+      transform: translate3d(0, calc(var(--hero-base-offset, -48px) + var(--hero-parallax-offset, 0px) * -0.18), 0) scale(1.15);
       transform-origin: center;
-      transition: transform 0.2s ease-out;
-      will-change: transform;
+      transition: transform 0.2s ease-out, background-position 0.3s ease-out;
+      will-change: transform, background-position;
     }
     .hero-section::after {
       content: "";
@@ -585,35 +586,71 @@ Original lesen
     let heroHeight = heroSection.offsetHeight;
 
     const setOffset = value => {
-      rootElement.style.setProperty('--hero-parallax-offset', `${value}px`);
+      rootElement.style.setProperty('--hero-parallax-offset', `${value.toFixed(2)}px`);
     };
 
-    const updateOffset = () => {
+    let targetOffset = 0;
+    let currentOffset = 0;
+    let rafId = null;
+
+    const cancelAnimation = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    };
+
+    const animateOffset = () => {
+      const difference = targetOffset - currentOffset;
+
+      if (Math.abs(difference) <= 0.5) {
+        currentOffset = targetOffset;
+        setOffset(currentOffset);
+        rafId = null;
+        return;
+      }
+
+      currentOffset += difference * 0.15;
+      setOffset(currentOffset);
+      rafId = requestAnimationFrame(animateOffset);
+    };
+
+    const scheduleAnimation = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(animateOffset);
+      }
+    };
+
+    const updateTargetOffset = () => {
       if (prefersReducedMotion.matches) {
+        cancelAnimation();
+        targetOffset = 0;
+        currentOffset = 0;
         setOffset(0);
         return;
       }
 
       const scrollPosition = window.scrollY || window.pageYOffset || 0;
       const relativeScroll = clamp(scrollPosition - heroTop, 0, heroHeight);
-      setOffset(relativeScroll);
+      targetOffset = relativeScroll;
+      scheduleAnimation();
     };
 
     const updateMetrics = () => {
       heroTop = heroSection.offsetTop;
       heroHeight = heroSection.offsetHeight;
-      updateOffset();
+      updateTargetOffset();
     };
 
     updateMetrics();
 
-    window.addEventListener('scroll', updateOffset, { passive: true });
+    window.addEventListener('scroll', updateTargetOffset, { passive: true });
     window.addEventListener('resize', updateMetrics);
 
     if (typeof prefersReducedMotion.addEventListener === 'function') {
-      prefersReducedMotion.addEventListener('change', updateOffset);
+      prefersReducedMotion.addEventListener('change', updateTargetOffset);
     } else if (typeof prefersReducedMotion.addListener === 'function') {
-      prefersReducedMotion.addListener(updateOffset);
+      prefersReducedMotion.addListener(updateTargetOffset);
     }
   });
 
