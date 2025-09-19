@@ -74,9 +74,9 @@
 
     .hero-section {
       position: relative;
-      min-height: 24rem;
-      height: min(70vh, 900px);
-      max-height: 900px;
+      min-height: clamp(24rem, 70vh, 900px);
+      height: auto;
+      max-height: none;
       overflow: hidden;
       isolation: isolate;
       background-color: #0f172a;
@@ -134,9 +134,13 @@
     }
     @media (max-width: 768px) {
       .hero-section {
-        min-height: 20rem;
-        height: min(85vh, 520px);
-        max-height: 520px;
+        min-height: clamp(28rem, 92vh, 640px);
+      }
+    }
+    @media (max-width: 640px) {
+      .hero-content {
+        padding-top: clamp(6.5rem, 18vw + 2rem, 9rem);
+        padding-bottom: clamp(3rem, 12vw, 5rem);
       }
     }
     @keyframes reveal {
@@ -238,7 +242,7 @@
 </div>
 </header>
 <section class="relative flex flex-col items-center md:items-start justify-center overflow-hidden hero-section text-white">
-  <div class="relative z-10 w-full max-w-4xl px-6 pt-32 pb-16 text-center text-white md:px-12 md:py-24 md:text-left">
+  <div class="relative z-10 w-full max-w-4xl px-6 pt-32 pb-16 text-center text-white md:px-12 md:py-24 md:text-left hero-content">
 <h1 class="hero-heading font-black leading-tight tracking-tight text-shadow mb-4 md:mb-6 max-w-3xl mx-auto md:mx-0">Dachrinnenreinigung in NRW – sauber, sicher und termintreu</h1>
 <p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-shadow text-slate-100 max-w-2xl mx-auto md:mx-0">Wir halten Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW frei von Schmutz – zuverlässig, sicher und mit moderner Ausrüstung. Nutzen Sie unseren Kostenrechner und erhalten Sie Ihr Angebot innerhalb von 24 Stunden.</p>
 <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center md:justify-start md:items-center">
