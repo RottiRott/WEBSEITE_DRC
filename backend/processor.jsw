@@ -21,7 +21,7 @@ export async function handleIncoming({ meta = {}, contact = {}, payload = {}, co
     const nachricht = s(contact?.nachricht, 1000);
 
     if (!reEmail.test(email)) return { ok: false, error: 'INVALID_EMAIL' };
-    if (!rePhone.test(telefon)) return { ok: false, error: 'INVALID_PHONE' };
+    if (telefon && !rePhone.test(telefon)) return { ok: false, error: 'INVALID_PHONE' };
     const consentGiven = String(consent || '').toLowerCase() === 'ja';
 
     const pl = {
