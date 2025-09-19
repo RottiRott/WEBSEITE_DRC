@@ -101,14 +101,17 @@
 <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300" x-data="{ scrolled: false }">
 <div class="container mx-auto flex justify-between items-center px-4 py-3">
 <a class="inline-flex items-center" href="index.html">
-<img alt="DachrinneCheck Logo" class="h-12 md:h-14 w-auto" src="assets/img/dachrinnecheck-logo.svg"/>
+<img alt="DachrinneCheck Logo" class="h-12 md:h-14 w-auto" src="https://static.wixstatic.com/media/6d33a0_2223a215c84a4ac48ca665382936b8d5~mv2.png"/>
 <span class="sr-only">Zur Startseite</span>
 </a>
 <div class="hidden md:flex items-center space-x-6">
 <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#services">Services</a>
 <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#about">Über uns</a>
 <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors" href="#contact">Kontakt</a>
-<a class="bg-primary text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="#contact">
+<a class="bg-primary text-white font-semibold py-2 px-5 rounded-full text-sm hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="kostenrechner.html">
+              Zum Kostenrechner
+            </a>
+<a class="bg-white text-primary font-semibold py-2 px-5 rounded-full text-sm border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="#contact">
               Angebot anfordern
             </a>
 </div>
@@ -123,7 +126,10 @@
 <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="#services">Services</a>
 <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="#about">Über uns</a>
 <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="#contact">Kontakt</a>
-<a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-4" href="#contact">
+<a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2" href="kostenrechner.html">
+                  Zum Kostenrechner
+                </a>
+<a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2" href="#contact">
                   Angebot anfordern
                 </a>
 </div>
@@ -134,9 +140,14 @@
 <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
 <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
 <p class="text-lg md:text-2xl mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
-<a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" href="#contact">
-          Angebot anfordern
-        </a>
+<div class="flex flex-col sm:flex-row gap-4">
+          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="kostenrechner.html">
+            Zum Kostenrechner
+          </a>
+          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="#contact">
+            Angebot anfordern
+          </a>
+        </div>
 </div>
 </section>
 <section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal" id="about">
@@ -354,7 +365,7 @@ Original lesen
 </svg>
 </button>
 <div class="px-4 md:px-6 pb-4 md:pb-6 text-text-light dark:text-text-dark text-sm md:text-base" x-show="open === 3" x-transition:enter="transition ease-out duration-300" x-transition:enter-end="opacity-100 translate-y-0" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-2" x-transition:leave-start="opacity-100 translate-y-0">
-<p>Die Kosten unseres Service hängen von mehreren Faktoren ab, darunter die Länge Ihrer Dachrinnen, die Höhe Ihres Gebäudes und die Menge an Schmutz. Wir bieten ein kostenloses, unverbindliches Angebot, damit Sie den genauen Preis im Voraus kennen.</p>
+<p>Die Kosten unseres Service hängen von mehreren Faktoren ab, darunter die Länge Ihrer Dachrinnen, die Höhe Ihres Gebäudes und die Menge an Schmutz. Nutzen Sie gern unseren <a class="text-primary hover:text-primary-dark font-semibold" href="kostenrechner.html">Kostenrechner</a>, um in wenigen Sekunden einen transparenten Richtpreis zu erhalten. Anschließend erstellen wir Ihnen ein kostenloses, unverbindliches Angebot, damit Sie den genauen Preis im Voraus kennen.</p>
 </div>
 </div>
 </div>
@@ -464,6 +475,11 @@ Original lesen
     </button>
   </div>
 </form>
+<div class="mt-10 text-center">
+    <a class="inline-flex items-center justify-center bg-primary text-white font-semibold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" href="kostenrechner.html">
+      Zum Kostenrechner
+    </a>
+  </div>
 </div>
 </section>
 <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
@@ -471,6 +487,7 @@ Original lesen
 <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
 <a class="hover:text-primary transition-colors text-sm" href="./datenschutz.html">Datenschutz</a>
 <a class="hover:text-primary transition-colors text-sm" href="./impressum.html">Impressum</a>
+<a class="hover:text-primary transition-colors text-sm" href="kostenrechner.html">Kostenrechner</a>
 <a class="hover:text-primary transition-colors text-sm" href="#contact">Kontakt</a>
 </div>
 <p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
