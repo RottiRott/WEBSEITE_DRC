@@ -319,6 +319,54 @@
       return;
     }
 
+    const trackedInputs = [
+      firstNameInput,
+      lastNameInput,
+      emailInput,
+      phoneInput,
+      addressInput,
+      heightInput,
+      lengthInput,
+    ];
+
+    const toggleDescribedBy = (field, id, add) => {
+      if (!field || !id) {
+        return;
+      }
+      const existing = (field.getAttribute('aria-describedby') || '')
+        .split(/\s+/)
+        .filter(Boolean);
+      const has = existing.includes(id);
+      if (add && !has) {
+        existing.push(id);
+      } else if (!add && has) {
+        existing.splice(existing.indexOf(id), 1);
+      }
+      if (existing.length) {
+        field.setAttribute('aria-describedby', existing.join(' '));
+      } else {
+        field.removeAttribute('aria-describedby');
+      }
+    };
+
+    const setFieldValidity = (field, isValid) => {
+      if (!field) {
+        return;
+      }
+      if (isValid) {
+        field.removeAttribute('aria-invalid');
+        toggleDescribedBy(field, 'contact-feedback', false);
+      } else {
+        field.setAttribute('aria-invalid', 'true');
+        toggleDescribedBy(field, 'contact-feedback', true);
+      }
+    };
+
+    const clearFieldValidity = () => {
+      trackedInputs.forEach(field => setFieldValidity(field, true));
+      setFieldValidity(consentInput, true);
+    };
+
     const parseNumberInput = input => {
       if (!input) {
         return null;
@@ -342,6 +390,7 @@
       errorContainer.textContent = '';
       successContainer.classList.add('hidden');
       successContainer.textContent = '';
+      clearFieldValidity();
     };
 
     const showErrors = messages => {
@@ -358,6 +407,11 @@
       errorContainer.innerHTML = '';
       errorContainer.appendChild(list);
       errorContainer.classList.remove('hidden');
+      try {
+        errorContainer.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      } catch (error) {
+        // ignore if scrolling fails (e.g. in iframe without permissions)
+      }
       errorContainer.focus({ preventScroll: false });
       if (typeof window.__postHeight === 'function') {
         window.__postHeight();
@@ -367,6 +421,12 @@
     const showSuccess = message => {
       successContainer.textContent = message;
       successContainer.classList.remove('hidden');
+      try {
+        successContainer.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      } catch (error) {
+        // ignore
+      }
+      successContainer.focus({ preventScroll: false });
       if (typeof window.__postHeight === 'function') {
         window.__postHeight();
       }
@@ -377,6 +437,13 @@
       resetMessages();
 
       const errors = [];
+      const fieldErrorSet = new Set();
+      const registerError = (field, message) => {
+        errors.push(message);
+        if (field) {
+          fieldErrorSet.add(field);
+        }
+      };
       const firstName = firstNameInput.value.trim();
       const lastName = lastNameInput.value.trim();
       const emailValue = emailInput.value.trim();
@@ -386,40 +453,45 @@
       const lengthValue = parseNumberInput(lengthInput);
 
       if (!firstName) {
-        errors.push('Bitte geben Sie Ihren Vornamen an.');
+        registerError(firstNameInput, 'Bitte geben Sie Ihren Vornamen an.');
       }
 
       if (!lastName) {
-        errors.push('Bitte geben Sie Ihren Nachnamen an.');
+        registerError(lastNameInput, 'Bitte geben Sie Ihren Nachnamen an.');
       }
 
       if (!emailValue) {
-        errors.push('Bitte geben Sie Ihre E-Mail-Adresse an.');
+        registerError(emailInput, 'Bitte geben Sie Ihre E-Mail-Adresse an.');
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
-        errors.push('Bitte geben Sie eine gültige E-Mail-Adresse an.');
+        registerError(emailInput, 'Bitte geben Sie eine gültige E-Mail-Adresse an.');
       }
 
       if (!phoneValue) {
-        errors.push('Bitte geben Sie eine Telefonnummer an.');
+        registerError(phoneInput, 'Bitte geben Sie eine Telefonnummer an.');
       } else if (!/^\+?[0-9 ()\-\/]{6,20}$/.test(phoneValue)) {
-        errors.push('Bitte prüfen Sie die Telefonnummer.');
+        registerError(phoneInput, 'Bitte prüfen Sie die Telefonnummer.');
       }
 
       if (!addressValue) {
-        errors.push('Bitte geben Sie eine Adresse an.');
+        registerError(addressInput, 'Bitte geben Sie eine Adresse an.');
       }
 
       if (heightValue === null || heightValue <= 0) {
-        errors.push('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
+        registerError(heightInput, 'Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
       }
 
       if (lengthValue === null || lengthValue <= 0) {
-        errors.push('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
+        registerError(lengthInput, 'Bitte geben Sie die geschätzte Länge der Dachrinne an.');
       }
 
       if (!consentInput.checked) {
-        errors.push('Bitte bestätigen Sie die Datenschutzerklärung.');
+        registerError(consentInput, 'Bitte bestätigen Sie die Datenschutzerklärung.');
       }
+
+      trackedInputs.forEach(field => {
+        setFieldValidity(field, !fieldErrorSet.has(field));
+      });
+      setFieldValidity(consentInput, !fieldErrorSet.has(consentInput));
 
       if (errors.length) {
         showErrors(errors);
@@ -440,6 +512,7 @@
       const originalButtonText = submitButton.textContent;
       submitButton.disabled = true;
       submitButton.setAttribute('aria-disabled', 'true');
+      submitButton.setAttribute('aria-busy', 'true');
       submitButton.classList.add('opacity-60', 'cursor-not-allowed');
       submitButton.textContent = 'Wird gesendet…';
 
@@ -492,6 +565,7 @@
       } finally {
         submitButton.disabled = false;
         submitButton.removeAttribute('aria-disabled');
+        submitButton.removeAttribute('aria-busy');
         submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
         submitButton.textContent = originalButtonText;
         if (typeof window.__postHeight === 'function') {
