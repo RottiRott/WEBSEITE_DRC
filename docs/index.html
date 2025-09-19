@@ -56,6 +56,9 @@
       height: min(70vh, 720px);
       max-height: 720px;
     }
+    .hero-background {
+      position: fixed;
+    }
     [x-cloak] {
       display: none !important;
     }
@@ -84,10 +87,6 @@
 </style>
   </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-  <img alt="" class="h-full w-full object-cover object-center" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
-  <div class="absolute inset-0 bg-slate-900/55 dark:bg-slate-900/65"></div>
-</div>
 <div class="relative z-10 w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
 <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
 <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
@@ -138,6 +137,7 @@
 </div>
 </header>
 <section class="relative flex flex-col items-start justify-center text-white overflow-hidden hero-section">
+<img alt="Fachkraft reinigt eine Dachrinne an einem Wohnhaus in Nordrhein-Westfalen" class="absolute inset-0 w-full h-full object-cover object-center -z-10 hero-background pointer-events-none" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
 <div class="absolute inset-0 bg-slate-900/60"></div>
 <div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
 <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
