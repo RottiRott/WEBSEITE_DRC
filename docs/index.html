@@ -105,13 +105,13 @@
 <span class="sr-only">Zur Startseite</span>
 </a>
 <div class="flex items-center gap-6 lg:gap-8" x-ref="desktopNav" :class="{'hidden': collapseNav}">
-<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="#services">Services</a>
-<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="#about">Über uns</a>
-<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="#contact">Kontakt</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#services">Services</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#about">Über uns</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#contact">Kontakt</a>
 <a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="kostenrechner.html">
               Zum Kostenrechner
             </a>
-<a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="#contact">
+<a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="index.html#contact">
               Angebot anfordern
             </a>
 </div>
@@ -121,13 +121,13 @@
 </div>
 <div id="mobile-navigation" role="navigation" :aria-hidden="collapseNav && mobileMenuOpen ? 'false' : 'true'" :class="{'hidden': !collapseNav, 'max-h-96': collapseNav && mobileMenuOpen, 'max-h-0': !mobileMenuOpen || !collapseNav}" class="overflow-hidden transition-all duration-500 ease-in-out">
 <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700">
-<a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="#services">Services</a>
-<a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="#about">Über uns</a>
-<a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="#contact">Kontakt</a>
+<a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#services">Services</a>
+<a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#about">Über uns</a>
+<a @click="closeMobileMenu()" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2" href="index.html#contact">Kontakt</a>
 <a @click="closeMobileMenu()" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2" href="kostenrechner.html">
                   Zum Kostenrechner
                 </a>
-<a @click="closeMobileMenu()" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2" href="#contact">
+<a @click="closeMobileMenu()" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2" href="index.html#contact">
                   Angebot anfordern
                 </a>
 </div>
