@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Einstieg & Über-uns-Block – DachrinneCheck</title>
+<!-- FIX: Provide canonical URL for SEO and Wix embedding -->
+<link href="https://www.dachrinnecheck.de/" rel="canonical"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#0077B6",
+            "primary-dark": "#005E90",
+            "background-light": "#F8F9FA",
+            "background-dark": "#1A202C",
+            "text-light": "#6C757D",
+            "text-dark": "#E2E8F0",
+            "card-light": "#FFFFFF",
+            "card-dark": "#2D3748",
+          },
+          fontFamily: {
+            display: ["Poppins", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+            lg: "0.75rem",
+            xl: "1rem",
+            full: "9999px",
+          },
+          boxShadow: {
+            'custom': '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+          }
+        },
+      },
+    };
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="assets/css/responsive-nav.css" rel="stylesheet"/>
+<script defer src="assets/js/responsive-nav.js"></script>
+<style>
+    .text-shadow {
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    /* FIX: Responsive hero media container without parallax tearing */
+    .hero-section {
+      position: relative;
+      isolation: isolate;
+      min-height: clamp(28rem, 70vh, 48rem);
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+    }
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 24, 47, 0.45), rgba(0, 0, 0, 0.55));
+      z-index: -1;
+    }
+    .hero-content {
+      padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+      width: min(100%, 720px);
+    }
+    [x-cloak] {
+      display: none !important;
+    }
+    .hover-lift {
+        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+    }
+    .hover-lift:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15), 0 12px 15px -8px rgba(0, 0, 0, 0.15);
+    }
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .reveal {
+      animation: reveal 0.8s ease-out forwards;
+      animation-timeline: view();
+      animation-range: entry 20% cover 40%;
+    }
+</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative w-full overflow-x-hidden">
+<header class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header>
+<div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
+<a class="inline-flex items-center" data-nav-logo href="https://www.dachrinnecheck.de/">
+<img alt="DachrinneCheck Logo" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
+<span class="sr-only">Zur Startseite</span>
+</a>
+<nav aria-label="Hauptnavigation" class="hidden md:flex items-center gap-5 lg:gap-8 nav-inline" data-nav-inline>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#services">Services</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#about">Über uns</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
+<a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="https://www.dachrinnecheck.de/kostenrechner">
+              Zum Kostenrechner
+            </a>
+<a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="https://www.dachrinnecheck.de/#contact">
+              Angebot anfordern
+            </a>
+</nav>
+<div class="nav-toggle">
+<button aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-3xl">menu</span>
+<span class="sr-only">Menü</span>
+</button>
+</div>
+</div>
+<div class="nav-dialog-backdrop" data-nav-overlay hidden>
+<nav aria-hidden="true" aria-label="Mobile Navigation" aria-modal="true" class="nav-dialog" data-nav-dialog id="primary-navigation" role="dialog" tabindex="-1">
+<button class="nav-dialog-close text-gray-900 dark:text-text-dark p-2" data-nav-close type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-2xl">close</span>
+<span class="sr-only">Menü schließen</span>
+</button>
+<div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700 nav-dialog-content">
+<div class="nav-dialog-links w-full flex flex-col items-center space-y-4">
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#services">Services</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#about">Über uns</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
+</div>
+<div class="nav-dialog-actions w-full flex flex-col items-center space-y-3">
+<a class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/kostenrechner">
+                  Zum Kostenrechner
+                </a>
+<a class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">
+                  Angebot anfordern
+                </a>
+</div>
+</div>
+</nav>
+</div>
+</header>
+
+<section class="relative text-white hero-section">
+<div aria-hidden="true" class="hero-media">
+<img alt="Arbeiter reinigt Dachrinne auf einem Gebäude" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
+</div>
+<div class="hero-overlay" aria-hidden="true"></div>
+<div class="relative z-10 hero-content">
+<h1 class="text-4xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
+<p class="text-lg md:text-2xl mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="https://www.dachrinnecheck.de/kostenrechner">
+            Zum Kostenrechner
+          </a>
+          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="https://www.dachrinnecheck.de/#contact">
+            Angebot anfordern
+          </a>
+        </div>
+</div>
+</section>
+
+<section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal" id="about">
+<div class="container mx-auto">
+<div class="text-center max-w-3xl mx-auto">
+<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Über DachrinneCheck</h2>
+<p class="text-base md:text-lg text-text-light dark:text-text-dark leading-relaxed">
+            Willkommen bei DachrinneCheck, Ihrem zuverlässigen Partner für professionelle Dachrinnenreinigung in Nordrhein-Westfalen. Unsere Mission ist es, Ihr Zuhause vor Wasserschäden zu schützen, indem wir sicherstellen, dass Ihre Dachrinnen sauber, frei und voll funktionsfähig sind. Wir verpflichten uns zu qualitativ hochwertigem Service mit Fokus auf Zuverlässigkeit, Effizienz und Kundenzufriedenheit.
+          </p>
+</div>
+</div>
+</section>
+</div>
+
+<script>
+  const detectFunctionsBase = () => {
+    try {
+      if (typeof window !== 'undefined') {
+        const { hostname = '' } = window.location || {};
+        const normalized = String(hostname).toLowerCase();
+        if (normalized.includes('wixsite') || normalized.includes('editor')) {
+          return '/_functions-dev';
+        }
+      }
+    } catch (error) {
+      console.warn('Konnte Umgebung für Functions-Endpunkte nicht bestimmen:', error);
+    }
+    return '/_functions';
+  };
+
+  const FUNCTIONS_BASE = detectFunctionsBase();
+
+  const createReviewEndpoints = limit => {
+    const parsedLimit = Number.parseInt(limit, 10);
+    const safeLimit = Number.isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : 10;
+    const alternateBase = FUNCTIONS_BASE === '/_functions' ? '/_functions-dev' : '/_functions';
+    const endpoints = [
+      `${FUNCTIONS_BASE}/reviews?limit=${safeLimit}`,
+      `${alternateBase}/reviews?limit=${safeLimit}`,
+      `https://www.dachrinnecheck.de/_functions/reviews?limit=${safeLimit}`
+    ];
+    return [...new Set(endpoints)];
+  };
+
+  const REVIEWS_ENDPOINTS = createReviewEndpoints(20);
+
+  function reviewsCarousel() {
+    return {
+      reviews: [],
+      activeIndex: 0,
+      ready: false,
+      error: '',
+      autoRotateId: null,
+      async init() {
+        this.stopAutoRotate();
+        this.error = '';
+        this.ready = false;
+        this.reviews = [];
+
+        try {
+          let payload = null;
+          let lastError = null;
+
+          for (const endpoint of REVIEWS_ENDPOINTS) {
+            try {
+              const response = await fetch(endpoint, { cache: 'no-store' });
+              if (!response.ok) {
+                throw new Error(`Konnte Rezensionen nicht laden (Status ${response.status}).`);
+              }
+
+              payload = await response.json();
+
+              if (payload?.ok === false) {
+                const message = payload?.error || 'Die Kundenrezensionen konnten nicht geladen werden.';
+                throw new Error(message);
+              }
+
+              break;
+            } catch (fetchError) {
+              lastError = fetchError;
+            }
+          }
+
+          if (!payload) {
+            throw lastError || new Error('Die Kundenrezensionen konnten nicht geladen werden.');
+          }
+
+          const rawItems = Array.isArray(payload?.items) ? payload.items : [];
+
+          if (!rawItems.length) {
+            throw new Error('Keine Rezensionen in der Datenquelle gefunden.');
+          }
+
+          const formatDate = value => {
+            if (!value) {
+              return '';
+            }
+            const date = value instanceof Date ? value : new Date(value);
+            if (Number.isNaN(date.getTime())) {
+              return typeof value === 'string' ? value : '';
+            }
+            return date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+          };
+
+          const toBoolean = value => {
+            if (typeof value === 'string') {
+              const normalized = value.trim().toLowerCase();
+              return ['true', '1', 'yes', 'ja'].includes(normalized);
+            }
+            return Boolean(value);
+          };
+
+          const normalized = rawItems.map((item, index) => {
+            const safeItem = item || {};
+            const name = typeof safeItem.name === 'string' ? safeItem.name.trim() : '';
+            const comment = typeof safeItem.comment === 'string'
+              ? safeItem.comment.trim()
+              : (typeof safeItem.text === 'string' ? safeItem.text.trim() : '');
+            const ratingSource = safeItem.rating ?? safeItem.score ?? safeItem.stars;
+            const ratingValue = Number.parseFloat(ratingSource);
+
+            return {
+              id: safeItem.id || `review-${index}`,
+              name: name || 'Anonymer Kunde',
+              text: comment,
+              rating: Number.isFinite(ratingValue) ? ratingValue : 0,
+              city: typeof safeItem.city === 'string' ? safeItem.city.trim() : '',
+              date: formatDate(safeItem.date),
+              source: typeof safeItem.source === 'string' ? safeItem.source.trim() : '',
+              link: typeof safeItem.link === 'string' ? safeItem.link.trim() : '',
+              avatar: typeof safeItem.avatar === 'string' ? safeItem.avatar.trim() : '',
+              highlighted: toBoolean(safeItem.highlighted),
+              verified: toBoolean(safeItem.verified)
+            };
+          });
+
+          const withTexts = normalized.filter(review => review.text.length > 0);
+
+          if (!withTexts.length) {
+            throw new Error('Keine veröffentlichten Rezensionstexte vorhanden.');
+          }
+
+          this.reviews = withTexts;
+          this.shuffleReviews();
+          this.ready = true;
+          this.startAutoRotate();
+        } catch (loadError) {
+          console.error(loadError);
+          this.error = loadError?.message || 'Die Kundenrezensionen konnten nicht geladen werden.';
+        }
+      },
+      shuffleReviews() {
+        for (let index = this.reviews.length - 1; index > 0; index--) {
+          const swapIndex = Math.floor(Math.random() * (index + 1));
+          [this.reviews[index], this.reviews[swapIndex]] = [this.reviews[swapIndex], this.reviews[index]];
+        }
+        this.activeIndex = 0;
+      },
+      next() {
+        if (!this.reviews.length) {
+          return;
+        }
+        this.activeIndex = (this.activeIndex + 1) % this.reviews.length;
+        this.startAutoRotate();
+      },
+      previous() {
+        if (!this.reviews.length) {
+          return;
+        }
+        this.activeIndex = (this.activeIndex - 1 + this.reviews.length) % this.reviews.length;
+        this.startAutoRotate();
+      },
+      goTo(index) {
+        if (typeof index !== 'number' || index < 0 || index >= this.reviews.length) {
+          return;
+        }
+        this.activeIndex = index;
+        this.startAutoRotate();
+      },
+      startAutoRotate() {
+        this.stopAutoRotate();
+        if (this.reviews.length <= 1) {
+          return;
+        }
+        this.autoRotateId = setInterval(() => {
+          if (document.hidden) {
+            return;
+          }
+          this.activeIndex = (this.activeIndex + 1) % this.reviews.length;
+        }, 9000);
+      },
+      stopAutoRotate() {
+        if (this.autoRotateId) {
+          clearInterval(this.autoRotateId);
+          this.autoRotateId = null;
+        }
+      },
+      avatarUrl(review) {
+        if (review.avatar) {
+          return review.avatar;
+        }
+        const name = review.name || 'Kunde';
+        const initials = encodeURIComponent(name);
+        return `https://ui-avatars.com/api/?background=0077B6&color=fff&name=${initials}`;
+      },
+      starIcon(star, rating) {
+        if (rating >= star) {
+          return 'star';
+        }
+        if (rating >= star - 0.5) {
+          return 'star_half';
+        }
+        return 'grade';
+      },
+      formatMeta(review) {
+        const parts = [];
+        if (review.city) {
+          parts.push(review.city);
+        }
+        if (review.date) {
+          parts.push(review.date);
+        }
+        return parts.join(' • ');
+      }
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.querySelector('#contact-form');
+    if (!contactForm) {
+      return;
+    }
+
+    const firstNameInput = contactForm.querySelector('#first-name');
+    const lastNameInput = contactForm.querySelector('#last-name');
+    const emailInput = contactForm.querySelector('#email');
+    const phoneInput = contactForm.querySelector('#phone');
+    const addressInput = contactForm.querySelector('#address');
+    const heightInput = contactForm.querySelector('#gutter-height');
+    const lengthInput = contactForm.querySelector('#gutter-length');
+    const consentInput = contactForm.querySelector('#consent');
+    const reasonInputs = Array.from(contactForm.querySelectorAll('input[name="reasons"]'));
+    const guardInputs = Array.from(contactForm.querySelectorAll('input[name="guards"]'));
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const statusContainer = contactForm.querySelector('[data-contact-status]');
+    const statusMessage = contactForm.querySelector('#contact-status-message');
+    const retryButton = contactForm.querySelector('[data-contact-retry]');
+
+    if (!firstNameInput || !lastNameInput || !emailInput || !phoneInput || !addressInput || !heightInput || !lengthInput || !consentInput || !submitButton) {
+      return;
+    }
+
+    const defaultButtonText = submitButton.textContent.trim();
+    let isProcessing = false;
+
+    const statusClassMap = {
+      info: ['border-blue-200', 'bg-blue-50', 'text-blue-900', 'dark:bg-blue-900/30', 'dark:border-blue-700', 'dark:text-blue-100'],
+      success: ['border-green-300', 'bg-green-50', 'text-green-800', 'dark:bg-green-900/30', 'dark:border-green-700', 'dark:text-green-200'],
+      error: ['border-red-300', 'bg-red-50', 'text-red-700', 'dark:bg-red-900/30', 'dark:border-red-700', 'dark:text-red-200']
+    };
+
+    const removeStatusClasses = () => {
+      if (!statusContainer) {
+        return;
+      }
+      Object.values(statusClassMap).forEach((classes) => {
+        classes.forEach((className) => statusContainer.classList.remove(className));
+      });
+    };
+
+    const toggleRetry = (visible) => {
+      if (!retryButton) {
+        return;
+      }
+      retryButton.classList.toggle('hidden', !visible);
+      retryButton.setAttribute('aria-hidden', visible ? 'false' : 'true');
+    };
+
+    const hideStatus = () => {
+      if (!statusContainer) {
+        return;
+      }
+      removeStatusClasses();
+      statusContainer.classList.add('hidden');
+      statusContainer.removeAttribute('data-state');
+      toggleRetry(false);
+    };
+
+    // FIX: Present friendly feedback for validation, success and failure states
+    const showStatus = (type, message, { showRetry = false } = {}) => {
+      if (!statusContainer || !statusMessage) {
+        return;
+      }
+      removeStatusClasses();
+      const classes = statusClassMap[type] || statusClassMap.info;
+      classes.forEach((className) => statusContainer.classList.add(className));
+      statusContainer.classList.remove('hidden');
+      statusContainer.dataset.state = type;
+      statusMessage.textContent = message;
+      toggleRetry(showRetry);
+    };
+
+    const setSubmitDisabled = (disabled) => {
+      submitButton.disabled = disabled;
+      submitButton.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      submitButton.classList.toggle('opacity-60', disabled);
+      submitButton.classList.toggle('cursor-not-allowed', disabled);
+    };
+
+    const updateSubmitState = () => {
+      if (isProcessing) {
+        return;
+      }
+      const shouldDisable = !contactForm.checkValidity();
+      setSubmitDisabled(shouldDisable);
+      if (!shouldDisable) {
+        submitButton.textContent = defaultButtonText;
+      }
+    };
+
+    const startProcessing = () => {
+      isProcessing = true;
+      hideStatus();
+      setSubmitDisabled(true);
+      submitButton.textContent = 'Wird gesendet…';
+    };
+
+    const stopProcessing = () => {
+      isProcessing = false;
+      submitButton.textContent = defaultButtonText;
+      updateSubmitState();
+    };
+
+    const resetCustomValidity = () => {
+      [firstNameInput, lastNameInput, emailInput, phoneInput, addressInput, heightInput, lengthInput].forEach((input) => {
+        input.setCustomValidity('');
+      });
+    };
+
+    const watchInputs = [firstNameInput, lastNameInput, emailInput, phoneInput, addressInput, heightInput, lengthInput];
+    watchInputs.forEach((input) => {
+      input.addEventListener('input', () => {
+        input.setCustomValidity('');
+        hideStatus();
+        updateSubmitState();
+      });
+    });
+
+    [consentInput, ...reasonInputs, ...guardInputs].forEach((element) => {
+      element.addEventListener('change', () => {
+        hideStatus();
+        updateSubmitState();
+      });
+    });
+
+    if (retryButton) {
+      retryButton.addEventListener('click', () => {
+        if (!isProcessing) {
+          hideStatus();
+          contactForm.requestSubmit();
+        }
+      });
+    }
+
+    const parseNumberInput = input => {
+      if (!input) {
+        return null;
+      }
+      const rawValue = input.value.replace(',', '.').trim();
+      if (!rawValue) {
+        return null;
+      }
+      const numericValue = Number.parseFloat(rawValue);
+      return Number.isFinite(numericValue) ? numericValue : null;
+    };
+
+    contactForm.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      hideStatus();
+      resetCustomValidity();
+
+      const errors = [];
+      const firstName = firstNameInput.value.trim();
+      const lastName = lastNameInput.value.trim();
+      const emailValue = emailInput.value.trim();
+      const phoneValue = phoneInput.value.trim();
+      const addressValue = addressInput.value.trim();
+      const heightValue = parseNumberInput(heightInput);
+      const lengthValue = parseNumberInput(lengthInput);
+
+      if (!firstName) {
+        firstNameInput.setCustomValidity('Bitte geben Sie Ihren Vornamen an.');
+        errors.push('Bitte geben Sie Ihren Vornamen an.');
+      }
+
+      if (!lastName) {
+        lastNameInput.setCustomValidity('Bitte geben Sie Ihren Nachnamen an.');
+        errors.push('Bitte geben Sie Ihren Nachnamen an.');
+      }
+
+      if (!emailValue) {
+        emailInput.setCustomValidity('Bitte geben Sie Ihre E-Mail-Adresse an.');
+        errors.push('Bitte geben Sie Ihre E-Mail-Adresse an.');
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        emailInput.setCustomValidity('Bitte geben Sie eine gültige E-Mail-Adresse an.');
+        errors.push('Bitte geben Sie eine gültige E-Mail-Adresse an.');
+      }
+
+      if (!phoneValue) {
+        phoneInput.setCustomValidity('Bitte geben Sie eine Telefonnummer an.');
+        errors.push('Bitte geben Sie eine Telefonnummer an.');
+      } else if (!/^\+?[0-9 ()\-\/]{6,20}$/.test(phoneValue)) {
+        phoneInput.setCustomValidity('Bitte prüfen Sie die Telefonnummer.');
+        errors.push('Bitte prüfen Sie die Telefonnummer.');
+      }
+
+      if (!addressValue) {
+        addressInput.setCustomValidity('Bitte geben Sie eine Adresse an.');
+        errors.push('Bitte geben Sie eine Adresse an.');
+      }
+
+      if (heightValue === null || heightValue <= 0) {
+        heightInput.setCustomValidity('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
+        errors.push('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
+      }
+
+      if (lengthValue === null || lengthValue <= 0) {
+        lengthInput.setCustomValidity('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
+        errors.push('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
+      }
+
+      if (!consentInput.checked) {
+        errors.push('Bitte bestätigen Sie die Datenschutzerklärung.');
+      }
+
+      if (errors.length) {
+        contactForm.reportValidity();
+        showStatus('error', errors.join(' '));
+        updateSubmitState();
+        return;
+      }
+
+      const selectedReasons = reasonInputs.filter(input => input.checked).map(input => input.value);
+      const selectedGuards = guardInputs.filter(input => input.checked).map(input => input.value);
+      const messageParts = [];
+      if (selectedReasons.length) {
+        messageParts.push(`Grund für die Reinigung: ${selectedReasons.join(', ')}`);
+      }
+      if (selectedGuards.length) {
+        messageParts.push(`Dachrinnenschutz: ${selectedGuards.join(', ')}`);
+      }
+      const messageValue = messageParts.join(' | ');
+
+      startProcessing();
+
+      const contact = {
+        vorname: firstName,
+        nachname: lastName,
+        email: emailValue,
+        telefon: phoneValue,
+        nachricht: messageValue,
+        wunschtermin: ''
+      };
+
+      const payload = {
+        typ: 'Homepage-Anfrage',
+        adresse: addressValue,
+        hoehe: heightValue,
+        lfm: lengthValue,
+        gruende: selectedReasons,
+        schutzOptionen: selectedGuards
+      };
+
+      const requestBody = {
+        meta: {
+          source: 'homepage-form',
+          version: '2.0.0',
+          timestamp: new Date().toISOString()
+        },
+        contact,
+        payload,
+        consent: consentInput.checked ? 'ja' : 'nein'
+      };
+
+      try {
+        const response = await fetch('/_functions/webhookbridge', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        let result = null;
+        try {
+          result = await response.json();
+        } catch (jsonError) {
+          // ignore JSON parsing errors – will be handled by status check below
+        }
+
+        if (!response.ok || (result && result.ok === false)) {
+          const errorMessage = result?.error || `Unerwarteter Status ${response.status}`;
+          throw new Error(errorMessage);
+        }
+
+        showStatus('success', 'Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
+        contactForm.reset();
+        updateSubmitState();
+      } catch (error) {
+        console.error('Fehler beim Senden des Formulars:', error);
+        showStatus('error', 'Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.', { showRetry: true });
+      } finally {
+        stopProcessing();
+      }
+    });
+
+    updateSubmitState();
+  });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const reviewsSection = document.querySelector('#dynamic-reviews');
+      if (!reviewsSection) {
+        return;
+      }
+
+      const listElement = reviewsSection.querySelector('#reviews-list');
+      const loadingElement = reviewsSection.querySelector('#reviews-loading');
+      const errorElement = reviewsSection.querySelector('#reviews-error');
+      const emptyElement = reviewsSection.querySelector('#reviews-empty');
+
+      if (!listElement) {
+        return;
+      }
+
+      const ENDPOINTS = createReviewEndpoints(10);
+
+      const showElement = (element, shouldShow) => {
+        if (!element) {
+          return;
+        }
+        if (shouldShow) {
+          element.classList.remove('hidden');
+        } else {
+          element.classList.add('hidden');
+        }
+      };
+
+      const formatDate = value => {
+        if (!value) {
+          return '';
+        }
+        const date = value instanceof Date ? value : new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return '';
+        }
+        return date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+      };
+
+      const clampRating = value => {
+        const numeric = Number.parseFloat(value);
+        if (!Number.isFinite(numeric)) {
+          return 0;
+        }
+        return Math.min(Math.max(numeric, 0), 5);
+      };
+
+      const createStarRow = ratingValue => {
+        const rating = clampRating(ratingValue);
+        const container = document.createElement('div');
+        container.className = 'flex items-center gap-1 text-yellow-400';
+        container.setAttribute('aria-label', `${Math.round(rating * 10) / 10} von 5 Sternen`);
+
+        for (let index = 1; index <= 5; index += 1) {
+          const span = document.createElement('span');
+          span.className = 'material-symbols-outlined text-xl';
+          if (rating >= index) {
+            span.textContent = 'star';
+          } else if (rating >= index - 0.5) {
+            span.textContent = 'star_half';
+          } else {
+            span.textContent = 'star_border';
+          }
+          container.appendChild(span);
+        }
+
+        const label = document.createElement('span');
+        label.className = 'ml-2 text-sm font-medium text-text-light dark:text-text-dark';
+        label.textContent = `${Math.round(rating * 10) / 10} / 5`;
+        container.appendChild(label);
+
+        return container;
+      };
+
+      const createReviewCard = review => {
+        const card = document.createElement('article');
+        card.className = 'bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm flex flex-col gap-4';
+
+        const name = document.createElement('h4');
+        name.className = 'text-lg font-semibold text-gray-900 dark:text-white';
+        name.textContent = review?.name || 'Kunde';
+        card.appendChild(name);
+
+        card.appendChild(createStarRow(review?.rating));
+
+        if (review?.comment) {
+          const comment = document.createElement('p');
+          comment.className = 'text-sm md:text-base text-text-light dark:text-text-dark italic';
+          comment.textContent = review.comment;
+          card.appendChild(comment);
+        }
+
+        const meta = document.createElement('p');
+        meta.className = 'text-xs text-text-light dark:text-text-dark';
+        const formattedDate = formatDate(review?.date);
+        meta.textContent = formattedDate ? `Bewertet am ${formattedDate}` : 'Bewertung ohne Datumsangabe';
+        card.appendChild(meta);
+
+        return card;
+      };
+
+      const renderReviews = reviews => {
+        listElement.innerHTML = '';
+
+        reviews.forEach(review => {
+          const card = createReviewCard(review);
+          listElement.appendChild(card);
+        });
+      };
+
+      const loadReviews = async () => {
+        showElement(loadingElement, true);
+        showElement(errorElement, false);
+        showElement(emptyElement, false);
+        showElement(listElement, false);
+
+        try {
+          let payload = null;
+          let lastError = null;
+
+          for (const endpoint of ENDPOINTS) {
+            try {
+              const response = await fetch(endpoint, { cache: 'no-store' });
+              if (!response.ok) {
+                throw new Error(`Serverantwort ${response.status}`);
+              }
+
+              payload = await response.json();
+
+              if (payload?.ok === false) {
+                const message = payload?.error || 'Die Kundenbewertungen konnten nicht geladen werden.';
+                throw new Error(message);
+              }
+
+              break;
+            } catch (requestError) {
+              lastError = requestError;
+            }
+          }
+
+          if (!payload) {
+            throw lastError || new Error('Die Kundenbewertungen konnten nicht geladen werden.');
+          }
+
+          const reviews = Array.isArray(payload?.items) ? payload.items : [];
+
+          if (!reviews.length) {
+            showElement(emptyElement, true);
+            return;
+          }
+
+          renderReviews(reviews);
+          showElement(listElement, true);
+        } catch (error) {
+          console.error('Bewertungen konnten nicht geladen werden:', error);
+          if (errorElement) {
+            errorElement.textContent = 'Die Kundenbewertungen konnten nicht geladen werden. Bitte versuchen Sie es später erneut.';
+          }
+          showElement(errorElement, true);
+        } finally {
+          showElement(loadingElement, false);
+        }
+      };
+
+      loadReviews();
+    });
+  </script>
+<script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body></html>
