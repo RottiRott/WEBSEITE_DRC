@@ -1,12 +1,12 @@
-(function () {
-  const headers = Array.from(document.querySelectorAll('[data-responsive-header]'));
-  if (!headers.length) {
-    return;
-  }
 
+(function () {
   const focusableSelectors = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"])';
 
-  headers.forEach((header) => {
+  const initHeader = (header) => {
+    if (header.dataset.responsiveNavReady === 'true') {
+      return;
+    }
+
     const navInner = header.querySelector('[data-nav-inner]') || header;
     const inlineNav = header.querySelector('[data-nav-inline]');
     const logoLink = header.querySelector('[data-nav-logo]');
@@ -19,9 +19,10 @@
       return;
     }
 
+    header.dataset.responsiveNavReady = 'true';
+
     let lastFocused = null;
 
-    // FIX: Always keep ARIA attributes in sync with the open state
     const setAriaState = (expanded) => {
       toggleButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
       const openLabel = toggleButton.dataset.navLabelOpen || 'Menü öffnen';
@@ -30,7 +31,6 @@
       dialog.setAttribute('aria-hidden', expanded ? 'false' : 'true');
     };
 
-    // FIX: Trap focus inside the fly-out while it is open
     const trapFocus = (event) => {
       if (event.key !== 'Tab' || !header.classList.contains('menu-open')) {
         return;
@@ -101,7 +101,6 @@
       });
     };
 
-    // FIX: Collapse the inline nav as soon as layout space runs out
     const updateCollapse = () => {
       const previousState = header.classList.contains('is-collapsed');
       header.classList.remove('is-collapsed');
@@ -198,7 +197,18 @@
     if (document.fonts && document.fonts.addEventListener) {
       document.fonts.addEventListener('loadingdone', updateCollapse, { once: false });
     }
+  };
 
-    updateCollapse();
-  });
+  const initHeaders = () => {
+    const headers = Array.from(document.querySelectorAll('[data-responsive-header]'));
+    headers.forEach(initHeader);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeaders);
+  } else {
+    initHeaders();
+  }
+
+  document.addEventListener('partials:loaded', initHeaders);
 })();
