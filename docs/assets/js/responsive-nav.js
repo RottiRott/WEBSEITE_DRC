@@ -14,12 +14,17 @@
     const overlay = header.querySelector('[data-nav-overlay]');
     const dialog = header.querySelector('[data-nav-dialog]');
     const closeControls = header.querySelectorAll('[data-nav-close]');
+    const forceMobileNav = header.hasAttribute('data-force-mobile-nav');
 
     if (!inlineNav || !logoLink || !toggleButton || !overlay || !dialog) {
       return;
     }
 
     let lastFocused = null;
+
+    if (forceMobileNav) {
+      header.classList.add('is-collapsed');
+    }
 
     // FIX: Always keep ARIA attributes in sync with the open state
     const setAriaState = (expanded) => {
@@ -103,6 +108,11 @@
 
     // FIX: Collapse the inline nav as soon as layout space runs out
     const updateCollapse = () => {
+      if (forceMobileNav) {
+        header.classList.add('is-collapsed');
+        return;
+      }
+
       const previousState = header.classList.contains('is-collapsed');
       header.classList.remove('is-collapsed');
 

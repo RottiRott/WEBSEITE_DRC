@@ -107,6 +107,37 @@
   min-height: 44px;
 }
 
+@media (min-width: 768px) {
+  .responsive-header .nav-toggle button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    padding: 0.5rem;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 12px 26px -18px rgba(15, 23, 42, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+
+  .dark .responsive-header .nav-toggle button {
+    background: rgba(30, 41, 59, 0.88);
+    border-color: rgba(148, 163, 184, 0.35);
+    box-shadow: 0 12px 26px -18px rgba(15, 23, 42, 0.5);
+  }
+}
+
+@media (min-width: 768px) and (hover: hover) {
+  .responsive-header .nav-toggle button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 32px -18px rgba(15, 23, 42, 0.35);
+  }
+
+  .dark .responsive-header .nav-toggle button:hover {
+    box-shadow: 0 18px 32px -18px rgba(15, 23, 42, 0.6);
+  }
+}
+
 /* FIX: Avoid logo distortion when the header shrinks */
 .responsive-header [data-nav-logo] img {
   height: clamp(56px, calc(58px + 0.5vw), 68px);
@@ -114,6 +145,13 @@
   max-width: min(200px, 40vw);
   object-fit: contain;
   display: block;
+}
+
+@media (min-width: 1024px) {
+  .responsive-header [data-nav-logo] img {
+    height: clamp(48px, calc(50px + 0.3vw), 60px);
+    max-width: min(180px, 28vw);
+  }
 }
 
 @media (min-width: 768px) {
