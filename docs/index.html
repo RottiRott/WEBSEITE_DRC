@@ -257,6 +257,7 @@
 </script>
   </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
+  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
   <div aria-hidden="true" class="scroll-progress" id="scroll-progress"></div>
   <div class="relative z-10 w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
 <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
