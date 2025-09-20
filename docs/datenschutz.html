@@ -124,13 +124,12 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900">
-  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
   <div aria-hidden="true" class="scroll-progress" id="scroll-progress"></div>
   <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
     <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
       <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
         <a class="inline-flex items-center" data-nav-logo href="index.html">
-          <img alt="DachrinneCheck Logo für Dachrinnenreinigung NRW" class="h-16 md:h-20 w-auto" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
+          <img alt="DachrinneCheck Logo für Dachrinnenreinigung NRW" class="h-16 md:h-20 w-auto" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" style="height: clamp(32px, 6vh, 48px); width: auto; aspect-ratio: attr(width) / attr(height); object-fit: contain;"/>
           <span class="sr-only">Zur Startseite</span>
         </a>
         <div class="hidden md:flex items-center gap-6 lg:gap-8 nav-inline" data-nav-inline>
@@ -176,7 +175,7 @@
       </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-12 space-y-12" id="main-content">
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-12">
     <section class="bg-card-light shadow-custom rounded-2xl p-8 space-y-6 animate-fade-up" data-animate="fade-up">
       <div class="space-y-3">
         <h1 class="text-3xl font-semibold text-slate-900">Datenschutzerklärung</h1>

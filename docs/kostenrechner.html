@@ -363,13 +363,12 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
   <div aria-hidden="true" class="scroll-progress" id="scroll-progress"></div>
   <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
     <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
       <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
         <a class="inline-flex items-center" data-nav-logo href="index.html">
-          <img alt="DachrinneCheck Logo für Dachrinnenreinigung NRW" class="h-16 md:h-20 w-auto" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
+          <img alt="DachrinneCheck Logo für Dachrinnenreinigung NRW" class="h-16 md:h-20 w-auto" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" style="height: clamp(32px, 6vh, 48px); width: auto; aspect-ratio: attr(width) / attr(height); object-fit: contain;"/>
           <span class="sr-only">Zur Startseite</span>
         </a>
         <div class="hidden md:flex items-center gap-6 lg:gap-8 nav-inline" data-nav-inline>
@@ -414,7 +413,7 @@
         </nav>
       </div>
     </header>
-    <main class="pt-24 pb-24" id="main-content">
+    <main class="pt-24 pb-24">
       <div class="px-4">
         <div class="wrap">
           <section class="hero" id="preisrechner">
@@ -464,7 +463,7 @@
                 </div>
                 <div class="field">
                   <label>Map-Vorschau</label>
-                  <div id="map" class="map" role="img" aria-label="Karte des Einsatzgebiets von DachrinneCheck in Nordrhein-Westfalen" tabindex="-1"></div>
+                  <div id="map" class="map"></div>
                 </div>
               </div>
 
@@ -512,13 +511,13 @@
                     <label>E-Mail</label>
                     <input id="inEmail" type="email" required autocomplete="email" inputmode="email" maxlength="80"
                            pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" />
-                    <div id="emailMsg" class="error hidden" role="alert" aria-live="polite">Bitte eine gültige E-Mail angeben (z.B. name@domain.de).</div>
+                    <div id="emailMsg" class="error" style="display:none">Bitte eine gültige E-Mail angeben (z.B. name@domain.de).</div>
                   </div>
                   <div class="field">
                     <label>Telefon</label>
                     <input id="inPhone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="25"
                            pattern="^\+?[0-9 ()\-/]{6,20}$" />
-                    <div id="phoneMsg" class="error hidden" role="alert" aria-live="polite">Bitte eine gültige Telefonnummer angeben.</div>
+                    <div id="phoneMsg" class="error" style="display:none">Bitte eine gültige Telefonnummer angeben.</div>
                   </div>
                   <div class="field" style="grid-column:1/-1"><label>Objektadresse</label><input id="inFormAddress" type="text" readonly /></div>
                   <div class="field"><label>Wunschtermin</label><input id="dpWish" type="date" /></div>
@@ -534,7 +533,7 @@
                   </label>
                 </div>
 
-                <button class="btn cta" id="btnSubmit" type="submit" disabled>Anfrage absenden</button>
+                <button class="btn cta" id="btnSubmit" disabled>Anfrage absenden</button>
 
                 <div class="note">
                   Mit dem Absenden werden Ihre Angaben zusammen mit der Kalkulation an unser Postfach übermittelt.
@@ -557,7 +556,7 @@
           <div class="note">Richtpreis</div>
           <div class="price" id="endpreis_mobile">–</div>
         </div>
-        <button class="btn" id="btnStickySubmit" type="button" disabled>Anfrage absenden</button>
+        <button class="btn" id="btnStickySubmit" type="button" onclick="document.getElementById('kontaktForm').requestSubmit();" disabled>Anfrage absenden</button>
       </div>
     </main>
 
@@ -581,7 +580,7 @@
 
   <script defer src="assets/js/site-enhancements.js"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
   <script>
   /* ===== Konfiguration ===== */
   const START_ADDR = "Ackerstraße 39, 47877 Willich, Germany";
@@ -855,128 +854,83 @@
   const phoneEl = document.getElementById('inPhone');
   const emailMsg = document.getElementById('emailMsg');
   const phoneMsg = document.getElementById('phoneMsg');
-  function showValidity(el, msgEl){
-    if (!el || !msgEl) return;
-    const isValid = el.validity.valid;
-    msgEl.classList.toggle('hidden', isValid);
-    if (isValid) {
-      el.removeAttribute('aria-invalid');
-      if (el.getAttribute('aria-describedby') === msgEl.id) {
-        el.removeAttribute('aria-describedby');
-      }
-    } else {
-      el.setAttribute('aria-invalid', 'true');
-      el.setAttribute('aria-describedby', msgEl.id);
-    }
-  }
+  function showValidity(el, msgEl){ if(el.validity.valid){ msgEl.style.display = 'none'; } else { msgEl.style.display = 'block'; } }
   emailEl.addEventListener('input', () => showValidity(emailEl, emailMsg));
   phoneEl.addEventListener('input', () => showValidity(phoneEl, phoneMsg));
 
   async function submitForm(e){
     e.preventDefault();
 
-    const form = document.getElementById('kontaktForm');
-    const consentCheckbox = document.getElementById('cbConsent');
-
     showValidity(emailEl, emailMsg);
     showValidity(phoneEl, phoneMsg);
-    if(!form.checkValidity()){
-      form.reportValidity();
+    if(!document.getElementById('kontaktForm').checkValidity()){
+      document.getElementById('kontaktForm').reportValidity();
       return;
     }
-    if(!consentCheckbox.checked){
+    if(!document.getElementById('cbConsent').checked){
       showToast("Bitte stimmen Sie der Datenverarbeitung zu.");
-      consentCheckbox.focus();
       return;
     }
 
-    const primaryButton = document.getElementById('btnSubmit');
-    const stickyButton = document.getElementById('btnStickySubmit');
-    const originalPrimaryText = primaryButton ? primaryButton.textContent : '';
+    await recalc();
 
-    if (primaryButton) {
-      primaryButton.disabled = true;
-      primaryButton.setAttribute('aria-disabled', 'true');
-      primaryButton.setAttribute('aria-busy', 'true');
-      primaryButton.textContent = 'Wird gesendet…';
-    }
-    if (stickyButton) {
-      stickyButton.disabled = true;
-      stickyButton.setAttribute('aria-disabled', 'true');
-      stickyButton.setAttribute('aria-busy', 'true');
-    }
+    const contact = {
+      vorname: sanitizeName(document.getElementById('inFirst').value.trim()),
+      nachname: sanitizeName(document.getElementById('inLast').value.trim()),
+      email: emailEl.value.trim(),
+      telefon: phoneEl.value.trim(),
+      nachricht: sanitizeText(document.getElementById('inMsg').value),
+      wunschtermin: document.getElementById('dpWish').value || ""
+    };
+    const payload = window._payload || {};
+    const body = { meta: { source: "preisrechner-html", version: "1.2.0", timestamp: new Date().toISOString() }, contact, payload, consent: "ja" };
 
     let ok=false, status=0, text='';
 
-    try {
-      await recalc();
-
-      const contact = {
-        vorname: sanitizeName(document.getElementById('inFirst').value.trim()),
-        nachname: sanitizeName(document.getElementById('inLast').value.trim()),
-        email: emailEl.value.trim(),
-        telefon: phoneEl.value.trim(),
-        nachricht: sanitizeText(document.getElementById('inMsg').value),
-        wunschtermin: document.getElementById('dpWish').value || ""
-      };
-      const payload = window._payload || {};
-      const body = { meta: { source: "preisrechner-html", version: "1.2.0", timestamp: new Date().toISOString() }, contact, payload, consent: "ja" };
-
-      // 1) Wenn NICHT im iFrame: Direkt an Velo-Funktion posten (mit Fallbacks)
-      if (!IN_IFRAME) {
-        const urls = [
-          WEBHOOK_URL, // /_functions-oder-/_functions-dev
-          '/_functions/webhookbridge',
-          '/_functions-dev/webhookbridge',
-          'https://www.dachrinnecheck.de/_functions/webhookbridge' // absolute Live-Domain
-        ];
-        for (const url of urls) {
-          try {
-            const resp = await fetch(url, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(body)
-            });
-            status = resp.status; text = await resp.text(); ok = resp.ok;
-            if (ok) break;
-          } catch (err) {
-            status = 0; text = String(err); ok = false;
-          }
+    // 1) Wenn NICHT im iFrame: Direkt an Velo-Funktion posten (mit Fallbacks)
+    if (!IN_IFRAME) {
+      const urls = [
+        WEBHOOK_URL, // /_functions-oder-/_functions-dev
+        '/_functions/webhookbridge',
+        '/_functions-dev/webhookbridge',
+        'https://www.dachrinnecheck.de/_functions/webhookbridge' // absolute Live-Domain
+      ];
+      for (const url of urls) {
+        try {
+          const resp = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+          });
+          status = resp.status; text = await resp.text(); ok = resp.ok;
+          if (ok) break;
+        } catch (err) {
+          status = 0; text = String(err); ok = false;
         }
       }
-
-      // 2) Im iFrame (oder wenn 1) fehlschlug): über Wix-Seite bridgen
-      if (!ok) {
-        const res = await sendViaParent(body);
-        ok = res.ok; status = res.status; text = res.text;
-      }
-
-      if(!ok){
-        console.error('Bridge error:', status, text);
-        showToast(`Online-Übermittlung fehlgeschlagen (Bridge ${status}). ${text || ""}`);
-        return;
-      }
-
-      showToast("Danke! Ihre Anfrage ist eingegangen. Wir melden uns kurzfristig.");
-      form.reset();
-      document.querySelectorAll('input,textarea,select').forEach(el=>el.blur());
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      updateMobileTotalVisibility();
-    } catch (error) {
-      console.error('Preisrechner-Anfrage fehlgeschlagen:', error);
-      if (!ok) {
-        showToast('Online-Übermittlung fehlgeschlagen. Bitte versuchen Sie es später erneut.');
-      }
-    } finally {
-      if (primaryButton) {
-        primaryButton.removeAttribute('aria-busy');
-        primaryButton.textContent = originalPrimaryText || 'Anfrage absenden';
-      }
-      if (stickyButton) {
-        stickyButton.removeAttribute('aria-busy');
-      }
-      updateSubmitState();
     }
+
+    // 2) Im iFrame (oder wenn 1) fehlschlug): über Wix-Seite bridgen
+    if (!ok) {
+      const res = await sendViaParent(body);
+      ok = res.ok; status = res.status; text = res.text;
+    }
+
+    if(!ok){
+      console.error('Bridge error:', status, text);
+      showToast(`Online-Übermittlung fehlgeschlagen (Bridge ${status}). ${text || ""}`);
+      return;
+    }
+
+    showToast("Danke! Ihre Anfrage ist eingegangen. Wir melden uns kurzfristig.");
+    document.getElementById('kontaktForm').reset();
+    const b1 = document.getElementById('btnSubmit'); if (b1) b1.disabled = true;
+    const sbtn = document.getElementById('btnStickySubmit'); if (sbtn) sbtn.disabled = true;
+    // Blur focused fields and scroll to top to avoid mobile zoom sticking around
+    document.querySelectorAll('input,textarea,select').forEach(el=>el.blur());
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateMobileTotalVisibility();
+    updateSubmitState();
 
     // --- Auto-Resize: Höhe an Wix melden (verbesserter Mechanismus) ---
     (function(){
@@ -1044,16 +998,8 @@
     const consent = document.getElementById('cbConsent').checked;
     const valid = form.checkValidity();
     const enable = consent && valid;
-    const b1 = document.getElementById('btnSubmit');
-    if (b1) {
-      b1.disabled = !enable;
-      b1.setAttribute('aria-disabled', String(!enable));
-    }
-    const b2 = document.getElementById('btnStickySubmit');
-    if (b2) {
-      b2.disabled = !enable;
-      b2.setAttribute('aria-disabled', String(!enable));
-    }
+    const b1 = document.getElementById('btnSubmit'); if (b1) b1.disabled = !enable;
+    const b2 = document.getElementById('btnStickySubmit'); if (b2) b2.disabled = !enable;
   }
 
   /* ===== Events ===== */
@@ -1073,16 +1019,6 @@
     el.addEventListener('input', updateSubmitState);
     el.addEventListener('change', updateSubmitState);
   });
-
-  const stickySubmitButton = document.getElementById('btnStickySubmit');
-  if (stickySubmitButton) {
-    stickySubmitButton.addEventListener('click', () => {
-      const form = document.getElementById('kontaktForm');
-      if (form) {
-        form.requestSubmit();
-      }
-    });
-  }
 
   // Init
   toggleGuard();
