@@ -2,14 +2,31 @@
   --nav-focus-color: #0077B6;
 }
 
+/* FIX: Preserve inline navigation layout while allowing the script to decide when to collapse */
 .responsive-header .nav-inline {
   flex-wrap: nowrap;
   align-items: center;
 }
 
+/* FIX: Keep the hamburger button touch-friendly on small screens */
 .responsive-header .nav-toggle {
   display: flex;
   align-items: center;
+}
+
+/* FIX: Guarantee a minimum 44px touch target for accessibility */
+.responsive-header .nav-toggle button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* FIX: Avoid logo distortion when the header shrinks */
+.responsive-header [data-nav-logo] img {
+  height: clamp(40px, 5vw + 20px, 72px);
+  width: auto;
+  max-width: min(200px, 40vw);
+  object-fit: contain;
+  display: block;
 }
 
 @media (min-width: 768px) {
@@ -26,10 +43,12 @@
   display: none !important;
 }
 
+/* FIX: Ensure the overlay anchors to the viewport while the menu is open */
 .responsive-header.menu-open {
   position: relative;
 }
 
+/* FIX: Reworked backdrop for consistent mobile behaviour and outside-click closing */
 .nav-dialog-backdrop {
   position: fixed;
   inset: 0;

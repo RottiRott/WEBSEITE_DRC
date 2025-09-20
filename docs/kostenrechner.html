@@ -4,7 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Dachrinnenreinigung Preisrechner – jetzt Kosten online berechnen | DachrinneCheck</title>
-  <meta name="description" content="Nutzen Sie den Dachrinnenreinigung Preisrechner von DachrinneCheck und berechnen Sie in wenigen Sekunden die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf & Umgebung. Richtpreis sofort & transparent.">
+  <meta name="description" content="Nutzen Sie den Dachrinnenreinigung Preisrechner von DachrinneCheck und berechnen Sie in wenigen Sekunden die Kosten für Ihre Dachrinnenreinigung in Willich, Krefeld, Düsseldorf & Umgebung. Richtpreis sofort & transparent." />
+  <!-- FIX: Canonical URL keeps pricing tool aligned across embeds -->
+  <link rel="canonical" href="https://www.dachrinnecheck.de/kostenrechner" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
@@ -223,8 +225,17 @@
       .row label{ padding:10px 12px; border:1px solid rgba(15,23,42,0.12); border-radius:14px; background:rgba(255,255,255,0.96); }
     }
     .row input[type="radio"]{ accent-color: var(--accent); }
-    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(110px + env(safe-area-inset-bottom,0px)); background:rgba(17,24,39,0.96); color:#fff; padding:14px 18px; border-radius:14px; box-shadow:0 18px 38px rgba(15,23,42,.35); z-index:3000; display:none; border:1px solid rgba(255,255,255,0.08); }
-    .toast.show{ display:block; }
+    /* FIX: Toast can show retry button and variant styling */
+    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(110px + env(safe-area-inset-bottom,0px)); padding:14px 18px; border-radius:16px; box-shadow:0 18px 38px rgba(15,23,42,.35); z-index:3000; display:none; border:1px solid transparent; max-width:min(90vw,420px); font-weight:600; gap:12px; align-items:center; backdrop-filter:blur(6px); }
+    .toast.show{ display:flex; }
+    .toast span{ flex:1; }
+    .toast.toast--info{ background:rgba(17,24,39,0.96); color:#fff; border-color:rgba(255,255,255,0.1); }
+    .toast.toast--success{ background:rgba(22,101,52,0.95); color:#dcfce7; border-color:rgba(134,239,172,0.35); }
+    .toast.toast--error{ background:rgba(153,27,27,0.94); color:#fee2e2; border-color:rgba(248,113,113,0.35); }
+    .toast-action{ display:none; background:rgba(255,255,255,0.12); color:inherit; border:1px solid currentColor; border-radius:999px; padding:6px 16px; font-size:0.85rem; font-weight:600; cursor:pointer; transition:background .2s ease, color .2s ease, border-color .2s ease; }
+    .toast-action.is-visible{ display:inline-flex; }
+    .toast-action:hover{ background:rgba(255,255,255,0.24); }
+    .toast-action:focus-visible{ outline:2px solid rgba(255,255,255,0.65); outline-offset:2px; }
 
     /* --- Wix/mobile overflow guards --- */
     svg,img,canvas,video{max-width:100%;height:auto}
@@ -249,48 +260,49 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-  <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
-    <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
+  <div class="relative w-full overflow-x-hidden">
+    <!-- FIX: Navigation unified with homepage for consistent behaviour -->
+    <header class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header>
       <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
-        <a class="inline-flex items-center" data-nav-logo href="index.html">
-          <img alt="DachrinneCheck Logo" class="h-16 md:h-20 w-auto" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" style="height: clamp(32px, 6vh, 48px); width: auto; aspect-ratio: attr(width) / attr(height); object-fit: contain;"/>
+        <a class="inline-flex items-center" data-nav-logo href="https://www.dachrinnecheck.de/">
+          <img alt="DachrinneCheck Logo" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" />
           <span class="sr-only">Zur Startseite</span>
         </a>
-        <div class="hidden md:flex items-center gap-6 lg:gap-8 nav-inline" data-nav-inline>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#services">Services</a>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#about">Über uns</a>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="#contact">Kontakt</a>
-          <a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="kostenrechner.html">
+        <nav aria-label="Hauptnavigation" class="hidden md:flex items-center gap-5 lg:gap-8 nav-inline" data-nav-inline>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#services">Services</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#about">Über uns</a>
+          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
+          <a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="https://www.dachrinnecheck.de/kostenrechner">
             Zum Kostenrechner
           </a>
-          <a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="#contact">
+          <a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="https://www.dachrinnecheck.de/#contact">
             Angebot anfordern
           </a>
-        </div>
-        <div class="md:hidden nav-toggle">
-          <button @click="mobileMenuOpen = !mobileMenuOpen" aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white p-2" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
+        </nav>
+        <div class="nav-toggle">
+          <button aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
             <span aria-hidden="true" class="material-symbols-outlined text-3xl">menu</span>
             <span class="sr-only">Menü</span>
           </button>
         </div>
       </div>
-      <div :class="{'max-h-96': mobileMenuOpen, 'max-h-0': !mobileMenuOpen}" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out nav-dialog-backdrop" data-nav-overlay hidden>
-        <nav aria-hidden="true" aria-label="Hauptnavigation" aria-modal="true" class="nav-dialog" data-nav-dialog id="primary-navigation" role="dialog" tabindex="-1">
+      <div class="nav-dialog-backdrop" data-nav-overlay hidden>
+        <nav aria-hidden="true" aria-label="Mobile Navigation" aria-modal="true" class="nav-dialog" data-nav-dialog id="primary-navigation" role="dialog" tabindex="-1">
           <button class="nav-dialog-close text-gray-900 dark:text-text-dark p-2" data-nav-close type="button">
             <span aria-hidden="true" class="material-symbols-outlined text-2xl">close</span>
             <span class="sr-only">Menü schließen</span>
           </button>
           <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700 nav-dialog-content">
             <div class="nav-dialog-links w-full flex flex-col items-center space-y-4">
-              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#services">Services</a>
-              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#about">Über uns</a>
-              <a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="#contact">Kontakt</a>
+              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#services">Services</a>
+              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#about">Über uns</a>
+              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
             </div>
             <div class="nav-dialog-actions w-full flex flex-col items-center space-y-3">
-              <a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="kostenrechner.html">
+              <a class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/kostenrechner">
                 Zum Kostenrechner
               </a>
-              <a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="#contact">
+              <a class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">
                 Angebot anfordern
               </a>
             </div>
@@ -414,7 +426,7 @@
                   <label for="cbConsent" class="note">
                     Ich willige ein, dass meine Angaben zur Kontaktaufnahme, Angebotserstellung und Terminabstimmung verarbeitet und gespeichert werden.
                     Die Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen. Hinweise in der
-                    <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.
+                    <a href="https://www.dachrinnecheck.de/datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a>.
                   </label>
                 </div>
 
@@ -448,16 +460,21 @@
     <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
       <div class="container mx-auto px-4 text-center text-text-dark">
         <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
-          <a class="hover:text-primary transition-colors text-sm" href="./datenschutz.html">Datenschutz</a>
-          <a class="hover:text-primary transition-colors text-sm" href="./impressum.html">Impressum</a>
-          <a class="hover:text-primary transition-colors text-sm" href="kostenrechner.html">Kostenrechner</a>
-          <a class="hover:text-primary transition-colors text-sm" href="#contact">Kontakt</a>
+          <a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/datenschutz">Datenschutz</a>
+          <a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/impressum">Impressum</a>
+          <a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/kostenrechner">Kostenrechner</a>
+          <a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
         </div>
         <p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
       </div>
     </footer>
   </div>
 
+  <!-- FIX: Toast now includes retry action for failed submissions -->
+  <div id="toast" class="toast toast--info" role="status" aria-live="polite">
+    <span id="toast-message"></span>
+    <button type="button" class="toast-action" data-toast-action aria-hidden="true">Erneut senden</button>
+  </div>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
   <script>
@@ -698,13 +715,66 @@
   });
 
   // ===== Toast helper (mobile-friendly) =====
-  function showToast(msg){
-    const t = document.getElementById('toast');
-    if(!t){ alert(msg); return; }
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(()=> t.classList.remove('show'), 2800);
+  let toastHideTimeout = 0;
+  function hideToast(){
+    const container = document.getElementById('toast');
+    if(!container){
+      return;
+    }
+    container.classList.remove('show');
+    container.removeAttribute('data-state');
+    if(toastHideTimeout){
+      clearTimeout(toastHideTimeout);
+      toastHideTimeout = 0;
+    }
   }
+  function showToast(message, options = {}){
+    const container = document.getElementById('toast');
+    const messageEl = document.getElementById('toast-message');
+    const actionButton = document.querySelector('[data-toast-action]');
+    if(!container || !messageEl){
+      alert(message);
+      return;
+    }
+
+    const { variant = 'info', duration = 3200, actionLabel = '', onAction = null } = options;
+
+    hideToast();
+
+    container.classList.remove('toast--info', 'toast--success', 'toast--error');
+    container.classList.add(`toast--${variant === 'success' ? 'success' : variant === 'error' ? 'error' : 'info'}`);
+    container.dataset.state = variant;
+    messageEl.textContent = message;
+
+    if(actionButton){
+      if(actionLabel && typeof onAction === 'function'){
+        actionButton.textContent = actionLabel;
+        actionButton.classList.add('is-visible');
+        actionButton.setAttribute('aria-hidden', 'false');
+        actionButton.onclick = () => {
+          hideToast();
+          onAction();
+        };
+      }else{
+        actionButton.classList.remove('is-visible');
+        actionButton.setAttribute('aria-hidden', 'true');
+        actionButton.onclick = null;
+      }
+    }
+
+    container.classList.add('show');
+    toastHideTimeout = window.setTimeout(() => hideToast(), Math.max(2000, duration));
+  }
+
+  const toastContainer = document.getElementById('toast');
+  if(toastContainer){
+    toastContainer.addEventListener('click', hideToast);
+  }
+  document.addEventListener('keydown', (event) => {
+    if(event.key === 'Escape'){
+      hideToast();
+    }
+  });
 
   // ===== Input sanitization =====
   function escapeHtml(str){
@@ -747,7 +817,7 @@
       return;
     }
     if(!document.getElementById('cbConsent').checked){
-      showToast("Bitte stimmen Sie der Datenverarbeitung zu.");
+      showToast("Bitte stimmen Sie der Datenverarbeitung zu.", { variant: 'error', duration: 3600 });
       return;
     }
 
@@ -797,11 +867,22 @@
 
     if(!ok){
       console.error('Bridge error:', status, text);
-      showToast(`Online-Übermittlung fehlgeschlagen (Bridge ${status}). ${text || ""}`);
+      showToast(`Online-Übermittlung fehlgeschlagen (Bridge ${status}). ${text || ""}`, {
+        variant: 'error',
+        duration: 5000,
+        actionLabel: 'Erneut senden',
+        onAction: () => {
+          const formEl = document.getElementById('kontaktForm');
+          if(formEl){
+            formEl.requestSubmit();
+          }
+        }
+      });
+      updateSubmitState();
       return;
     }
 
-    showToast("Danke! Ihre Anfrage ist eingegangen. Wir melden uns kurzfristig.");
+    showToast("Danke! Ihre Anfrage ist eingegangen. Wir melden uns kurzfristig.", { variant: 'success' });
     document.getElementById('kontaktForm').reset();
     const b1 = document.getElementById('btnSubmit'); if (b1) b1.disabled = true;
     const sbtn = document.getElementById('btnStickySubmit'); if (sbtn) sbtn.disabled = true;
@@ -870,6 +951,5 @@
   try { recalc(); } catch (e) { console.error('recalc init failed', e); }
   updateSubmitState();
   </script>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
