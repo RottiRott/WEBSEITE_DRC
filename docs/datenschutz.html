@@ -62,7 +62,7 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900">
-  <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
+  <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
     <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
       <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
         <a class="inline-flex items-center" data-nav-logo href="index.html">
@@ -82,8 +82,8 @@
         </div>
         <div class="md:hidden nav-toggle">
           <button @click="mobileMenuOpen = !mobileMenuOpen" aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white p-2" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
-            <span aria-hidden="true" class="material-symbols-outlined text-3xl" data-nav-icon data-nav-icon-closed="menu" data-nav-icon-open="close">menu</span>
-            <span class="sr-only" data-nav-sr>Menü</span>
+            <span aria-hidden="true" class="material-symbols-outlined text-3xl">menu</span>
+            <span class="sr-only">Menü</span>
           </button>
         </div>
       </div>
