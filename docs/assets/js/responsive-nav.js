@@ -130,52 +130,40 @@
     const previousState = header.classList.contains('is-collapsed');
     header.classList.remove('is-collapsed');
 
-    const forcedCollapse =
-      typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 767px)').matches;
+    const originalStyle = inlineNav.getAttribute('style');
+    const computedDisplay = window.getComputedStyle(inlineNav).display;
+    let temporarilyVisible = false;
 
-    let shouldCollapse = Boolean(forcedCollapse);
+    if (computedDisplay === 'none') {
+      inlineNav.style.display = 'flex';
+      inlineNav.style.position = 'absolute';
+      inlineNav.style.visibility = 'hidden';
+      inlineNav.style.pointerEvents = 'none';
+      temporarilyVisible = true;
+    }
 
-    if (!shouldCollapse) {
-      const originalStyle = inlineNav.getAttribute('style');
-      const computedDisplay = window.getComputedStyle(inlineNav).display;
-      let temporarilyVisible = false;
+    const logoRect = logoLink.getBoundingClientRect();
+    const logoStyles = window.getComputedStyle(logoLink);
+    const inlineRectWidth = inlineNav.scrollWidth;
+    const inlineStyles = window.getComputedStyle(inlineNav);
+    const navWidth = inlineRectWidth + parseFloat(inlineStyles.marginLeft || '0') + parseFloat(inlineStyles.marginRight || '0');
+    const logoWidth = logoRect.width + parseFloat(logoStyles.marginLeft || '0') + parseFloat(logoStyles.marginRight || '0');
+    const containerWidth = navInner.clientWidth;
+    const buffer = 24;
+    const shouldCollapse = navWidth + logoWidth + buffer > containerWidth;
 
-      if (computedDisplay === 'none') {
-        inlineNav.style.display = 'flex';
-        inlineNav.style.position = 'absolute';
-        inlineNav.style.visibility = 'hidden';
-        inlineNav.style.pointerEvents = 'none';
-        temporarilyVisible = true;
-      }
-
-      const logoRect = logoLink.getBoundingClientRect();
-      const logoStyles = window.getComputedStyle(logoLink);
-      const inlineRectWidth = inlineNav.scrollWidth;
-      const inlineStyles = window.getComputedStyle(inlineNav);
-      const navWidth =
-        inlineRectWidth +
-        parseFloat(inlineStyles.marginLeft || '0') +
-        parseFloat(inlineStyles.marginRight || '0');
-      const logoWidth =
-        logoRect.width +
-        parseFloat(logoStyles.marginLeft || '0') +
-        parseFloat(logoStyles.marginRight || '0');
-      const containerWidth = navInner.clientWidth;
-      const buffer = 24;
-
-      shouldCollapse = navWidth + logoWidth + buffer > containerWidth;
-
-      if (temporarilyVisible) {
-        inlineNav.removeAttribute('style');
-        if (originalStyle) {
-          inlineNav.setAttribute('style', originalStyle);
-        }
+    if (temporarilyVisible) {
+      inlineNav.removeAttribute('style');
+      if (originalStyle) {
+        inlineNav.setAttribute('style', originalStyle);
       }
     }
 
     if (shouldCollapse) {
       header.classList.add('is-collapsed');
-    } else if (previousState) {
+    }
+
+    if (!shouldCollapse && previousState) {
       closeMenu();
     }
   }
