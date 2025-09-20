@@ -57,74 +57,11 @@
   <link href="assets/css/responsive-nav.css" rel="stylesheet" />
   <script defer src="assets/js/responsive-nav.js"></script>
   <style>
-    :root {
-      --header-height: 4.5rem;
-    }
-    body {
-      min-height: 100vh;
-      padding-top: var(--header-height);
-      position: relative;
-    }
+    body { min-height: 100vh; }
     h2 { scroll-margin-top: 6rem; }
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      transform-origin: left center;
-      transform: scaleX(0);
-      background: linear-gradient(90deg, #38bdf8, #0ea5e9 55%, #0284c7);
-      z-index: 60;
-      pointer-events: none;
-    }
-    .animate-fade-up {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .animate-fade-up.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .back-to-top {
-      position: fixed;
-      right: 1.25rem;
-      bottom: clamp(1.5rem, 3vh, 3rem);
-      width: 3rem;
-      height: 3rem;
-      border-radius: 9999px;
-      background: rgba(0, 119, 182, 0.92);
-      color: #fff;
-      border: none;
-      box-shadow: 0 15px 30px -18px rgba(15, 23, 42, 0.7);
-      display: grid;
-      place-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(16px);
-      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
-      z-index: 55;
-    }
-    .back-to-top:focus-visible {
-      outline: 3px solid #bae6fd;
-      outline-offset: 3px;
-    }
-    .back-to-top.is-visible {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-    .responsive-header {
-      min-height: var(--header-height);
-    }
-    .responsive-header > [data-nav-inner] {
-      min-height: var(--header-height);
-    }
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900">
-  <div aria-hidden="true" class="scroll-progress" id="scroll-progress"></div>
   <div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
     <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
       <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
@@ -176,7 +113,7 @@
     </header>
 
     <main class="max-w-4xl mx-auto px-4 py-12 space-y-12">
-    <section class="bg-card-light shadow-custom rounded-2xl p-8 space-y-6 animate-fade-up" data-animate="fade-up">
+    <section class="bg-card-light shadow-custom rounded-2xl p-8 space-y-6">
       <div class="space-y-3">
         <h1 class="text-3xl font-semibold text-slate-900">Datenschutzerklärung</h1>
         <p class="text-text-light text-sm">Stand: 21. März 2024</p>
@@ -184,19 +121,19 @@
       <p class="text-sm leading-relaxed text-slate-700">Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Nachfolgend informieren wir Sie gemäß Art. 12 ff. DSGVO über die Verarbeitung personenbezogener Daten beim Besuch unserer Website, der Nutzung unseres Preisrechners sowie weiterer angebotener Funktionen. Sofern Sie Fragen zur Datenverarbeitung haben, sprechen Sie uns gerne an.</p>
     </section>
 
-    <section id="verantwortlicher" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="verantwortlicher" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">1. Verantwortlicher</h2>
       <p>DachrinneCheck – Inhaber: Frederik Rott<br/>Ackerstraße 39, 47877 Willich<br/>Telefon: 0172 3285468<br/>E-Mail: <a class="text-primary hover:text-primary-dark" href="mailto:kontakt@dachrinnecheck.de">kontakt@dachrinnecheck.de</a></p>
       <p>Für sämtliche Fragen zum Datenschutz erreichen Sie uns unter den vorgenannten Kontaktdaten.</p>
     </section>
 
-    <section id="hosting" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="hosting" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">2. Bereitstellung der Website und Server-Protokolle</h2>
       <p>Beim Aufrufen unserer Website werden durch den auf Ihrem Endgerät zum Einsatz kommenden Browser automatisch Informationen an den Server unserer Website gesendet. Diese Informationen werden temporär in sogenannten Server-Logfiles gespeichert. Erfasst werden insbesondere IP-Adresse, Datum und Uhrzeit des Zugriffs, Name und URL der abgerufenen Datei, Website, von der aus der Zugriff erfolgt (Referrer-URL), verwendeter Browser und ggf. das Betriebssystem Ihres Rechners sowie der Name Ihres Access-Providers.</p>
       <p>Die genannten Daten werden zu folgenden Zwecken verarbeitet: Gewährleistung eines reibungslosen Verbindungsaufbaus der Website, Gewährleistung einer komfortablen Nutzung unserer Website, Auswertung der Systemsicherheit und -stabilität sowie zu weiteren administrativen Zwecken. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse folgt aus den vorgenannten Zwecken der Datenerhebung. Eine Zusammenführung dieser Daten mit anderen Datenquellen findet nicht statt.</p>
     </section>
 
-    <section id="cdn" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="cdn" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">3. Eingesetzte Drittanbieter-Dienste</h2>
       <p>Zur Bereitstellung eines modernen Nutzererlebnisses setzen wir externe Inhalte und Bibliotheken ein. Dabei werden aus technischer Notwendigkeit personenbezogene Daten (insbesondere Ihre IP-Adresse und Browserinformationen) an die Anbieter übertragen. Rechtsgrundlage der Integration ist Art. 6 Abs. 1 lit. f DSGVO, unser berechtigtes Interesse an der wirtschaftlichen und technisch sicheren Bereitstellung unserer Leistungen sowie, sofern erforderlich, Art. 6 Abs. 1 lit. a DSGVO (Einwilligung), etwa bei aktivierten Medien-Inhalten.</p>
       <div class="space-y-4">
@@ -215,19 +152,19 @@
       </div>
     </section>
 
-    <section id="kontakt" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="kontakt" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">4. Kontaktanfragen</h2>
       <p>Wenn Sie uns per E-Mail, Telefon oder über das Kontaktformular auf der Website kontaktieren, werden Ihre Angaben inklusive der von Ihnen dort angegebenen Kontaktdaten zur Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung und -durchführung) sowie Art. 6 Abs. 1 lit. a DSGVO, sofern Sie freiwillig zusätzliche Informationen bereitstellen.</p>
       <p>Die Kommunikation zwischen Ihrem Browser und unserem Server erfolgt über TLS-verschlüsselte Verbindungen.</p>
     </section>
 
-    <section id="preisrechner" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="preisrechner" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">5. Preisrechner &amp; Formularübermittlung</h2>
       <p>Unser Online-Preisrechner ermöglicht die Kalkulation von Richtpreisen und die direkte Angebotsanfrage. Bei Nutzung des Formulars verarbeiten wir folgende Kategorien personenbezogener Daten: Anrede, Name, Anschrift der Immobilie, Kontaktdaten (E-Mail, Telefonnummer), gewünschter Termin, freiwillige Zusatzinformationen sowie technische Daten zur Kalkulation (z.&nbsp;B. Objekthöhe, Dachrinnenlänge, Entfernungen).</p>
       <p>Die von Ihnen eingegebenen Informationen werden gemeinsam mit dem Berechnungsergebnis an unser internes Postfach übertragen, damit wir Ihre Anfrage beantworten können. Für den Versand nutzen wir einen eigenen Serverdienst (Microsoft Azure Functions). Rechtsgrundlage der Verarbeitung ist Art. 6 Abs. 1 lit. b DSGVO. Die Daten werden nach Abschluss der Kommunikation bzw. nach Ablauf gesetzlicher Aufbewahrungsfristen gelöscht.</p>
     </section>
 
-    <section id="karten" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="karten" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">6. Kartendienste, Routing &amp; Geodaten</h2>
       <p>Zur Visualisierung und Berechnung von Entfernungen nutzt der Preisrechner die Bibliothek Leaflet (Copyright © Vladimir Agafonkin) sowie Inhalte der OpenStreetMap Foundation, St John’s Innovation Centre, Cowley Road, Cambridge, CB4 0WS, Vereinigtes Königreich.</p>
       <ul class="list-disc list-inside space-y-2">
@@ -238,17 +175,17 @@
       <p>Die Verarbeitung erfolgt zur Durchführung vorvertraglicher Maßnahmen und basiert auf Art. 6 Abs. 1 lit. b DSGVO sowie unserem berechtigten Interesse an einer effizienten Angebotsabwicklung (Art. 6 Abs. 1 lit. f DSGVO). Soweit Daten auf Servern außerhalb der EU verarbeitet werden, stellen wir sicher, dass geeignete Garantien gemäß Art. 44 ff. DSGVO bestehen.</p>
     </section>
 
-    <section id="rechte" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="rechte" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">7. Dauer der Speicherung</h2>
       <p>Wir speichern personenbezogene Daten nur so lange, wie dies zur Erfüllung der jeweiligen Zwecke erforderlich ist oder uns gesetzliche Aufbewahrungspflichten (insbesondere nach Handels- und Steuerrecht) zur Speicherung verpflichten.</p>
     </section>
 
-    <section id="weitergabe" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="weitergabe" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">8. Weitergabe von Daten</h2>
       <p>Eine Übermittlung Ihrer persönlichen Daten an Dritte findet grundsätzlich nicht statt, es sei denn, dies ist zur Vertragsabwicklung erforderlich, es besteht eine gesetzliche Verpflichtung, Sie haben ausdrücklich eingewilligt oder es liegt ein berechtigtes Interesse vor. Wir arbeiten mit sorgfältig ausgewählten Dienstleistern (z.&nbsp;B. Hosting-Anbieter, IT-Dienstleister) zusammen, die vertraglich zur Verschwiegenheit sowie zur Einhaltung der geltenden Datenschutzgesetze verpflichtet sind.</p>
     </section>
 
-    <section id="rechte-betroffene" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="rechte-betroffene" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">9. Ihre Rechte</h2>
       <p>Sie haben das Recht:</p>
       <ul class="list-disc list-inside space-y-2">
@@ -263,12 +200,12 @@
       </ul>
     </section>
 
-    <section id="sicherheit" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="sicherheit" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">10. Datensicherheit</h2>
       <p>Wir verwenden innerhalb des Website-Besuchs das verbreitete TLS-Verfahren (Transport Layer Security) in Verbindung mit der jeweils höchsten Verschlüsselungsstufe, die von Ihrem Browser unterstützt wird. Darüber hinaus treffen wir geeignete technische und organisatorische Sicherheitsmaßnahmen, um Ihre Daten gegen zufällige oder vorsätzliche Manipulationen, teilweisen oder vollständigen Verlust, Zerstörung oder den unbefugten Zugriff Dritter zu schützen.</p>
     </section>
 
-    <section id="aenderungen" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700 animate-fade-up" data-animate="fade-up">
+    <section id="aenderungen" class="bg-card-light shadow-custom rounded-2xl p-8 space-y-4 text-sm leading-relaxed text-slate-700">
       <h2 class="text-2xl font-semibold text-slate-900">11. Aktualität und Änderungen dieser Datenschutzerklärung</h2>
       <p>Diese Datenschutzerklärung ist aktuell gültig und hat den Stand März 2024. Durch die Weiterentwicklung unserer Website oder aufgrund geänderter gesetzlicher beziehungsweise behördlicher Vorgaben kann es notwendig werden, diese Datenschutzerklärung zu ändern. Die jeweils aktuelle Fassung kann jederzeit auf dieser Seite von Ihnen abgerufen und ausgedruckt werden.</p>
     </section>
@@ -287,12 +224,6 @@
     </footer>
   </div>
 
-  <button aria-label="Nach oben" class="back-to-top" id="back-to-top" type="button">
-    <span class="material-symbols-outlined">arrow_upward</span>
-    <span class="sr-only">Nach oben</span>
-  </button>
-
-  <script defer src="assets/js/site-enhancements.js"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
