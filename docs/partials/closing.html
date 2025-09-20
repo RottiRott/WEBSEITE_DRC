@@ -1,0 +1,130 @@
+<section class="py-16 md:py-24 px-4 bg-card-light dark:bg-card-dark reveal" id="contact">
+<div class="container mx-auto max-w-2xl text-center">
+<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
+<p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
+<form class="space-y-8 text-left" id="contact-form">
+  <!-- FIX: Inline status area provides graceful feedback and retry controls -->
+  <div aria-live="polite" class="hidden rounded-lg border p-4 text-sm transition-colors" data-contact-status role="status">
+    <p class="font-semibold" id="contact-status-message"></p>
+    <button class="mt-3 inline-flex items-center justify-center rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition-colors px-4 py-2 text-sm font-semibold hidden" data-contact-retry type="button">
+      Erneut senden
+    </button>
+  </div>
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="first-name">Vorname<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="first-name" name="first-name" autocomplete="given-name" required="" type="text"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="last-name">Nachname<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="last-name" name="last-name" autocomplete="family-name" required="" type="text"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="email">E-Mail<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="email" name="email" autocomplete="email" required="" type="email"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="phone">Telefon<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="phone" name="phone" autocomplete="tel" inputmode="tel" pattern="\+?[0-9 ()\-\/]{6,20}" placeholder="z. B. +49 171 1234567" required="" type="tel"/>
+    </div>
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="address">Adresse auswählen<span class="text-red-500">*</span></label>
+    <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="address" name="address" placeholder="Straße, Hausnummer, PLZ und Ort" required="" type="text"/>
+    <p class="mt-2 text-xs text-text-light dark:text-text-dark">Bitte nennen Sie die Adresse der Immobilie, damit wir den Einsatz planen können.</p>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="gutter-height">Höhe der Dachrinne<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="gutter-height" name="gutter-height" min="0" step="0.1" placeholder="geschätzte Höhe in Metern" required="" type="number"/>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="gutter-length">Länge der Dachrinne<span class="text-red-500">*</span></label>
+      <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="gutter-length" name="gutter-length" min="0" step="0.5" placeholder="geschätzte Länge in Metern" required="" type="number"/>
+    </div>
+  </div>
+
+  <fieldset class="space-y-4">
+    <legend class="text-sm font-semibold text-gray-900 dark:text-white">Grund für die Dachrinnenreinigung</legend>
+    <div class="space-y-3">
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Ich habe verunreinigtes Wasser"/>
+        <span>Ich habe verunreinigtes Wasser</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Wasserschäden an der Fassade"/>
+        <span>Wasserschäden an der Fassade</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Pflanzen in der Rinne"/>
+        <span>Pflanzen in der Rinne</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Dachrinne verstopft"/>
+        <span>Dachrinne verstopft</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="reasons" type="checkbox" value="Ich bin mir unsicher"/>
+        <span>Ich bin mir unsicher</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset class="space-y-4">
+    <legend class="text-sm font-semibold text-gray-900 dark:text-white">Dachrinnenschutz/Laubschutz</legend>
+    <div class="space-y-3">
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich habe einen Dachrinnenschutz"/>
+        <span>Ich habe einen Dachrinnenschutz</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich benötige einen Dachrinnenschutz"/>
+        <span>Ich benötige einen Dachrinnenschutz</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich bin mir unsicher – möchte mich beraten lassen"/>
+        <span>Ich bin mir unsicher – möchte mich beraten lassen</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich habe einen Dachrinnenschutz, brauche eine Reparatur"/>
+        <span>Ich habe einen Dachrinnenschutz, brauche eine Reparatur</span>
+      </label>
+      <label class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" name="guards" type="checkbox" value="Ich habe einen Dachrinnenschutz, brauche eine Reinigung"/>
+        <span>Ich habe einen Dachrinnenschutz, brauche eine Reinigung</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="flex items-start gap-3">
+    <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" id="consent" name="consent" required="" type="checkbox"/>
+    <label class="text-sm text-gray-700 dark:text-gray-300" for="consent">Ich habe die <a class="text-primary hover:text-primary-dark font-medium" href="https://www.dachrinnecheck.de/datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</label>
+  </div>
+
+  <div class="text-center pt-4">
+    <button class="bg-primary text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" type="submit">
+      Angebot anfordern
+    </button>
+  </div>
+</form>
+<div class="mt-10 text-center">
+    <a class="inline-flex items-center justify-center bg-primary text-white font-semibold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" href="https://www.dachrinnecheck.de/kostenrechner">
+      Zum Kostenrechner
+    </a>
+  </div>
+</div>
+</section>
+
+<footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
+<div class="container mx-auto px-4 text-center text-text-dark">
+<div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/datenschutz">Datenschutz</a>
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/impressum">Impressum</a>
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/kostenrechner">Kostenrechner</a>
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
+</div>
+<p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
+</div>
+</footer>
