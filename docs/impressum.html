@@ -52,16 +52,29 @@
           <img alt="DachrinneCheck Logo" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" />
           <span class="sr-only">Zur Startseite</span>
         </a>
-        <nav aria-label="Hauptnavigation" class="hidden md:flex items-center gap-5 lg:gap-8 nav-inline" data-nav-inline>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#services">Services</a>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#about">Über uns</a>
-          <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
-          <a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="https://www.dachrinnecheck.de/kostenrechner">
-            Zum Kostenrechner
-          </a>
-          <a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="https://www.dachrinnecheck.de/#contact">
-            Angebot anfordern
-          </a>
+        <nav aria-label="Hauptnavigation" class="hidden md:flex flex-nowrap items-center nav-inline" data-nav-inline>
+          <ul class="nav-list text-sm lg:text-base text-gray-700 dark:text-text-dark">
+            <li>
+              <a class="nav-link hover:text-primary dark:hover:text-primary" href="index.html#about">Über uns</a>
+            </li>
+            <li>
+              <a class="nav-link hover:text-primary dark:hover:text-primary" href="index.html#services">Leistungen</a>
+            </li>
+            <li>
+              <a class="nav-link hover:text-primary dark:hover:text-primary" href="index.html#dynamic-reviews">Bewertungen</a>
+            </li>
+            <li>
+              <a class="nav-link hover:text-primary dark:hover:text-primary" href="index.html#contact">Kontakt</a>
+            </li>
+          </ul>
+          <div class="nav-actions">
+            <a class="nav-button nav-button--primary" href="kostenrechner.html">
+              Zum Kostenrechner
+            </a>
+            <a class="nav-button nav-button--outline" href="index.html#contact">
+              Angebot anfordern
+            </a>
+          </div>
         </nav>
         <div class="nav-toggle">
           <button aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
@@ -78,15 +91,16 @@
           </button>
           <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700 nav-dialog-content">
             <div class="nav-dialog-links w-full flex flex-col items-center space-y-4">
-              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#services">Services</a>
-              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#about">Über uns</a>
-              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
+              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#about">Über uns</a>
+              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#services">Leistungen</a>
+              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#dynamic-reviews">Bewertungen</a>
+              <a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#contact">Kontakt</a>
             </div>
             <div class="nav-dialog-actions w-full flex flex-col items-center space-y-3">
-              <a class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/kostenrechner">
+              <a class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="kostenrechner.html">
                 Zum Kostenrechner
               </a>
-              <a class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">
+              <a class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="index.html#contact">
                 Angebot anfordern
               </a>
             </div>
