@@ -106,7 +106,13 @@
 </style>
 <style>
     body {
-      min-height: max(884px, 100dvh);
+      min-height: 100dvh;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        min-height: 884px;
+      }
     }
   </style>
   </head>
@@ -185,13 +191,13 @@
 </div>
 <div class="hero-overlay" aria-hidden="true"></div>
 <div class="relative z-10 hero-content">
-<h1 class="text-4xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
-<p class="text-lg md:text-2xl mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
-<div class="flex flex-col sm:flex-row gap-4">
-          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="https://www.dachrinnecheck.de/kostenrechner">
+<h1 class="text-[clamp(2.75rem,6vw,4.75rem)] font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
+<p class="text-[clamp(1.125rem,3.2vw,1.75rem)] mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
+<div class="flex flex-col sm:flex-row sm:justify-center gap-4">
+          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center w-full sm:w-auto" href="https://www.dachrinnecheck.de/kostenrechner">
             Zum Kostenrechner
           </a>
-          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="https://www.dachrinnecheck.de/#contact">
+          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center w-full sm:w-auto" href="https://www.dachrinnecheck.de/#contact">
             Angebot anfordern
           </a>
         </div>
@@ -202,7 +208,7 @@
 <section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal" id="about">
 <div class="container mx-auto">
 <div class="text-center max-w-3xl mx-auto">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Über DachrinneCheck</h2>
+<h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Über DachrinneCheck</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark leading-relaxed">
             Willkommen bei DachrinneCheck, Ihrem zuverlässigen Partner für professionelle Dachrinnenreinigung in Nordrhein-Westfalen. Unsere Mission ist es, Ihr Zuhause vor Wasserschäden zu schützen, indem wir sicherstellen, dass Ihre Dachrinnen sauber, frei und voll funktionsfähig sind. Wir verpflichten uns zu qualitativ hochwertigem Service mit Fokus auf Zuverlässigkeit, Effizienz und Kundenzufriedenheit.
           </p>
@@ -214,7 +220,7 @@
 <section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal">
 <div class="container mx-auto">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie unsere Arbeit in Aktion</h2>
+<h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie unsere Arbeit in Aktion</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark">Schauen Sie sich unser Video an, um einen Einblick in unseren professionellen Reinigungsprozess und die Ergebnisse zu erhalten, die wir liefern.</p>
 </div>
 <div class="max-w-4xl mx-auto">
@@ -232,12 +238,12 @@
 <!-- partial:video:end -->
 <!-- partial:gallery:start -->
 <section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal">
-<div class="container mx-auto">
+<div class="container mx-auto [container-type:inline-size]">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie den Unterschied</h2>
+<h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie den Unterschied</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark">Unsere Vorher-Nachher-Galerie zeigt die Qualität und Effektivität unserer Dienstleistungen.</p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+<div class="grid grid-cols-1 gap-8 md:gap-10 @[36rem]:grid-cols-2">
 <div class="rounded-xl overflow-hidden shadow-custom bg-card-light dark:bg-card-dark hover-lift reveal">
 <div class="relative">
 <img alt="Gutter before cleaning" class="w-full h-64 md:h-72 object-cover" src="https://static.wixstatic.com/media/6d33a0_e6c8065853f1475d97141c103c8f38a5~mv2.png"/>
@@ -264,12 +270,12 @@
 <!-- partial:gallery:end -->
 <!-- partial:services:start -->
 <section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal" id="services">
-<div class="container mx-auto">
+<div class="container mx-auto [container-type:inline-size]">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Umfassende Dachrinnenpflege</h2>
+<h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Umfassende Dachrinnenpflege</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark">Wir bieten eine Reihe von Dienstleistungen an, um sicherzustellen, dass Ihre Dachrinnen in Top-Zustand sind.</p>
 </div>
-<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+<div class="grid grid-cols-1 gap-8 @[42rem]:grid-cols-2 @[70rem]:grid-cols-3">
 <div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
 <div class="flex justify-center mb-5 text-primary">
 <svg fill="currentColor" height="48" viewBox="0 0 256 256" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -304,10 +310,10 @@
 
 <!-- partial:testimonials:start -->
 <section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal">
-<div class="container mx-auto">
-<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 md:mb-6 text-gray-900 dark:text-white">Was unsere Kunden sagen</h2>
+<div class="container mx-auto [container-type:inline-size]">
+<h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-center mb-4 md:mb-6 text-gray-900 dark:text-white">Was unsere Kunden sagen</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark text-center mb-8 md:mb-12 max-w-2xl mx-auto">Hören Sie von unseren zufriedenen Kunden und erfahren Sie, warum sie DachrinneCheck vertrauen.</p>
-<div class="relative max-w-3xl mx-auto" x-data="reviewsCarousel()" x-init="init()" x-cloak>
+<div class="relative max-w-3xl mx-auto [container-type:inline-size]" x-data="reviewsCarousel()" x-init="init()" x-cloak>
 <div class="bg-white/70 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-center rounded-xl py-8" x-show="!ready && !error">
 <p class="font-medium">Kundenstimmen werden geladen …</p>
 </div>
@@ -358,10 +364,10 @@ Original lesen
 </template>
 </div>
 </div>
-<button :aria-disabled="reviews.length <= 1" :class="{'opacity-40 cursor-not-allowed': reviews.length <= 1}" @click="previous" class="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-4 md:-translate-x-1/2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition transform hover:scale-110" type="button">
+<button :aria-disabled="reviews.length <= 1" :class="{'opacity-40 cursor-not-allowed': reviews.length <= 1}" @click="previous" class="absolute bottom-3 left-3 translate-x-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:left-0 sm:-translate-x-4 sm:-translate-y-1/2 md:-translate-x-1/2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition transform hover:scale-110" type="button">
 <span class="material-symbols-outlined text-primary">chevron_left</span>
 </button>
-<button :aria-disabled="reviews.length <= 1" :class="{'opacity-40 cursor-not-allowed': reviews.length <= 1}" @click="next" class="absolute top-1/2 -translate-y-1/2 right-0 translate-x-4 md:translate-x-1/2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition transform hover:scale-110" type="button">
+<button :aria-disabled="reviews.length <= 1" :class="{'opacity-40 cursor-not-allowed': reviews.length <= 1}" @click="next" class="absolute bottom-3 right-3 translate-x-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:right-0 sm:translate-x-4 sm:-translate-y-1/2 md:translate-x-1/2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition transform hover:scale-110" type="button">
 <span class="material-symbols-outlined text-primary">chevron_right</span>
 </button>
 </div>
@@ -376,13 +382,13 @@ Original lesen
       <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Aktuelle Kundenbewertungen</h3>
       <p class="text-base md:text-lg text-text-light dark:text-text-dark">Echte Rückmeldungen aus unserer Reviews-CMS-Sammlung – automatisch aktualisiert.</p>
     </div>
-    <div class="max-w-4xl mx-auto space-y-6">
+    <div class="max-w-4xl mx-auto space-y-6 [container-type:inline-size]">
       <div class="bg-white/70 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl p-6 text-center" id="reviews-loading">
         <p class="font-medium">Bewertungen werden geladen …</p>
       </div>
       <div class="hidden bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-700 dark:text-red-200 rounded-xl p-6 text-center" id="reviews-error"></div>
       <div class="hidden text-text-light dark:text-text-dark text-center" id="reviews-empty">Noch keine veröffentlichten Bewertungen vorhanden.</div>
-      <div class="grid gap-6 md:grid-cols-2" id="reviews-list"></div>
+      <div class="grid gap-6 @[40rem]:grid-cols-2 @[64rem]:grid-cols-3" id="reviews-list"></div>
     </div>
   </div>
   </div>
@@ -392,7 +398,7 @@ Original lesen
 <!-- partial:faq:start -->
 <section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal">
 <div class="container mx-auto max-w-3xl">
-<h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-8 md:mb-12">Häufig gestellte Fragen</h2>
+<h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-center text-gray-900 dark:text-white mb-8 md:mb-12">Häufig gestellte Fragen</h2>
 <div class="space-y-4 md:space-y-6" x-data="{ open: null }">
 <div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift reveal">
 <button @click="open === 1 ? open = null : open = 1" class="w-full text-left p-4 md:p-6 flex justify-between items-center">
@@ -433,10 +439,10 @@ Original lesen
 <!-- partial:faq:end -->
 <!-- partial:contact:start -->
 <section class="py-16 md:py-24 px-4 bg-card-light dark:bg-card-dark reveal" id="contact">
-<div class="container mx-auto max-w-2xl text-center">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
+<div class="container mx-auto max-w-2xl text-center [container-type:inline-size]">
+<h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
-<form class="space-y-8 text-left" id="contact-form">
+<form class="space-y-8 text-left [container-type:inline-size]" id="contact-form">
   <!-- FIX: Inline status area provides graceful feedback and retry controls -->
   <div aria-live="polite" class="hidden rounded-lg border p-4 text-sm transition-colors" data-contact-status role="status">
     <p class="font-semibold" id="contact-status-message"></p>
@@ -444,7 +450,7 @@ Original lesen
       Erneut senden
     </button>
   </div>
-  <div class="grid gap-6 md:grid-cols-2">
+  <div class="grid gap-6 @[38rem]:grid-cols-2 @[62rem]:grid-cols-3">
     <div>
       <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="first-name">Vorname<span class="text-red-500">*</span></label>
       <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="first-name" name="first-name" autocomplete="given-name" required="" type="text"/>
@@ -469,7 +475,7 @@ Original lesen
     <p class="mt-2 text-xs text-text-light dark:text-text-dark">Bitte nennen Sie die Adresse der Immobilie, damit wir den Einsatz planen können.</p>
   </div>
 
-  <div class="grid gap-6 md:grid-cols-2">
+  <div class="grid gap-6 @[38rem]:grid-cols-2">
     <div>
       <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="gutter-height">Höhe der Dachrinne<span class="text-red-500">*</span></label>
       <input class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary dark:text-white py-3 px-4 transition" id="gutter-height" name="gutter-height" min="0" step="0.1" placeholder="geschätzte Höhe in Metern" required="" type="number"/>
