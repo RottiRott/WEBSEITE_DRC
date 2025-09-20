@@ -6,6 +6,93 @@
 .responsive-header .nav-inline {
   flex-wrap: nowrap;
   align-items: center;
+  justify-content: flex-end;
+  gap: clamp(2rem, 2.4vw, 3rem);
+}
+
+.responsive-header .nav-inline > * {
+  flex-shrink: 0;
+}
+
+.responsive-header .nav-inline .nav-list {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.25rem, 1vw + 0.75rem, 2.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.responsive-header .nav-inline .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.responsive-header .nav-inline .nav-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(0.75rem, 0.5vw + 0.5rem, 1.25rem);
+  flex-wrap: nowrap;
+}
+
+.responsive-header .nav-inline .nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.responsive-header .nav-inline .nav-button:focus-visible {
+  outline: 2px solid var(--nav-focus-color);
+  outline-offset: 4px;
+}
+
+.responsive-header .nav-inline .nav-button--primary {
+  background-color: var(--nav-focus-color);
+  color: #ffffff;
+  box-shadow: 0 15px 30px -18px rgba(0, 119, 182, 0.6);
+}
+
+.responsive-header .nav-inline .nav-button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px -18px rgba(0, 119, 182, 0.65);
+}
+
+.responsive-header .nav-inline .nav-button--outline {
+  background-color: transparent;
+  color: var(--nav-focus-color);
+  border: 1px solid var(--nav-focus-color);
+}
+
+.responsive-header .nav-inline .nav-button--outline:hover {
+  background-color: var(--nav-focus-color);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 30px -20px rgba(0, 119, 182, 0.55);
+}
+
+.dark .responsive-header .nav-inline .nav-link {
+  color: #e2e8f0;
+}
+
+.dark .responsive-header .nav-inline .nav-button--outline {
+  color: #e2e8f0;
+  border-color: rgba(226, 232, 240, 0.5);
+}
+
+.dark .responsive-header .nav-inline .nav-button--outline:hover {
+  border-color: var(--nav-focus-color);
 }
 
 /* FIX: Keep the hamburger button touch-friendly on small screens */
@@ -22,7 +109,7 @@
 
 /* FIX: Avoid logo distortion when the header shrinks */
 .responsive-header [data-nav-logo] img {
-  height: clamp(40px, 5vw + 20px, 72px);
+  height: clamp(56px, calc(58px + 0.5vw), 68px);
   width: auto;
   max-width: min(200px, 40vw);
   object-fit: contain;
@@ -136,11 +223,17 @@
   border-radius: 9999px;
 }
 
+.responsive-header .nav-inline .nav-link:focus-visible,
 .responsive-header .nav-toggle button:focus-visible,
 .nav-dialog button:focus-visible,
 .nav-dialog a:focus-visible {
   outline: 2px solid var(--nav-focus-color);
   outline-offset: 3px;
+}
+
+.responsive-header .nav-inline .nav-link:focus-visible {
+  outline-offset: 4px;
+  border-radius: 9999px;
 }
 
 body.nav-is-open {
