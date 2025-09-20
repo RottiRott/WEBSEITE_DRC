@@ -1,0 +1,140 @@
+import { getSecret } from 'wix-secrets-backend';
+import { fetch } from 'wix-fetch';
+
+const RESEND_ENDPOINT = 'https://api.resend.com/emails';
+const DEFAULT_FROM = 'DachrinneCheck <noreply@dachrinnecheck.de>';
+const DEFAULT_TO = 'info@dachrinnecheck.de';
+
+/**
+ * @typedef {Object} SendResult
+ * @property {boolean} ok
+ * @property {string} [error]
+ */
+
+/**
+ * @typedef {Object<string, any> | Array<{ fieldId?: string, fieldLabel?: string, fieldValue?: any }>} Submission
+ */
+
+/**
+ * Versendet eine Kontaktanfrage über Resend.
+ * @param {Submission} data
+ * @returns {Promise<SendResult>}
+ */
+export async function sendContactEmail(data) {
+  const payload = normaliseSubmission(data);
+  if (!payload || Object.keys(payload).length === 0) {
+    return { ok: false, error: 'Keine Formulardaten erhalten.' };
+  }
+
+  const subject = `Neue Kontaktanfrage von ${payload.name || payload.vorname || 'der Website'}`;
+  const lines = Object.entries(payload)
+    .map(([key, value]) => `${key}: ${formatValue(value)}`)
+    .join('\n');
+
+  return sendEmail({ subject, text: `Es ist eine neue Kontaktanfrage eingegangen:\n\n${lines}` });
+}
+
+/**
+ * Versendet eine Zusammenfassung aus dem Kostenrechner.
+ * @param {Submission} data
+ * @returns {Promise<SendResult>}
+ */
+export async function sendCalcSummary(data) {
+  if (!data || typeof data !== 'object') {
+    return { ok: false, error: 'Ungültige Daten für den Kostenrechner.' };
+  }
+
+  const total = Number(data.total);
+  if (!Number.isFinite(total)) {
+    return { ok: false, error: 'Endsumme konnte nicht ermittelt werden.' };
+  }
+
+  const subject = 'Neue Kostenrechner-Anfrage';
+  const text = `Kostenrechner-Anfrage:\n\n${Object.entries(data)
+    .map(([key, value]) => `${key}: ${formatValue(value)}`)
+    .join('\n')}`;
+
+  return sendEmail({ subject, text });
+}
+
+async function sendEmail({ subject, text }) {
+  const apiKey = await getSecret('RESEND_API_KEY');
+  if (!apiKey) {
+    return { ok: false, error: 'Resend-API-Schlüssel fehlt. Secret RESEND_API_KEY setzen.' };
+  }
+
+  if (!subject || !text) {
+    return { ok: false, error: 'E-Mail-Payload unvollständig.' };
+  }
+
+  try {
+    const response = await fetch(RESEND_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        from: DEFAULT_FROM,
+        to: [DEFAULT_TO],
+        subject,
+        text,
+      }),
+    });
+
+    if (!response.ok) {
+      let message = 'Versand über Resend fehlgeschlagen.';
+      try {
+        const errorBody = await response.json();
+        if (errorBody && errorBody.message) {
+          message = errorBody.message;
+        }
+      } catch (error) {
+        message = `${message} (${response.status})`;
+      }
+      return { ok: false, error: message };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: error.message || 'Unbekannter Fehler beim Versand.' };
+  }
+}
+
+function normaliseSubmission(data) {
+  if (!data) {
+    return null;
+  }
+
+  if (Array.isArray(data)) {
+    return data.reduce((acc, field) => {
+      if (!field) {
+        return acc;
+      }
+      const key = field.fieldId || field.fieldLabel || field.name;
+      if (!key) {
+        return acc;
+      }
+      acc[key] = field.fieldValue ?? field.value ?? '';
+      return acc;
+    }, {});
+  }
+
+  if (typeof data === 'object') {
+    return data;
+  }
+
+  return null;
+}
+
+function formatValue(value) {
+  if (Array.isArray(value)) {
+    return value.map(formatValue).join(', ');
+  }
+
+  if (value && typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+
+  return String(value ?? '');
+}
