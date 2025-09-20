@@ -1,0 +1,82 @@
+const BASE_PRICES = {
+  standard: 79,
+  premium: 129,
+};
+
+const ADDON_PRICES = {
+  fallrohrreinigung: 35,
+  schutzreinigung: 49,
+  fotodokumentation: 25,
+};
+
+const EXPRESS_FACTOR = 1.25;
+
+/**
+ * @typedef {Object} QuoteInput
+ * @property {string} leistung
+ * @property {number} [umfang]
+ * @property {boolean} [express]
+ * @property {Array<string>} [addons]
+ */
+
+/**
+ * @typedef {Object} QuoteBreakdown
+ * @property {number} basispreis
+ * @property {number} umfangMultiplikator
+ * @property {number} zuschlaege
+ * @property {number} expressFaktor
+ * @property {number} zwischensumme
+ */
+
+/**
+ * @typedef {Object} QuoteResult
+ * @property {number} total
+ * @property {QuoteBreakdown} breakdown
+ */
+
+/**
+ * Berechnet ein unverbindliches Angebot basierend auf Leistung, Umfang und Optionen.
+ * @param {QuoteInput} input
+ * @returns {QuoteResult}
+ */
+export function calculateQuote(input) {
+  const safeInput = sanitiseInput(input);
+  const basePrice = BASE_PRICES[safeInput.leistung] || BASE_PRICES.standard;
+  const umfang = safeInput.umfang > 0 ? safeInput.umfang : 1;
+  const addons = Array.isArray(safeInput.addons) ? safeInput.addons : [];
+
+  let subtotal = basePrice * umfang;
+  const addonTotal = addons.reduce((sum, key) => sum + (ADDON_PRICES[key] || 0), 0);
+  subtotal += addonTotal;
+
+  const expressFactor = safeInput.express ? EXPRESS_FACTOR : 1;
+  const total = roundCurrency(subtotal * expressFactor);
+
+  return {
+    total,
+    breakdown: {
+      basispreis: roundCurrency(basePrice),
+      umfangMultiplikator: umfang,
+      zuschlaege: roundCurrency(addonTotal),
+      expressFaktor: expressFactor,
+      zwischensumme: roundCurrency(subtotal),
+    },
+  };
+}
+
+function sanitiseInput(input) {
+  if (!input || typeof input !== 'object') {
+    return { leistung: 'standard', umfang: 1, express: false, addons: [] };
+  }
+
+  return {
+    leistung: typeof input.leistung === 'string' ? input.leistung.toLowerCase() : 'standard',
+    umfang: Number(input.umfang) || 1,
+    express: Boolean(input.express),
+    addons: Array.isArray(input.addons) ? input.addons : [],
+  };
+}
+
+function roundCurrency(value) {
+  return Math.round((Number(value) || 0) * 100) / 100;
+}
