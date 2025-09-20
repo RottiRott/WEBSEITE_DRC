@@ -97,31 +97,29 @@
       isolation: isolate;
       background-color: #0f172a;
     }
-
-    .hero-media {
+    .hero-section::before {
+      content: "";
       position: absolute;
       inset: 0;
       z-index: 0;
-      overflow: hidden;
       pointer-events: none;
+      background-image: url('https://static.wixstatic.com/media/6d33a0_2dfde59dfa1d4618a7bd44c0ced58e9c~mv2.png');
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      transform: translate3d(0, clamp(0px, calc(var(--hero-parallax-offset, 0px) * -0.14), 0px), 0) scale(1.22);
+      transform-origin: top center;
+      transition: transform 0.2s ease-out, background-position 0.3s ease-out;
+      will-change: transform, background-position;
     }
-
-    .hero-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      transform: translate3d(0, clamp(-160px, calc(var(--hero-parallax-offset, 0px) * -0.16), 0px), 0) scale(1.18);
-      transition: transform 0.25s ease-out;
-      will-change: transform;
-    }
-
-    .hero-overlay {
+    .hero-section::after {
+      content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.55) 45%, rgba(15, 23, 42, 0.82) 100%);
-      pointer-events: none;
       z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.5) 45%, rgba(15, 23, 42, 0.75) 100%);
+      mix-blend-mode: multiply;
     }
     [x-cloak] {
       display: none !important;
@@ -155,8 +153,8 @@
       .hero-heading {
         font-size: clamp(2rem, 6vw + 1rem, 3rem);
       }
-      .hero-media img {
-        transform: translate3d(0, clamp(-120px, calc(var(--hero-parallax-offset, 0px) * -0.1), 0px), 0) scale(1.14);
+      .hero-section::before {
+        transform: translate3d(0, clamp(-96px, calc(var(--hero-parallax-offset, 0px) * -0.1), 0px), 0) scale(1.22);
       }
     }
     @media (max-width: 768px) {
@@ -169,25 +167,6 @@
         padding-top: clamp(6.5rem, 18vw + 2rem, 9rem);
         padding-bottom: clamp(3rem, 12vw, 5rem);
       }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-media img {
-        transform: scale(1.05);
-        transition: none;
-      }
-      .animate-fade-up {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-      }
-    }
-
-    input[aria-invalid="true"],
-    select[aria-invalid="true"],
-    textarea[aria-invalid="true"] {
-      border-color: #ef4444 !important;
-      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.18);
     }
     .back-to-top {
       position: fixed;
@@ -257,13 +236,12 @@
 </script>
   </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
   <div aria-hidden="true" class="scroll-progress" id="scroll-progress"></div>
   <div class="relative z-10 w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }" x-on:responsive-nav-toggle.window="mobileMenuOpen = $event.detail.open">
 <header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
 <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
 <a class="inline-flex items-center" data-nav-logo href="index.html">
-<img alt="DachrinneCheck Logo für Dachrinnenreinigung in NRW" class="h-16 md:h-20 w-auto" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
+<img alt="DachrinneCheck Logo für Dachrinnenreinigung in NRW" class="h-16 md:h-20 w-auto" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" style="height: clamp(32px, 6vh, 48px); width: auto; aspect-ratio: attr(width) / attr(height); object-fit: contain;"/>
 <span class="sr-only">Zur Startseite</span>
 </a>
 <div class="hidden md:flex items-center gap-6 lg:gap-8 nav-inline" data-nav-inline>
@@ -308,12 +286,7 @@
 </nav>
 </div>
 </header>
-<main id="main-content">
 <section class="relative flex flex-col items-center md:items-start justify-center overflow-hidden hero-section text-white" data-parallax="hero">
-  <div aria-hidden="true" class="hero-media">
-    <img alt="DachrinneCheck Team bei der Reinigung einer Dachrinne in NRW" decoding="async" fetchpriority="high" height="1080" loading="eager" sizes="100vw" src="https://static.wixstatic.com/media/6d33a0_2dfde59dfa1d4618a7bd44c0ced58e9c~mv2.png" width="1920"/>
-    <div aria-hidden="true" class="hero-overlay"></div>
-  </div>
   <div class="relative z-10 w-full max-w-4xl px-6 pt-32 pb-16 text-center text-white md:px-12 md:py-24 md:text-left hero-content">
 <h1 class="hero-heading font-black leading-tight tracking-tight text-shadow mb-4 md:mb-6 max-w-3xl mx-auto md:mx-0">Dachrinnenreinigung in NRW – sauber, sicher und termintreu</h1>
 <p class="text-lg md:text-2xl mb-8 md:mb-10 font-light text-shadow text-slate-100 max-w-2xl mx-auto md:mx-0">Wir halten Dachrinnen in Willich, Krefeld, Düsseldorf und ganz NRW frei von Schmutz – zuverlässig, sicher und mit moderner Ausrüstung. Nutzen Sie unseren Kostenrechner und erhalten Sie Ihr Angebot innerhalb von 24 Stunden.</p>
@@ -537,7 +510,7 @@ Original lesen
 <p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Teilen Sie uns ein paar Eckdaten mit – wir prüfen Ihren Bedarf, melden uns innerhalb eines Werktags und stimmen den nächsten Schritt persönlich mit Ihnen ab.</p>
 <div class="space-y-4 mb-6">
   <div class="hidden rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700 dark:border-red-700/60 dark:bg-red-900/30 dark:text-red-100" id="contact-feedback" role="alert" aria-live="assertive" tabindex="-1"></div>
-  <div class="hidden rounded-xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700 dark:border-green-700/60 dark:bg-green-900/30 dark:text-green-100" id="contact-success" role="status" aria-live="polite" tabindex="-1"></div>
+  <div class="hidden rounded-xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700 dark:border-green-700/60 dark:bg-green-900/30 dark:text-green-100" id="contact-success" role="status" aria-live="polite"></div>
 </div>
 <form class="space-y-8 text-left" id="contact-form">
   <div class="grid gap-6 md:grid-cols-2">
@@ -646,7 +619,6 @@ Original lesen
   </div>
 </div>
 </section>
-</main>
 <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
 <div class="container mx-auto px-4 text-center text-text-dark">
 <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">

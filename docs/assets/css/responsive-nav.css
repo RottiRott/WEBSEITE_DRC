@@ -1,33 +1,5 @@
-.skip-link {
-  position: absolute;
-  left: 50%;
-  top: -3rem;
-  transform: translateX(-50%);
-  background: #0f172a;
-  color: #ffffff;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: top 0.2s ease, opacity 0.2s ease;
-  opacity: 0;
-  z-index: 100;
-}
-
-.skip-link:focus {
-  top: 1rem;
-  opacity: 1;
-}
-
 .responsive-header {
   --nav-focus-color: #0077B6;
-}
-
-.responsive-header [data-nav-logo] img {
-  height: clamp(40px, 8vh, 64px);
-  width: auto;
-  max-width: min(240px, 60vw);
-  object-fit: contain;
 }
 
 .responsive-header .nav-inline {
