@@ -43,6 +43,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link href="assets/css/responsive-nav.css" rel="stylesheet"/>
 <script defer src="assets/js/responsive-nav.js"></script>
+<script defer src="assets/js/scroll-effects.js"></script>
 <style>
     .text-shadow {
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
@@ -63,6 +64,7 @@
       display: grid;
       align-items: center;
       overflow: hidden;
+      perspective: 1400px;
     }
     @media (min-width: 768px) {
       .hero-section {
@@ -71,26 +73,43 @@
     }
     .hero-media {
       position: absolute;
-      inset: 0;
+      left: 0;
+      right: 0;
+      top: clamp(-12rem, -18vh, -6rem);
+      bottom: clamp(-8rem, -14vh, -4rem);
       z-index: -2;
       overflow: hidden;
+      transform: translate3d(0, var(--hero-media-offset, 0px), 0);
+      will-change: transform;
+    }
+    @media (max-width: 767px) {
+      .hero-media {
+        top: clamp(-10rem, -22vh, -5rem);
+        bottom: clamp(-6rem, -18vh, -3rem);
+      }
     }
     .hero-media img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.02);
+      transform: scale(1.18);
+      transform-origin: center;
+      filter: saturate(1.05);
     }
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0, 24, 47, 0.45), rgba(0, 0, 0, 0.55));
+      background: linear-gradient(180deg, rgba(0, 24, 47, 0.5), rgba(0, 0, 0, 0.7));
       z-index: -1;
+      opacity: var(--hero-overlay-opacity, 0.92);
+      will-change: opacity;
     }
     .hero-content {
       padding: clamp(2.25rem, 8vw, 3.5rem) clamp(1.5rem, 5vw, 4rem)
         max(clamp(1.75rem, 7vw, 3rem), calc(1.75rem + var(--hero-safe-bottom)));
       width: min(100%, 720px);
+      transform: translate3d(0, var(--hero-content-offset, 0px), 0);
+      will-change: transform;
     }
     @media (max-width: 639px) {
       .hero-content {
@@ -172,6 +191,83 @@
       animation: reveal 0.8s ease-out forwards;
       animation-timeline: view();
       animation-range: entry 20% cover 40%;
+    }
+    @keyframes hero-intro {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 48px, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+    .hero-animated .hero-content > * {
+      opacity: 0;
+      transform: translate3d(0, 48px, 0);
+      animation: hero-intro 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-animated .hero-content > *:nth-child(2) {
+      animation-delay: 0.08s;
+    }
+    .hero-animated .hero-content > *:nth-child(3) {
+      animation-delay: 0.16s;
+    }
+    .hero-animated .hero-content > *:nth-child(4) {
+      animation-delay: 0.24s;
+    }
+    body[data-scroll-animations] [data-scroll-animate] {
+      --scroll-animate-x: 0px;
+      --scroll-animate-y: 48px;
+      --scroll-animate-scale: 0.96;
+      opacity: 0;
+      transform: translate3d(var(--scroll-animate-x), var(--scroll-animate-y), 0)
+        scale(var(--scroll-animate-scale));
+      transition-property: opacity, transform;
+      transition-duration: 0.9s;
+      transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+      transition-delay: var(--scroll-animate-delay, 0s);
+      will-change: opacity, transform;
+    }
+    body[data-scroll-animations] [data-scroll-animate].is-animated {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    body[data-scroll-animations] [data-scroll-animate="slide-left"] {
+      --scroll-animate-x: -52px;
+      --scroll-animate-y: 0px;
+    }
+    body[data-scroll-animations] [data-scroll-animate="slide-right"] {
+      --scroll-animate-x: 52px;
+      --scroll-animate-y: 0px;
+    }
+    body[data-scroll-animations] [data-scroll-animate="zoom"] {
+      --scroll-animate-scale: 0.9;
+      --scroll-animate-y: 32px;
+    }
+    body[data-scroll-animations] [data-scroll-animate="drift"] {
+      --scroll-animate-x: -20px;
+      --scroll-animate-y: 36px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-media,
+      .hero-content {
+        transform: none !important;
+      }
+      .hero-overlay {
+        opacity: 0.92 !important;
+      }
+      .hero-animated .hero-content > * {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      body[data-scroll-animations] [data-scroll-animate] {
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
     }
 </style>
 <style>
@@ -255,12 +351,12 @@
 <!-- partial:header:end -->
 <!-- FIX: Static hero background eliminates black bars on scroll -->
 <!-- partial:hero:start -->
-<section class="relative text-white hero-section">
-<div aria-hidden="true" class="hero-media">
-<img alt="Arbeiter reinigt Dachrinne auf einem Gebäude" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
-</div>
-<div class="hero-overlay" aria-hidden="true"></div>
-<div class="relative z-10 hero-content">
+<section class="relative text-white hero-section hero-animated" data-hero-parallax>
+  <div aria-hidden="true" class="hero-media" data-hero-parallax-media>
+    <img alt="Arbeiter reinigt Dachrinne auf einem Gebäude" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
+  </div>
+  <div aria-hidden="true" class="hero-overlay" data-hero-overlay></div>
+  <div class="relative z-10 hero-content" data-hero-parallax-content>
 <h1 class="hero-title font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
 <p class="hero-subtitle mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
 <div class="hero-cta flex flex-col sm:flex-row sm:justify-center">
@@ -275,7 +371,7 @@
 </section>
 <!-- partial:hero:end -->
 <!-- partial:about:start -->
-<section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal" id="about">
+<section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark" data-scroll-animate="rise" id="about">
 <div class="container mx-auto">
 <div class="text-center max-w-3xl mx-auto">
 <h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Über DachrinneCheck</h2>
@@ -287,14 +383,14 @@
 </section>
 <!-- partial:about:end -->
 <!-- partial:video:start -->
-<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal">
+<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark" data-scroll-animate="rise">
 <div class="container mx-auto">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
 <h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie unsere Arbeit in Aktion</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark">Schauen Sie sich unser Video an, um einen Einblick in unseren professionellen Reinigungsprozess und die Ergebnisse zu erhalten, die wir liefern.</p>
 </div>
 <div class="max-w-4xl mx-auto">
-          <div class="rounded-xl overflow-hidden shadow-custom hover-lift">
+          <div class="rounded-xl overflow-hidden shadow-custom hover-lift" data-scroll-animate="zoom">
             <div class="relative w-full" style="padding-top: 56.25%;">
               <video class="absolute inset-0 w-full h-full object-cover" controls preload="metadata" playsinline>
                 <source src="https://video.wixstatic.com/video/6d33a0_8388ea3febb544bba1a01ab1de3c0b1a/720p/mp4/file.mp4" type="video/mp4"/>
@@ -307,14 +403,14 @@
 </section>
 <!-- partial:video:end -->
 <!-- partial:gallery:start -->
-<section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal">
+<section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark" data-scroll-animate="rise">
 <div class="container mx-auto [container-type:inline-size]">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
 <h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Sehen Sie den Unterschied</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark">Unsere Vorher-Nachher-Galerie zeigt die Qualität und Effektivität unserer Dienstleistungen.</p>
 </div>
 <div class="grid grid-cols-1 gap-8 md:gap-10 @[36rem]:grid-cols-2">
-<div class="rounded-xl overflow-hidden shadow-custom bg-card-light dark:bg-card-dark hover-lift reveal">
+<div class="rounded-xl overflow-hidden shadow-custom bg-card-light dark:bg-card-dark hover-lift" data-scroll-animate="slide-right" style="--scroll-animate-delay: 0.04s;">
 <div class="relative">
 <img alt="Gutter before cleaning" class="w-full h-64 md:h-72 object-cover" src="https://static.wixstatic.com/media/6d33a0_e6c8065853f1475d97141c103c8f38a5~mv2.png"/>
 <div class="absolute top-4 left-4 bg-red-500/80 text-white px-4 py-1 rounded-full text-xs md:text-sm font-semibold">Vorher</div>
@@ -324,7 +420,7 @@
 <p class="text-text-light dark:text-text-dark text-sm md:text-base">Laub, Moos und Schmutz blockierten die Dachrinne vollständig, was zu einem Überlaufen des Wassers führte.</p>
 </div>
 </div>
-<div class="rounded-xl overflow-hidden shadow-custom bg-card-light dark:bg-card-dark hover-lift reveal">
+<div class="rounded-xl overflow-hidden shadow-custom bg-card-light dark:bg-card-dark hover-lift" data-scroll-animate="slide-left" style="--scroll-animate-delay: 0.12s;">
 <div class="relative">
 <img alt="Gutter after cleaning" class="w-full h-64 md:h-72 object-cover" src="https://static.wixstatic.com/media/6d33a0_b9208eaa790f49fcb1d72fa23dd847be~mv2.png"/>
 <div class="absolute top-4 left-4 bg-green-500/80 text-white px-4 py-1 rounded-full text-xs md:text-sm font-semibold">Nachher</div>
@@ -339,14 +435,14 @@
 </section>
 <!-- partial:gallery:end -->
 <!-- partial:services:start -->
-<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal" id="services">
+<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark" data-scroll-animate="rise" id="services">
 <div class="container mx-auto [container-type:inline-size]">
 <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
 <h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Umfassende Dachrinnenpflege</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark">Wir bieten eine Reihe von Dienstleistungen an, um sicherzustellen, dass Ihre Dachrinnen in Top-Zustand sind.</p>
 </div>
 <div class="grid grid-cols-1 gap-8 @[42rem]:grid-cols-2 @[70rem]:grid-cols-3">
-<div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift" data-scroll-animate="slide-left" style="--scroll-animate-delay: 0.06s;">
 <div class="flex justify-center mb-5 text-primary">
 <svg fill="currentColor" height="48" viewBox="0 0 256 256" width="48" xmlns="http://www.w3.org/2000/svg">
 <path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
@@ -355,7 +451,7 @@
 <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Dachrinnenreinigung</h3>
 <p class="text-text-light dark:text-text-dark text-sm md:text-base">Gründliche Reinigung von Dachrinnen und Fallrohren, um Laub und Verstopfungen zu entfernen.</p>
 </div>
-<div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift" data-scroll-animate="zoom" style="--scroll-animate-delay: 0.12s;">
 <div class="flex justify-center mb-5 text-primary">
 <svg fill="currentColor" height="48" viewBox="0 0 256 256" width="48" xmlns="http://www.w3.org/2000/svg">
 <path d="M223.45,40.07a8,8,0,0,0-7.52-7.52C139.8,28.08,78.82,51,52.82,94a87.09,87.09,0,0,0-12.76,49c.57,15.92,5.21,32,13.79,47.85l-19.51,19.5a8,8,0,0,0,11.32,11.32l19.5-19.51C81,210.73,97.09,215.37,113,215.94q1.67.06,3.33.06A86.93,86.93,0,0,0,162,203.18C205,177.18,227.93,116.21,223.45,40.07ZM153.75,189.5c-22.75,13.78-49.68,14-76.71.77l88.63-88.62a8,8,0,0,0-11.32-11.32L65.73,179c-13.19-27-13-54,.77-76.71,22.09-36.47,74.6-56.44,141.31-54.06C210.2,114.89,190.22,167.41,153.75,189.5Z"></path>
@@ -364,7 +460,7 @@
 <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Schmutzentfernung</h3>
 <p class="text-text-light dark:text-text-dark text-sm md:text-base">Entfernung aller Abfälle von Ihrem Grundstück, damit es sauber und ordentlich bleibt.</p>
 </div>
-<div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700 hover-lift" data-scroll-animate="slide-right" style="--scroll-animate-delay: 0.18s;">
 <div class="flex justify-center mb-5 text-primary">
 <svg fill="currentColor" height="48" viewBox="0 0 256 256" width="48" xmlns="http://www.w3.org/2000/svg">
 <path d="M208,40H48A16,16,0,0,0,32,56v58.78c0,89.61,75.82,119.34,91,124.39a15.53,15.53,0,0,0,10,0c15.2-5.05,91-34.78,91-124.39V56A16,16,0,0,0,208,40Zm0,74.79c0,78.42-66.35,104.62-80,109.18-13.53-4.51-80-30.69-80-109.18V56H208ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.68l50.34-50.34a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"></path>
@@ -379,7 +475,7 @@
 <!-- partial:services:end -->
 
 <!-- partial:testimonials:start -->
-<section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark reveal">
+<section class="py-16 md:py-20 px-4 bg-card-light dark:bg-card-dark" data-scroll-animate="zoom">
 <div class="container mx-auto [container-type:inline-size]">
 <h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-center mb-4 md:mb-6 text-gray-900 dark:text-white">Was unsere Kunden sagen</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark text-center mb-8 md:mb-12 max-w-2xl mx-auto">Hören Sie von unseren zufriedenen Kunden und erfahren Sie, warum sie DachrinneCheck vertrauen.</p>
@@ -447,7 +543,7 @@ Original lesen
 </template>
   </div>
   </div>
-  <div class="mt-12" id="dynamic-reviews">
+  <div class="mt-12" data-scroll-animate="rise" id="dynamic-reviews">
     <div class="text-center max-w-3xl mx-auto mb-8">
       <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Aktuelle Kundenbewertungen</h3>
       <p class="text-base md:text-lg text-text-light dark:text-text-dark">Echte Rückmeldungen aus unserer Reviews-CMS-Sammlung – automatisch aktualisiert.</p>
@@ -466,11 +562,11 @@ Original lesen
 <!-- partial:testimonials:end -->
 
 <!-- partial:faq:start -->
-<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark reveal">
+<section class="py-16 md:py-20 px-4 bg-background-light dark:bg-background-dark" data-scroll-animate="rise">
 <div class="container mx-auto max-w-3xl">
 <h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-center text-gray-900 dark:text-white mb-8 md:mb-12">Häufig gestellte Fragen</h2>
 <div class="space-y-4 md:space-y-6" x-data="{ open: null }">
-<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift" data-scroll-animate="rise" style="--scroll-animate-delay: 0.04s;">
 <button @click="open === 1 ? open = null : open = 1" class="w-full text-left p-4 md:p-6 flex justify-between items-center">
 <span class="font-semibold text-base md:text-xl text-gray-900 dark:text-white">Wie oft sollte ich meine Dachrinnen reinigen lassen?</span>
 <svg :class="{ 'rotate-180': open === 1 }" class="w-6 h-6 text-primary transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -481,7 +577,7 @@ Original lesen
 <p>Wir empfehlen, Ihre Dachrinnen mindestens zweimal im Jahr reinigen zu lassen, typischerweise im Frühjahr und Herbst. Wenn Ihr Grundstück von vielen Bäumen umgeben ist, kann eine häufigere Reinigung erforderlich sein.</p>
 </div>
 </div>
-<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift" data-scroll-animate="rise" style="--scroll-animate-delay: 0.12s;">
 <button @click="open === 2 ? open = null : open = 2" class="w-full text-left p-4 md:p-6 flex justify-between items-center">
 <span class="font-semibold text-base md:text-xl text-gray-900 dark:text-white">Was ist Ihr Servicegebiet in NRW?</span>
 <svg :class="{ 'rotate-180': open === 2 }" class="w-6 h-6 text-primary transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -492,7 +588,7 @@ Original lesen
 <p>Wir bieten unsere Dachrinnenreinigungsdienste in der gesamten Region Nordrhein-Westfalen (NRW) an. Kontaktieren Sie uns mit Ihrer Adresse, um zu bestätigen, ob wir Ihren spezifischen Standort bedienen.</p>
 </div>
 </div>
-<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift reveal">
+<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-sm hover-lift" data-scroll-animate="rise" style="--scroll-animate-delay: 0.2s;">
 <button @click="open === 3 ? open = null : open = 3" class="w-full text-left p-4 md:p-6 flex justify-between items-center">
 <span class="font-semibold text-base md:text-xl text-gray-900 dark:text-white">Wie wird der Preis für die Dachrinnenreinigung bestimmt?</span>
 <svg :class="{ 'rotate-180': open === 3 }" class="w-6 h-6 text-primary transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -508,7 +604,7 @@ Original lesen
 </section>
 <!-- partial:faq:end -->
 <!-- partial:contact:start -->
-<section class="py-16 md:py-24 px-4 bg-card-light dark:bg-card-dark reveal" id="contact">
+<section class="py-16 md:py-24 px-4 bg-card-light dark:bg-card-dark" data-scroll-animate="rise" id="contact">
 <div class="container mx-auto max-w-2xl text-center [container-type:inline-size]">
 <h2 class="text-balance text-[clamp(2rem,4vw,3rem)] font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
