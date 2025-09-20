@@ -3,6 +3,8 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>DachrinneCheck - Gutter Cleaning NRW</title>
+<!-- FIX: Provide canonical URL for SEO and Wix embedding -->
+<link href="https://www.dachrinnecheck.de/" rel="canonical"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
@@ -41,31 +43,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link href="assets/css/responsive-nav.css" rel="stylesheet"/>
 <script defer src="assets/js/responsive-nav.js"></script>
-<link href="<img src="https://1drv.ms/i/c/83abebca150dc60f/IQT5fcvfMuAWQ6Xby_AFmFr0AcC8muppz2Sszhm6eSZi37I?width=1536&height=672" width="1536" height="672" />"/>
 <style>
     .text-shadow {
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
+    /* FIX: Responsive hero media container without parallax tearing */
     .hero-section {
       position: relative;
-      min-height: 24rem;
-      height: min(70vh, 720px);
-      max-height: 720px;
-      background-image: url("https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png");
-      background-position: center top;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-attachment: fixed;
+      isolation: isolate;
+      min-height: clamp(28rem, 70vh, 48rem);
+      display: grid;
+      align-items: center;
+      overflow: hidden;
     }
-    @media (min-width: 1024px) {
-      .hero-section {
-        background-position: 70% center;
-      }
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
     }
-    @media (max-width: 768px) {
-      .hero-section {
-        background-attachment: scroll;
-      }
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 24, 47, 0.45), rgba(0, 0, 0, 0.55));
+      z-index: -1;
+    }
+    .hero-content {
+      padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+      width: min(100%, 720px);
     }
     [x-cloak] {
       display: none !important;
@@ -100,48 +111,49 @@
   </style>
   </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-<div class="relative w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false }">
-<header @scroll.window="scrolled = window.scrollY &gt; 10" class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header x-data="{ scrolled: false }">
+<div class="relative w-full overflow-x-hidden">
+<!-- FIX: Shared navigation rebuilt for consistent behaviour across pages -->
+<header class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg shadow-md transition-all duration-300 responsive-header" data-responsive-header>
 <div class="container mx-auto flex justify-between items-center px-4 py-4 md:py-5" data-nav-inner>
-<a class="inline-flex items-center" data-nav-logo href="index.html">
-<img alt="DachrinneCheck Logo" class="h-16 md:h-20 w-auto" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png" style="height: clamp(32px, 6vh, 48px); width: auto; aspect-ratio: attr(width) / attr(height); object-fit: contain;"/>
+<a class="inline-flex items-center" data-nav-logo href="https://www.dachrinnecheck.de/">
+<img alt="DachrinneCheck Logo" src="https://static.wixstatic.com/media/6d33a0_2f72c9b480724f2b83a3784dddd3aa8f~mv2.png"/>
 <span class="sr-only">Zur Startseite</span>
 </a>
-<div class="hidden md:flex items-center gap-6 lg:gap-8 nav-inline" data-nav-inline>
-<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#services">Services</a>
-<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#about">Über uns</a>
-<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="index.html#contact">Kontakt</a>
-<a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="kostenrechner.html">
+<nav aria-label="Hauptnavigation" class="hidden md:flex items-center gap-5 lg:gap-8 nav-inline" data-nav-inline>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#services">Services</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#about">Über uns</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors text-sm lg:text-base" href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
+<a class="bg-primary text-white font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base hover:bg-primary-dark transition-all duration-300 shadow transform hover:scale-105" href="https://www.dachrinnecheck.de/kostenrechner">
               Zum Kostenrechner
             </a>
-<a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="index.html#contact">
+<a class="bg-white text-primary font-semibold py-2.5 px-6 rounded-full text-sm lg:text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-sm" href="https://www.dachrinnecheck.de/#contact">
               Angebot anfordern
             </a>
-</div>
-<div class="md:hidden nav-toggle">
-<button @click="mobileMenuOpen = !mobileMenuOpen" aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white p-2" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
+</nav>
+<div class="nav-toggle">
+<button aria-controls="primary-navigation" aria-expanded="false" class="text-gray-900 dark:text-white" data-nav-label-close="Menü schließen" data-nav-label-open="Menü öffnen" data-nav-toggle type="button">
 <span aria-hidden="true" class="material-symbols-outlined text-3xl">menu</span>
 <span class="sr-only">Menü</span>
 </button>
 </div>
 </div>
-<div :class="{'max-h-96': mobileMenuOpen, 'max-h-0': !mobileMenuOpen}" class="md:hidden overflow-hidden transition-all duration-500 ease-in-out nav-dialog-backdrop" data-nav-overlay hidden>
-<nav aria-hidden="true" aria-label="Hauptnavigation" aria-modal="true" class="nav-dialog" data-nav-dialog id="primary-navigation" role="dialog" tabindex="-1">
+<div class="nav-dialog-backdrop" data-nav-overlay hidden>
+<nav aria-hidden="true" aria-label="Mobile Navigation" aria-modal="true" class="nav-dialog" data-nav-dialog id="primary-navigation" role="dialog" tabindex="-1">
 <button class="nav-dialog-close text-gray-900 dark:text-text-dark p-2" data-nav-close type="button">
 <span aria-hidden="true" class="material-symbols-outlined text-2xl">close</span>
 <span class="sr-only">Menü schließen</span>
 </button>
 <div class="flex flex-col items-center space-y-4 py-4 border-t border-gray-200 dark:border-gray-700 nav-dialog-content">
 <div class="nav-dialog-links w-full flex flex-col items-center space-y-4">
-<a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#services">Services</a>
-<a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#about">Über uns</a>
-<a @click="mobileMenuOpen = false" class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="index.html#contact">Kontakt</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#services">Services</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#about">Über uns</a>
+<a class="text-gray-600 dark:text-text-dark hover:text-primary dark:hover:text-primary transition-colors py-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
 </div>
 <div class="nav-dialog-actions w-full flex flex-col items-center space-y-3">
-<a @click="mobileMenuOpen = false" class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="kostenrechner.html">
+<a class="bg-primary text-white font-semibold py-3 px-8 rounded-full text-base hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/kostenrechner">
                   Zum Kostenrechner
                 </a>
-<a @click="mobileMenuOpen = false" class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="index.html#contact">
+<a class="bg-white text-primary font-semibold py-3 px-8 rounded-full text-base border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow mt-2 w-full" data-nav-close href="https://www.dachrinnecheck.de/#contact">
                   Angebot anfordern
                 </a>
 </div>
@@ -149,16 +161,20 @@
 </nav>
 </div>
 </header>
-<section class="relative flex flex-col items-start justify-center text-white overflow-hidden hero-section">
-<div class="absolute inset-0 bg-black/50"></div>
-<div class="relative z-10 p-6 md:p-12 max-w-4xl pt-20">
-<h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
+<!-- FIX: Static hero background eliminates black bars on scroll -->
+<section class="relative text-white hero-section">
+<div aria-hidden="true" class="hero-media">
+<img alt="Arbeiter reinigt Dachrinne auf einem Gebäude" loading="lazy" src="https://static.wixstatic.com/media/6d33a0_0055e10499254c9ba395085f3325607f~mv2.png"/>
+</div>
+<div class="hero-overlay" aria-hidden="true"></div>
+<div class="relative z-10 hero-content">
+<h1 class="text-4xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-4 md:mb-6 text-shadow">Professionelle Dachrinnenreinigung in NRW</h1>
 <p class="text-lg md:text-2xl mb-8 md:mb-10 text-shadow font-light">Schützen Sie Ihr Eigentum vor Wasserschäden. Fordern Sie noch heute ein kostenloses Angebot an.</p>
 <div class="flex flex-col sm:flex-row gap-4">
-          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="kostenrechner.html">
+          <a class="bg-primary text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="https://www.dachrinnecheck.de/kostenrechner">
             Zum Kostenrechner
           </a>
-          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="#contact">
+          <a class="bg-white text-primary font-bold py-3 px-6 md:py-4 md:px-8 rounded-full text-base md:text-lg border border-primary hover:bg-primary-dark hover:text-white transition-all duration-300 shadow-lg transform hover:scale-105 text-center" href="https://www.dachrinnecheck.de/#contact">
             Angebot anfordern
           </a>
         </div>
@@ -379,7 +395,7 @@ Original lesen
 </svg>
 </button>
 <div class="px-4 md:px-6 pb-4 md:pb-6 text-text-light dark:text-text-dark text-sm md:text-base" x-show="open === 3" x-transition:enter="transition ease-out duration-300" x-transition:enter-end="opacity-100 translate-y-0" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-2" x-transition:leave-start="opacity-100 translate-y-0">
-<p>Die Kosten unseres Service hängen von mehreren Faktoren ab, darunter die Länge Ihrer Dachrinnen, die Höhe Ihres Gebäudes und die Menge an Schmutz. Nutzen Sie gern unseren <a class="text-primary hover:text-primary-dark font-semibold" href="kostenrechner.html">Kostenrechner</a>, um in wenigen Sekunden einen transparenten Richtpreis zu erhalten. Anschließend erstellen wir Ihnen ein kostenloses, unverbindliches Angebot, damit Sie den genauen Preis im Voraus kennen.</p>
+<p>Die Kosten unseres Service hängen von mehreren Faktoren ab, darunter die Länge Ihrer Dachrinnen, die Höhe Ihres Gebäudes und die Menge an Schmutz. Nutzen Sie gern unseren <a class="text-primary hover:text-primary-dark font-semibold" href="https://www.dachrinnecheck.de/kostenrechner">Kostenrechner</a>, um in wenigen Sekunden einen transparenten Richtpreis zu erhalten. Anschließend erstellen wir Ihnen ein kostenloses, unverbindliches Angebot, damit Sie den genauen Preis im Voraus kennen.</p>
 </div>
 </div>
 </div>
@@ -390,6 +406,13 @@ Original lesen
 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">Fordern Sie ein Angebot an</h2>
 <p class="text-base md:text-lg text-text-light dark:text-text-dark mb-8 md:mb-10">Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich mit einem kostenlosen, unverbindlichen Angebot bei Ihnen.</p>
 <form class="space-y-8 text-left" id="contact-form">
+  <!-- FIX: Inline status area provides graceful feedback and retry controls -->
+  <div aria-live="polite" class="hidden rounded-lg border p-4 text-sm transition-colors" data-contact-status role="status">
+    <p class="font-semibold" id="contact-status-message"></p>
+    <button class="mt-3 inline-flex items-center justify-center rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition-colors px-4 py-2 text-sm font-semibold hidden" data-contact-retry type="button">
+      Erneut senden
+    </button>
+  </div>
   <div class="grid gap-6 md:grid-cols-2">
     <div>
       <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="first-name">Vorname<span class="text-red-500">*</span></label>
@@ -480,7 +503,7 @@ Original lesen
 
   <div class="flex items-start gap-3">
     <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" id="consent" name="consent" required="" type="checkbox"/>
-    <label class="text-sm text-gray-700 dark:text-gray-300" for="consent">Ich habe die <a class="text-primary hover:text-primary-dark font-medium" href="./datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</label>
+    <label class="text-sm text-gray-700 dark:text-gray-300" for="consent">Ich habe die <a class="text-primary hover:text-primary-dark font-medium" href="https://www.dachrinnecheck.de/datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</label>
   </div>
 
   <div class="text-center pt-4">
@@ -490,7 +513,7 @@ Original lesen
   </div>
 </form>
 <div class="mt-10 text-center">
-    <a class="inline-flex items-center justify-center bg-primary text-white font-semibold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" href="kostenrechner.html">
+    <a class="inline-flex items-center justify-center bg-primary text-white font-semibold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg transform hover:scale-105" href="https://www.dachrinnecheck.de/kostenrechner">
       Zum Kostenrechner
     </a>
   </div>
@@ -499,10 +522,10 @@ Original lesen
 <footer class="bg-card-dark border-t border-gray-800 py-10 md:py-12">
 <div class="container mx-auto px-4 text-center text-text-dark">
 <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
-<a class="hover:text-primary transition-colors text-sm" href="./datenschutz.html">Datenschutz</a>
-<a class="hover:text-primary transition-colors text-sm" href="./impressum.html">Impressum</a>
-<a class="hover:text-primary transition-colors text-sm" href="kostenrechner.html">Kostenrechner</a>
-<a class="hover:text-primary transition-colors text-sm" href="#contact">Kontakt</a>
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/datenschutz">Datenschutz</a>
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/impressum">Impressum</a>
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/kostenrechner">Kostenrechner</a>
+<a class="hover:text-primary transition-colors text-sm" href="https://www.dachrinnecheck.de/#contact">Kontakt</a>
 </div>
 <p class="text-xs">© 2024 DachrinneCheck. Alle Rechte vorbehalten.</p>
 </div>
@@ -739,9 +762,124 @@ Original lesen
     const reasonInputs = Array.from(contactForm.querySelectorAll('input[name="reasons"]'));
     const guardInputs = Array.from(contactForm.querySelectorAll('input[name="guards"]'));
     const submitButton = contactForm.querySelector('button[type="submit"]');
+    const statusContainer = contactForm.querySelector('[data-contact-status]');
+    const statusMessage = contactForm.querySelector('#contact-status-message');
+    const retryButton = contactForm.querySelector('[data-contact-retry]');
 
     if (!firstNameInput || !lastNameInput || !emailInput || !phoneInput || !addressInput || !heightInput || !lengthInput || !consentInput || !submitButton) {
       return;
+    }
+
+    const defaultButtonText = submitButton.textContent.trim();
+    let isProcessing = false;
+
+    const statusClassMap = {
+      info: ['border-blue-200', 'bg-blue-50', 'text-blue-900', 'dark:bg-blue-900/30', 'dark:border-blue-700', 'dark:text-blue-100'],
+      success: ['border-green-300', 'bg-green-50', 'text-green-800', 'dark:bg-green-900/30', 'dark:border-green-700', 'dark:text-green-200'],
+      error: ['border-red-300', 'bg-red-50', 'text-red-700', 'dark:bg-red-900/30', 'dark:border-red-700', 'dark:text-red-200']
+    };
+
+    const removeStatusClasses = () => {
+      if (!statusContainer) {
+        return;
+      }
+      Object.values(statusClassMap).forEach((classes) => {
+        classes.forEach((className) => statusContainer.classList.remove(className));
+      });
+    };
+
+    const toggleRetry = (visible) => {
+      if (!retryButton) {
+        return;
+      }
+      retryButton.classList.toggle('hidden', !visible);
+      retryButton.setAttribute('aria-hidden', visible ? 'false' : 'true');
+    };
+
+    const hideStatus = () => {
+      if (!statusContainer) {
+        return;
+      }
+      removeStatusClasses();
+      statusContainer.classList.add('hidden');
+      statusContainer.removeAttribute('data-state');
+      toggleRetry(false);
+    };
+
+    // FIX: Present friendly feedback for validation, success and failure states
+    const showStatus = (type, message, { showRetry = false } = {}) => {
+      if (!statusContainer || !statusMessage) {
+        return;
+      }
+      removeStatusClasses();
+      const classes = statusClassMap[type] || statusClassMap.info;
+      classes.forEach((className) => statusContainer.classList.add(className));
+      statusContainer.classList.remove('hidden');
+      statusContainer.dataset.state = type;
+      statusMessage.textContent = message;
+      toggleRetry(showRetry);
+    };
+
+    const setSubmitDisabled = (disabled) => {
+      submitButton.disabled = disabled;
+      submitButton.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      submitButton.classList.toggle('opacity-60', disabled);
+      submitButton.classList.toggle('cursor-not-allowed', disabled);
+    };
+
+    const updateSubmitState = () => {
+      if (isProcessing) {
+        return;
+      }
+      const shouldDisable = !contactForm.checkValidity();
+      setSubmitDisabled(shouldDisable);
+      if (!shouldDisable) {
+        submitButton.textContent = defaultButtonText;
+      }
+    };
+
+    const startProcessing = () => {
+      isProcessing = true;
+      hideStatus();
+      setSubmitDisabled(true);
+      submitButton.textContent = 'Wird gesendet…';
+    };
+
+    const stopProcessing = () => {
+      isProcessing = false;
+      submitButton.textContent = defaultButtonText;
+      updateSubmitState();
+    };
+
+    const resetCustomValidity = () => {
+      [firstNameInput, lastNameInput, emailInput, phoneInput, addressInput, heightInput, lengthInput].forEach((input) => {
+        input.setCustomValidity('');
+      });
+    };
+
+    const watchInputs = [firstNameInput, lastNameInput, emailInput, phoneInput, addressInput, heightInput, lengthInput];
+    watchInputs.forEach((input) => {
+      input.addEventListener('input', () => {
+        input.setCustomValidity('');
+        hideStatus();
+        updateSubmitState();
+      });
+    });
+
+    [consentInput, ...reasonInputs, ...guardInputs].forEach((element) => {
+      element.addEventListener('change', () => {
+        hideStatus();
+        updateSubmitState();
+      });
+    });
+
+    if (retryButton) {
+      retryButton.addEventListener('click', () => {
+        if (!isProcessing) {
+          hideStatus();
+          contactForm.requestSubmit();
+        }
+      });
     }
 
     const parseNumberInput = input => {
@@ -759,6 +897,9 @@ Original lesen
     contactForm.addEventListener('submit', async event => {
       event.preventDefault();
 
+      hideStatus();
+      resetCustomValidity();
+
       const errors = [];
       const firstName = firstNameInput.value.trim();
       const lastName = lastNameInput.value.trim();
@@ -769,34 +910,43 @@ Original lesen
       const lengthValue = parseNumberInput(lengthInput);
 
       if (!firstName) {
+        firstNameInput.setCustomValidity('Bitte geben Sie Ihren Vornamen an.');
         errors.push('Bitte geben Sie Ihren Vornamen an.');
       }
 
       if (!lastName) {
+        lastNameInput.setCustomValidity('Bitte geben Sie Ihren Nachnamen an.');
         errors.push('Bitte geben Sie Ihren Nachnamen an.');
       }
 
       if (!emailValue) {
+        emailInput.setCustomValidity('Bitte geben Sie Ihre E-Mail-Adresse an.');
         errors.push('Bitte geben Sie Ihre E-Mail-Adresse an.');
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        emailInput.setCustomValidity('Bitte geben Sie eine gültige E-Mail-Adresse an.');
         errors.push('Bitte geben Sie eine gültige E-Mail-Adresse an.');
       }
 
       if (!phoneValue) {
+        phoneInput.setCustomValidity('Bitte geben Sie eine Telefonnummer an.');
         errors.push('Bitte geben Sie eine Telefonnummer an.');
       } else if (!/^\+?[0-9 ()\-\/]{6,20}$/.test(phoneValue)) {
+        phoneInput.setCustomValidity('Bitte prüfen Sie die Telefonnummer.');
         errors.push('Bitte prüfen Sie die Telefonnummer.');
       }
 
       if (!addressValue) {
+        addressInput.setCustomValidity('Bitte geben Sie eine Adresse an.');
         errors.push('Bitte geben Sie eine Adresse an.');
       }
 
       if (heightValue === null || heightValue <= 0) {
+        heightInput.setCustomValidity('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
         errors.push('Bitte geben Sie die geschätzte Höhe der Dachrinne an.');
       }
 
       if (lengthValue === null || lengthValue <= 0) {
+        lengthInput.setCustomValidity('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
         errors.push('Bitte geben Sie die geschätzte Länge der Dachrinne an.');
       }
 
@@ -805,7 +955,9 @@ Original lesen
       }
 
       if (errors.length) {
-        alert(errors.join('\n'));
+        contactForm.reportValidity();
+        showStatus('error', errors.join(' '));
+        updateSubmitState();
         return;
       }
 
@@ -820,11 +972,7 @@ Original lesen
       }
       const messageValue = messageParts.join(' | ');
 
-      const originalButtonText = submitButton.textContent;
-      submitButton.disabled = true;
-      submitButton.setAttribute('aria-disabled', 'true');
-      submitButton.classList.add('opacity-60', 'cursor-not-allowed');
-      submitButton.textContent = 'Wird gesendet…';
+      startProcessing();
 
       const contact = {
         vorname: firstName,
@@ -876,19 +1024,19 @@ Original lesen
           throw new Error(errorMessage);
         }
 
-        alert('Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
+        showStatus('success', 'Vielen Dank für Ihre Anfrage! Wir melden uns schnellstmöglich bei Ihnen.');
         contactForm.reset();
+        updateSubmitState();
       } catch (error) {
         console.error('Fehler beim Senden des Formulars:', error);
-        alert('Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.');
+        showStatus('error', 'Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.', { showRetry: true });
       } finally {
-        submitButton.disabled = false;
-        submitButton.removeAttribute('aria-disabled');
-        submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
-        submitButton.textContent = originalButtonText;
+        stopProcessing();
       }
     });
-    });
+
+    updateSubmitState();
+  });
 
     document.addEventListener('DOMContentLoaded', () => {
       const reviewsSection = document.querySelector('#dynamic-reviews');
