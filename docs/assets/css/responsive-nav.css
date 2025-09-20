@@ -12,10 +12,6 @@
   align-items: center;
 }
 
-.responsive-header .nav-toggle [data-nav-icon] {
-  transition: transform 0.2s ease;
-}
-
 @media (min-width: 768px) {
   .responsive-header .nav-toggle {
     display: none;
@@ -28,14 +24,6 @@
 
 .responsive-header.is-collapsed .nav-inline {
   display: none !important;
-}
-
-.responsive-header .nav-dialog-backdrop {
-  max-height: 0;
-}
-
-.responsive-header .nav-dialog-backdrop.is-visible {
-  max-height: 100vh !important;
 }
 
 .responsive-header.menu-open {
@@ -81,10 +69,6 @@
 .nav-dialog-backdrop.is-visible .nav-dialog {
   transform: translateY(0);
   opacity: 1;
-}
-
-.responsive-header.menu-open .nav-toggle [data-nav-icon] {
-  transform: rotate(180deg);
 }
 
 .dark .nav-dialog {
