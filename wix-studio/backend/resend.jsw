@@ -1,0 +1,399 @@
+import wixSecretsBackend from 'wix-secrets-backend';
+import { fetch } from 'wix-fetch';
+
+const toStr = (value) => String(value ?? '');
+const safeTrim = (value) => {
+  const str = toStr(value).trim();
+  return str.length ? str : '';
+};
+const esc = (s) => toStr(s).replace(/[&<>"'`]/g, (match) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '`': '&#96;'
+}[match]));
+const isEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(toStr(email).trim());
+
+const euro = (value) => {
+  const n = Number(value);
+  if (!Number.isFinite(n)) {
+    return '';
+  }
+  try {
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 }).format(n);
+  } catch (error) {
+    console.warn('Intl.NumberFormat fehlgeschlagen:', error);
+    return `${n.toFixed(2)} €`.replace('.', ',');
+  }
+};
+
+const fmt = (value) => {
+  const n = Number(value);
+  if (!Number.isFinite(n)) {
+    return '';
+  }
+  try {
+    return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 2 }).format(n);
+  } catch (error) {
+    console.warn('Intl.NumberFormat fehlgeschlagen:', error);
+    return String(n);
+  }
+};
+
+const yn = (value) => (String(value).toLowerCase() === 'ja' || value === true ? 'Ja' : 'Nein');
+
+function sanitizeTag(value) {
+  const cleaned = toStr(value).trim().replace(/[^A-Za-z0-9_-]/g, '_');
+  return cleaned.length ? cleaned.slice(0, 64) : '';
+}
+
+function parseRecipients(value) {
+  if (!value) {
+    return [];
+  }
+  return toStr(value)
+    .split(/[;,]/)
+    .map((part) => part.trim())
+    .filter((part) => part && isEmail(part));
+}
+
+function buildHtml({ contact = {}, payload = {}, meta = {} }) {
+  const name = [contact?.vorname, contact?.nachname].filter(Boolean).join(' ') || 'Unbekannt';
+  const email = contact?.email ? esc(contact.email) : '';
+  const telefon = contact?.telefon ? esc(contact.telefon) : '';
+  const wunschtermin = contact?.wunschtermin ? esc(contact.wunschtermin) : '';
+  const nachricht = contact?.nachricht ? esc(contact.nachricht) : '';
+
+  const typ = payload?.typ ? esc(payload.typ) : '';
+  const lfm = Number.isFinite(Number(payload?.lfm)) ? fmt(payload.lfm) : '';
+  const hoehe = Number.isFinite(Number(payload?.hoehe)) ? fmt(payload.hoehe) : '';
+  const adresse = payload?.adresse ? esc(payload.adresse) : '';
+  const km = Number.isFinite(Number(payload?.km_einfach)) ? fmt(payload.km_einfach) : '';
+
+  const schutz = payload?.schutz;
+  const sClean = Number.isFinite(Number(payload?.schutz_clean)) ? fmt(payload.schutz_clean) : '';
+  const sMont = Number.isFinite(Number(payload?.schutz_mont ?? payload?.schluss_mont)) ? fmt(payload.schutz_mont ?? payload?.schluss_mont) : '';
+  const sDemont = Number.isFinite(Number(payload?.schutz_demont)) ? fmt(payload.schutz_demont) : '';
+
+  const endpreis = euro(payload?.endpreis);
+  const eurKm = euro(payload?.eur_km);
+  const setup = euro(payload?.setup);
+  const ladder = euro(payload?.ladder);
+  const steiger = euro(payload?.steiger);
+  const minpreis = euro(payload?.minpreis);
+  const tsCalc = payload?.ts ? esc(payload.ts) : '';
+
+  const metaSource = meta?.source ? esc(meta.source) : '';
+  const metaVers = meta?.version ? esc(meta.version) : '';
+  const metaTs = meta?.timestamp ? esc(meta.timestamp) : '';
+
+  const brand = '#1B3898';
+  const ink = '#0f172a';
+  const muted = '#6b7280';
+  const border = '#e5e7eb';
+
+  return `
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f7f8fb;padding:16px 0">
+  <tr>
+    <td align="center">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="640" style="width:640px;max-width:100%;background:#ffffff;border:1px solid ${border};border-radius:12px;overflow:hidden">
+        <tr>
+          <td style="background:${brand};color:#fff;padding:16px 20px;font:600 16px/1.2 system-ui,Segoe UI,Roboto,Helvetica,Arial">
+            DachrinneCheck · Neue Anfrage (Preisrechner)
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:16px 20px">
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding:12px;border:1px dashed ${border};border-radius:10px">
+                  <div style="font:700 18px/1.3 system-ui,Segoe UI,Roboto,Helvetica,Arial;color:${ink};margin-bottom:6px">
+                    Richtpreis: ${endpreis || '–'}
+                  </div>
+                  <div style="color:${muted};font:14px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial">
+                    Typ: <b>${typ || '-'}</b>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <h3 style="font:700 16px/1.2 system-ui,Segoe UI,Roboto,Helvetica,Arial;color:${ink};margin:18px 0 8px">Kontakt</h3>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${border};border-radius:10px;overflow:hidden">
+              <tr><td style="padding:10px;background:#f9fafb;width:180px;font:600 14px system-ui">Name</td><td style="padding:10px;font:14px system-ui">${name}</td></tr>
+              <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">E-Mail</td><td style="padding:10px;font:14px system-ui">${email}</td></tr>
+              <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Telefon</td><td style="padding:10px;font:14px system-ui">${telefon}</td></tr>
+              <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Wunschtermin</td><td style="padding:10px;font:14px system-ui">${wunschtermin}</td></tr>
+              ${nachricht ? `<tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Nachricht</td><td style="padding:10px;font:14px system-ui;white-space:pre-wrap">${nachricht}</td></tr>` : ''}
+            </table>
+
+            <h3 style="font:700 16px/1.2 system-ui,Segoe UI,Roboto,Helvetica,Arial;color:${ink};margin:18px 0 8px">Objekt & Anfahrt</h3>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${border};border-radius:10px;overflow:hidden">
+              <tr><td style="padding:10px;background:#f9fafb;width:180px;font:600 14px system-ui">Adresse</td><td style="padding:10px;font:14px system-ui">${adresse || ''}</td></tr>
+              <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Entfernung (einfach)</td><td style="padding:10px;font:14px system-ui">${km ? `${km} km` : '–'}</td></tr>
+            </table>
+
+            <h3 style="font:700 16px/1.2 system-ui,Segoe UI,Roboto,Helvetica,Arial;color:${ink};margin:18px 0 8px">Daten aus Kalkulator</h3>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${border};border-radius:10px;overflow:hidden">
+              <tr><td style="padding:10px;background:#f9fafb;width:220px;font:600 14px system-ui">Länge Dachrinne</td><td style="padding:10px;font:14px system-ui">${lfm ? `${lfm} lfm` : '–'}</td></tr>
+              <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Höhe</td><td style="padding:10px;font:14px system-ui">${hoehe ? `${hoehe} m` : '–'}</td></tr>
+              <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Dachrinnenschutz</td><td style="padding:10px;font:14px system-ui">${yn(schutz)}</td></tr>
+              ${String(schutz).toLowerCase() === 'ja'
+                ? `
+                  <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Schutz · Reinigung</td><td style="padding:10px;font:14px system-ui">${sClean || '0'} lfm</td></tr>
+                  <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Schutz · Montage</td><td style="padding:10px;font:14px system-ui">${sMont || '0'} lfm</td></tr>
+                  <tr><td style="padding:10px;background:#f9fafb;font:600 14px system-ui">Schutz · Demontage</td><td style="padding:10px;font:14px system-ui">${sDemont || '0'} lfm</td></tr>
+                `
+                : ''
+              }
+            </table>
+
+            <div style="margin-top:16px;color:${muted};font:12px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial;border-top:1px dashed ${border};padding-top:10px">
+              Quelle: ${metaSource || ''} · Version ${metaVers || ''} · ${metaTs || ''}
+            </div>
+            <div style="margin-top:6px;color:${muted};font:12px/1.6 system-ui">Hinweis: Richtpreis ohne Darstellung einzelner Positionen (intern).</div>
+
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`;
+}
+
+function buildText({ contact = {}, payload = {}, meta = {} }) {
+  const name = [contact?.vorname, contact?.nachname].filter(Boolean).join(' ') || 'Unbekannt';
+  const email = contact?.email || '';
+  const telefon = contact?.telefon || '';
+  const wunschtermin = contact?.wunschtermin || '';
+  const nachricht = contact?.nachricht || '';
+
+  const typ = payload?.typ || '';
+  const lfm = payload?.lfm;
+  const hoehe = payload?.hoehe;
+  const adresse = payload?.adresse || '';
+  const km = payload?.km_einfach;
+
+  const schutz = payload?.schutz;
+  const sClean = payload?.schutz_clean;
+  const sMont = payload?.schutz_mont ?? payload?.schluss_mont;
+  const sDemont = payload?.schutz_demont;
+
+  const lines = [
+    'DachrinneCheck – Neue Anfrage (Preisrechner)',
+    '',
+    `Richtpreis: ${euro(payload?.endpreis) || '-'}`,
+    `Typ: ${typ || '-'}`,
+    '',
+    'Kontakt',
+    `  Name: ${name}`,
+    `  E-Mail: ${email}`,
+    `  Telefon: ${telefon}`,
+    `  Wunschtermin: ${wunschtermin}`
+  ];
+  if (nachricht) {
+    lines.push(`  Nachricht: ${nachricht.replace(/\s+/g, ' ').trim()}`);
+  }
+  lines.push(
+    '',
+    'Objekt & Anfahrt',
+    `  Adresse: ${adresse}`,
+    `  Entfernung (einfach): ${Number.isFinite(Number(km)) ? `${fmt(km)} km` : '-'}`,
+    '',
+    'Daten aus Kalkulator',
+    `  Länge Dachrinne: ${Number.isFinite(Number(lfm)) ? `${fmt(lfm)} lfm` : '-'}`,
+    `  Höhe: ${Number.isFinite(Number(hoehe)) ? `${fmt(hoehe)} m` : '-'}`,
+    `  Dachrinnenschutz: ${yn(schutz)}`
+  );
+  if (String(schutz).toLowerCase() === 'ja') {
+    lines.push(
+      `  Schutz · Reinigung: ${Number.isFinite(Number(sClean)) ? `${fmt(sClean)} lfm` : '0 lfm'}`,
+      `  Schutz · Montage: ${Number.isFinite(Number(sMont)) ? `${fmt(sMont)} lfm` : '0 lfm'}`,
+      `  Schutz · Demontage: ${Number.isFinite(Number(sDemont)) ? `${fmt(sDemont)} lfm` : '0 lfm'}`
+    );
+  }
+  lines.push(
+    '',
+    'Parameter',
+    `  EUR/km: ${euro(payload?.eur_km) || '-'}`,
+    `  Setup: ${euro(payload?.setup) || '-'}`,
+    `  Leiter (ab ~6 m): ${euro(payload?.ladder) || '-'}`,
+    `  Steiger (bei Schutz & >5 m): ${euro(payload?.steiger) || '-'}`,
+    `  Mindestauftrag: ${euro(payload?.minpreis) || '-'}`,
+    `  Kalkulator-Zeitstempel: ${payload?.ts || ''}`,
+    '',
+    'Meta',
+    `  Quelle: ${meta?.source || ''}`,
+    `  Version: ${meta?.version || ''}`,
+    `  Timestamp: ${meta?.timestamp || ''}`
+  );
+
+  return lines.join('\n');
+}
+
+async function loadSecrets() {
+  const required = async (name) => {
+    const value = await wixSecretsBackend.getSecret(name);
+    if (!value) {
+      throw new Error(`MISSING_SECRET_${name}`);
+    }
+    return value;
+  };
+  const optional = async (name) => {
+    try {
+      return await wixSecretsBackend.getSecret(name);
+    } catch (error) {
+      return '';
+    }
+  };
+
+  const apiKey = await required('RESEND_API_KEY');
+  const fromSecret = safeTrim(await optional('RESEND_FROM'));
+  const toSecret = safeTrim((await optional('RESEND_TO')) || (await optional('ADMIN_EMAIL')));
+  const subjectContact = safeTrim(await optional('RESEND_SUBJECT_CONTACT'));
+  const subjectSummary = safeTrim(await optional('RESEND_SUBJECT_SUMMARY'));
+  const dryRun = safeTrim(await optional('RESEND_DRY_RUN')) === '1';
+
+  return {
+    apiKey,
+    from: fromSecret || 'DachrinneCheck <noreply@dachrinnecheck.de>',
+    to: toSecret,
+    subjectContact,
+    subjectSummary,
+    dryRun
+  };
+}
+
+function buildTags(meta = {}) {
+  const tags = [];
+  const src = sanitizeTag(meta?.source) || 'preisrechner';
+  tags.push({ name: 'source', value: src });
+
+  const version = sanitizeTag(meta?.version);
+  if (version) {
+    tags.push({ name: 'version', value: version });
+  }
+
+  const iso = String(meta?.timestamp || '').replace(/[^0-9TzZ]/g, '');
+  const ts = sanitizeTag(iso || new Date().toISOString().replace(/[^0-9TzZ]/g, ''));
+  if (ts) {
+    tags.push({ name: 'timestamp', value: ts });
+  }
+
+  return tags;
+}
+
+async function sendPayload({ apiKey, body, dryRun }) {
+  if (dryRun) {
+    return { ok: true, dryRun: true, payload: body };
+  }
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  let json = null;
+  try {
+    json = await response.json();
+  } catch (error) {
+    json = null;
+  }
+
+  if (!response.ok) {
+    const message = json?.message || `RESEND_HTTP_${response.status}`;
+    return { ok: false, error: message, status: response.status || 0 };
+  }
+
+  return { ok: true, id: json?.id, status: response.status };
+}
+
+function buildEnvelope({ secrets, subject, contactEmail, html, text, meta }) {
+  const recipients = parseRecipients(secrets.to);
+  if (!recipients.length) {
+    throw new Error('MISSING_RECIPIENT');
+  }
+
+  const replyTo = isEmail(contactEmail) ? contactEmail : undefined;
+  const tags = buildTags(meta);
+
+  return {
+    from: secrets.from,
+    to: recipients,
+    subject,
+    html,
+    text,
+    ...(replyTo ? { reply_to: replyTo } : {}),
+    ...(tags.length ? { tags } : {})
+  };
+}
+
+function displayName(contact = {}) {
+  return [contact?.vorname, contact?.nachname].filter(Boolean).join(' ') || 'Unbekannt';
+}
+
+export async function sendContactEmail(formData = {}) {
+  try {
+    const secrets = await loadSecrets();
+    const contact = formData?.contact || {};
+    const payload = formData?.payload || {};
+    const meta = formData?.meta || {
+      source: 'homepage-form',
+      version: '2.0.0',
+      timestamp: new Date().toISOString()
+    };
+
+    const name = displayName(contact);
+    const subject = secrets.subjectContact || `Neue Anfrage (Homepage) – ${name}`;
+    const html = buildHtml({ contact, payload, meta });
+    const text = buildText({ contact, payload, meta });
+    const body = buildEnvelope({
+      secrets,
+      subject,
+      contactEmail: contact?.email,
+      html,
+      text,
+      meta
+    });
+
+    return await sendPayload({ apiKey: secrets.apiKey, body, dryRun: secrets.dryRun });
+  } catch (error) {
+    return { ok: false, error: toStr(error?.message || error) };
+  }
+}
+
+export async function sendCalcSummary(summaryData = {}) {
+  try {
+    const secrets = await loadSecrets();
+    const contact = summaryData?.contact || {};
+    const payload = summaryData?.payload || {};
+    const meta = summaryData?.meta || {
+      source: 'preisrechner-html',
+      version: '1.2.0',
+      timestamp: new Date().toISOString()
+    };
+
+    const name = displayName(contact);
+    const subject = secrets.subjectSummary || `Neue Anfrage (Preisrechner) – ${name}`;
+    const html = buildHtml({ contact, payload, meta });
+    const text = buildText({ contact, payload, meta });
+    const body = buildEnvelope({
+      secrets,
+      subject,
+      contactEmail: contact?.email,
+      html,
+      text,
+      meta
+    });
+
+    return await sendPayload({ apiKey: secrets.apiKey, body, dryRun: secrets.dryRun });
+  } catch (error) {
+    return { ok: false, error: toStr(error?.message || error) };
+  }
+}
