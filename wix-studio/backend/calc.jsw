@@ -1,0 +1,162 @@
+/**
+ * Legacy price calculator ported for Wix Studio.
+ * The implementation mirrors docs/kostenrechner.html without any functional
+ * changes so identical inputs yield identical totals.
+ */
+
+const PARAMS = Object.freeze({
+  eurKm: 1.0,
+  setup: 40,
+  minPrice: 125,
+  ladder: 40,
+  steiger: 340
+});
+
+const RATES = Object.freeze({
+  ERST: Object.freeze([
+    { min: 2, max: 3.99, price: 5 },
+    { min: 4, max: 5.99, price: 7 },
+    { min: 6, max: 7.99, price: 9 },
+    { min: 8, max: 9.99, price: 12 },
+    { min: 10, max: 999, price: 15 }
+  ]),
+  FOLGE: Object.freeze([
+    { min: 2, max: 3.99, price: 4 },
+    { min: 4, max: 5.99, price: 5 },
+    { min: 6, max: 7.99, price: 7 },
+    { min: 8, max: 9.99, price: 10 },
+    { min: 10, max: 999, price: 15 }
+  ])
+});
+
+function toNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function toPositive(value) {
+  return Math.max(0, toNumber(value));
+}
+
+function normaliseType(value) {
+  return String(value || '') === 'Folgereinigung' ? 'Folgereinigung' : 'Erstreinigung';
+}
+
+function pickRate(type, height) {
+  const band = type === 'Folgereinigung' ? RATES.FOLGE : RATES.ERST;
+  const h = toNumber(height);
+  for (const range of band) {
+    if (h >= range.min && h <= range.max) {
+      return range.price;
+    }
+  }
+  return band[band.length - 1].price;
+}
+
+function isTruthy(value) {
+  if (value === true) {
+    return true;
+  }
+  if (typeof value === 'number') {
+    return value > 0;
+  }
+  if (typeof value === 'string') {
+    const normalised = value.trim().toLowerCase();
+    return ['1', 'true', 'ja', 'yes', 'y'].includes(normalised);
+  }
+  return false;
+}
+
+function round(value) {
+  return Number(Number(value).toFixed(2));
+}
+
+/**
+ * @typedef {Object} QuoteInput
+ * @property {string} [typ='Erstreinigung'] - Reinigungstyp.
+ * @property {number} [lfm=0] - Länge der Dachrinne.
+ * @property {number} [hoehe=0] - Höhe der Dachrinne.
+ * @property {number} [km=0] - Entfernung einfach, alternativ `kmEinfach` oder `km_einfach`.
+ * @property {boolean|string|number} [schutz=false] - Ob ein Schutz vorhanden ist.
+ * @property {number} [schutz_clean=0] - Laufmeter Reinigung Schutz.
+ * @property {number} [schutz_mont=0] - Laufmeter Montage Schutz.
+ * @property {number} [schutz_demont=0] - Laufmeter Demontage Schutz.
+ */
+
+/**
+ * @typedef {Object} QuoteBreakdown
+ * @property {number} base - Grundreinigung (lfm * Satz).
+ * @property {number} travel - Anfahrt (Hin- und Rückfahrt).
+ * @property {number} setup - Pauschale Einrichtung.
+ * @property {number} guardClean - Reinigung Dachrinnenschutz.
+ * @property {number} guardMount - Montage Dachrinnenschutz.
+ * @property {number} guardDemount - Demontage Dachrinnenschutz.
+ * @property {number} steiger - Steigeraufschlag.
+ * @property {number} ladder - Leiterzuschlag.
+ * @property {number} subtotal - Summe vor Mindestpreisprüfung.
+ * @property {boolean} minimumApplied - Ob der Mindestpreis gegriffen hat.
+ * @property {number} rate - Verwendeter Satz je lfm.
+ * @property {number} distanceKm - Entfernung einfach in km.
+ */
+
+/**
+ * @typedef {Object} QuoteResult
+ * @property {number} total - Endpreis nach Rundung und Mindestpreis.
+ * @property {QuoteBreakdown} breakdown - Detailinformationen für das UI.
+ * @property {string[]} [warnings] - Optionaler Hinweis, wenn der Mindestpreis aktiv war.
+ */
+
+/**
+ * Berechnet den Richtpreis identisch zum historischen HTML-Kostenrechner.
+ *
+ * @param {QuoteInput} [input={}]
+ * @returns {QuoteResult}
+ */
+export function calculateQuote(input = {}) {
+  const type = normaliseType(input.typ);
+  const lfm = toPositive(input.lfm);
+  const hoehe = toPositive(input.hoehe);
+  const km = toPositive(input.km ?? input.kmEinfach ?? input.km_einfach);
+
+  const hasGuard = isTruthy(input.schutz);
+  const guardClean = hasGuard ? toPositive(input.schutz_clean) : 0;
+  const guardMont = hasGuard ? toPositive(input.schutz_mont ?? input.schutzMont) : 0;
+  const guardDemont = hasGuard ? toPositive(input.schutz_demont ?? input.schutzDemont) : 0;
+
+  const rate = pickRate(type, hoehe);
+
+  const base = lfm * rate;
+  const travel = km * 2 * PARAMS.eurKm;
+  const setup = PARAMS.setup;
+  const guardCleanTotal = guardClean * rate;
+  const guardMontTotal = guardMont * rate;
+  const guardDemontTotal = guardDemont * rate;
+
+  const needSteiger = hasGuard && hoehe > 5 && guardClean + guardMont + guardDemont > 0;
+  const steiger = needSteiger ? PARAMS.steiger : 0;
+  const ladder = !needSteiger && hoehe > 6 ? PARAMS.ladder : 0;
+
+  const subtotal = base + travel + setup + guardCleanTotal + guardMontTotal + guardDemontTotal + steiger + ladder;
+  const minimumApplied = subtotal < PARAMS.minPrice;
+  const totalValue = minimumApplied ? PARAMS.minPrice : subtotal;
+  const total = round(totalValue);
+
+  const breakdown = {
+    rate,
+    distanceKm: round(km),
+    base: round(base),
+    travel: round(travel),
+    setup: round(setup),
+    guardClean: round(guardCleanTotal),
+    guardMount: round(guardMontTotal),
+    guardDemount: round(guardDemontTotal),
+    steiger: round(steiger),
+    ladder: round(ladder),
+    subtotal: round(subtotal),
+    minimumApplied
+  };
+
+  const warnings = minimumApplied ? ['MIN_PRICE_APPLIED'] : undefined;
+
+  return { total, breakdown, warnings };
+}

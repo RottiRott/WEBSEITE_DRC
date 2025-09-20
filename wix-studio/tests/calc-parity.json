@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Erstreinigung Standard",
+    "input": { "typ": "Erstreinigung", "lfm": 12, "hoehe": 6, "km": 10, "schutz": "nein", "schutz_clean": 0, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Folgereinigung Kurzstrecke",
+    "input": { "typ": "Folgereinigung", "lfm": 18, "hoehe": 4.5, "km": 6, "schutz": "nein", "schutz_clean": 0, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Erstreinigung mit Schutzarbeiten",
+    "input": { "typ": "Erstreinigung", "lfm": 24, "hoehe": 5.5, "km": 12, "schutz": "ja", "schutz_clean": 12, "schutz_mont": 10, "schutz_demont": 0 }
+  },
+  {
+    "name": "Folgereinigung hoher Aufbau",
+    "input": { "typ": "Folgereinigung", "lfm": 30, "hoehe": 8.5, "km": 15, "schutz": "nein", "schutz_clean": 0, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Schutz mit Steiger",
+    "input": { "typ": "Erstreinigung", "lfm": 28, "hoehe": 6.5, "km": 18, "schutz": "ja", "schutz_clean": 8, "schutz_mont": 8, "schutz_demont": 5 }
+  },
+  {
+    "name": "Mindestpreis greift",
+    "input": { "typ": "Folgereinigung", "lfm": 4, "hoehe": 3, "km": 2, "schutz": "nein", "schutz_clean": 0, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Ohne Entfernung",
+    "input": { "typ": "Erstreinigung", "lfm": 16, "hoehe": 7, "km": 0, "schutz": "nein", "schutz_clean": 0, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Großes Objekt",
+    "input": { "typ": "Erstreinigung", "lfm": 80, "hoehe": 9.5, "km": 40, "schutz": "nein", "schutz_clean": 0, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Schutz nur Reinigung",
+    "input": { "typ": "Folgereinigung", "lfm": 22, "hoehe": 5.8, "km": 9, "schutz": "ja", "schutz_clean": 22, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Schutz Montage und Demontage",
+    "input": { "typ": "Erstreinigung", "lfm": 14, "hoehe": 4.2, "km": 7, "schutz": "ja", "schutz_clean": 0, "schutz_mont": 12, "schutz_demont": 12 }
+  },
+  {
+    "name": "Extrem hohe Entfernung",
+    "input": { "typ": "Erstreinigung", "lfm": 10, "hoehe": 5, "km": 75, "schutz": "nein", "schutz_clean": 0, "schutz_mont": 0, "schutz_demont": 0 }
+  },
+  {
+    "name": "Rundungsprüfung",
+    "input": { "typ": "Folgereinigung", "lfm": 19.7, "hoehe": 6.3, "km": 11.4, "schutz": "ja", "schutz_clean": 4.5, "schutz_mont": 3.2, "schutz_demont": 1.7 }
+  }
+]
